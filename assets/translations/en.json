@@ -1,0 +1,36 @@
+{
+  "welcomeTo": "Welcome To",
+  "appName": "Realtorpass",
+  "onBoardingDescription": "Choose the right transport, because every day you live affects your time",
+  "letsStarted": "Let's started",
+  "signIn": "Sign in",
+  "signUp": "Registration",
+  "email": "Email",
+  "password": "Password",
+  "confirm": "Confirm password",
+  "get": "Get a code",
+  "agree": "By logging in you agree to the policy\nprocessing of personal data",
+  "forgotPassword": "Forgot Password?",
+  "recover": "Restore",
+  "or": "or",
+  "enterCode": "Enter code",
+  "code": "To confirm your email, send a 6-digit code \nto",
+  "receive": "Receive code again",
+  "in60secGetCode": "If you don't receive the code, you can get new one in 60 sec",
+  "goBack": "Go back",
+  "confirm": "Confirm",
+  "byRegistering":"By registering you agree to the personal data processing policy",
+  "enter": "Enter",
+  "updatePassword": "Update Password",
+  "confirmNwPassword": "Confirm New Password",
+  "enterNewPassword": "Enter New Password",
+  "setNewPassword": "Set New Password",
+  "yourLocation": "Your Location",
+  "home": "Home",
+  "catalog": "Catalog",
+  "favorite": "Favorite",
+  "profile": "Profile"
+
+
+
+}

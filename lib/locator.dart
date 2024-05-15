@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:get_it/get_it.dart';
+import 'package:realtor_pass/features/main/presentation/cubit/bottom_nav/bottom_nav_cubit.dart';
 
 import 'app_core/app_core_library.dart';
 import 'app_core/cubits/network/network_cubit.dart';
@@ -58,10 +59,6 @@ void setup() {
   locator.registerLazySingleton(() => ForgotPasswordUsecase(locator()));
   locator.registerLazySingleton(() => ConfirmPasswordUsecase(locator()));
 
-
-
-
-
   // ================ External ================ //
 
   locator.registerLazySingleton(() => SecureStorage());
@@ -89,12 +86,12 @@ void setup() {
         locator(),
       ));
   locator.registerFactory(() => ForgotPasswordCubit(
-    locator(),
-  ));
+        locator(),
+      ));
   locator.registerFactory(() => ConfirmPasswordCubit(
-    locator(),
-
-  ));
+        locator(),
+      ));
+  locator.registerFactory(() => BottomNavCubit());
   locator.registerFactory(() => AuthCubit(
         locator(),
         locator(),
@@ -111,17 +108,7 @@ void setup() {
         locator(),
       ));
 
-
-
-
-
   // ================ Cars ================ //
-
-
-
-
-
-
 
   // ================ Repository / Datasource ================ //
 
@@ -132,8 +119,6 @@ void setup() {
     ),
   );
 
-
-
   // ================ DATASOURCE ================ //
 
   locator.registerLazySingleton<AuthRemoteDataSource>(
@@ -141,6 +126,4 @@ void setup() {
 
   locator.registerLazySingleton<AuthLocalDataSource>(
       () => AuthLocalDataSourceImpl(locator()));
-
-
 }

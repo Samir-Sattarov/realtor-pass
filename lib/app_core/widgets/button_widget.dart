@@ -34,7 +34,12 @@ class ButtonWidget extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(65.r),
-            color: isEnabled == false ? const Color(0xff272B2C) : color?? AppStyle.dark,
+            color: isEnabled ? null : AppStyle.blue,
+            gradient: isEnabled ? const LinearGradient(
+              colors: [AppStyle.blue, AppStyle.darkBlue],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ) : null, // No gradient if not enabled
           ),
           child: Center(
             child: customWidget ?? Text(

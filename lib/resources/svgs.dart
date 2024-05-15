@@ -25,4 +25,5 @@ class Svgs {
   static const String tSettings = 'assets/svg/settings.svg';
   static const String tSpeedometer = 'assets/svg/speedometer.svg';
   static const String tUserCircle = 'assets/svg/user_circle.svg';
+  static const String tGeoIcon = "assets/svg/arrow-down.svg";
 }
