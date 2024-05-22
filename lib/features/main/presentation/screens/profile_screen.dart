@@ -76,7 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 16.h),
                         _profileItem(
-                          svgPath: Svgs.tCar,
+                          svgPath: Svgs.tPrivacy,
                           title: "applications".tr(),
                           onTap: () {
                           },
