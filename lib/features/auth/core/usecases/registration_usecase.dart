@@ -11,12 +11,13 @@ class RegistrationUsecase extends UseCase<void, RegistrationUsecaseParams> {
 
   @override
   Future<Either<AppError, void>> call(RegistrationUsecaseParams params) =>
-      authRepository.signUp(email: params.email, username: params.username);
+      authRepository.signUp(email: params.email, username: params.username, password: params.password);
 }
 
 class RegistrationUsecaseParams {
   final String email;
   final String username;
+  final String password;
 
-  RegistrationUsecaseParams({required this.email, required this.username});
+  RegistrationUsecaseParams({required this.email, required this.username, required this.password});
 }

@@ -57,6 +57,10 @@ dependencies:
   pinput: ^4.0.0
   card_swiper: ^3.0.1
   flutter_typeahead: ^5.2.0
+  extended_image: ^8.2.0
+  flutter_animate: ^4.5.0
+  photo_view: ^0.15.0
+  flutter_map: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -111,3 +115,24 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+spider:
+  generate_tests: false
+  no_comments: true
+  export: true
+  use_part_of: true
+  use_references_list: false
+
+  package: resources
+  groups:
+    - path: assets/images
+      class_name: Images
+      prefix: t
+      types: [ .png, .jpg, .jpeg, .webp, .webm, .bmp ]
+    - path: assets/animations
+      class_name: Animations
+      prefix: t
+      types: [ .json]
+    - path: assets/svg
+      class_name: Svgs
+      prefix: t
+      types: [ .svg ]
