@@ -27,6 +27,7 @@ abstract class AuthRepository {
   Future<Either<AppError, void>> signUp({
     required String email,
     required String username,
+    required String password
   });
   Future<Either<AppError, UserEntity>> confirmOtp({
     required String code,
@@ -73,9 +74,10 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<AppError, void>> signUp({
     required String email,
     required String username,
+    required String password
   }) async {
     return action(
-      task: remoteDataSource.signUp(email: email, username: username),
+      task: remoteDataSource.signUp(email: email, username: username, password: password),
     );
   }
 

@@ -17,6 +17,7 @@ abstract class AuthRemoteDataSource {
   Future<void> signUp({
     required String username,
     required String email,
+    required String password,
   });
   Future<void> getCodeForEditUser({
     required String email,
@@ -65,6 +66,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   Future<void> signUp({
     required String username,
     required String email,
+    required String password
   }) async {
     final response = await client.post(ApiConstants.signUp, params: {
       "email": email,
