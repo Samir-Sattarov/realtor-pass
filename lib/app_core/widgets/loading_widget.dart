@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:realtor_pass/app_core/app_core_library.dart';
 
 
 class LoadingWidget extends StatelessWidget {
@@ -12,7 +13,7 @@ class LoadingWidget extends StatelessWidget {
       width: 120.r,
       child: const Center(
         child: CircularProgressIndicator(
-          color: Colors.black,
+          color: AppStyle.darkBlue,
         ),
       ),
     );
