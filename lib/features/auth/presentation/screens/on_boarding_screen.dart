@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:realtor_pass/app_core/app_core_library.dart';
-import 'package:realtor_pass/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:realtor_pass/features/main/presentation/screens/main_screen.dart';
 import '../../../../app_core/utils/app_style.dart';
 import '../../../../app_core/widgets/button_widget.dart';
@@ -45,7 +44,6 @@ class OnBoardingScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
           ),
           SizedBox(height: 4.h),
           Padding(
@@ -64,7 +62,8 @@ class OnBoardingScreen extends StatelessWidget {
             child: ButtonWidget(
               title: "letsStarted".tr(),
               onTap: () {
-                AnimatedNavigation.push(context: context, page: const MainScreen());
+                AnimatedNavigation.push(
+                    context: context, page: const MainScreen());
               },
             ),
           ),
