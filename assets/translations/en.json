@@ -29,7 +29,9 @@
   "home": "Home",
   "catalog": "Catalog",
   "favorite": "Favorite",
-  "profile": "Profile"
+  "profile": "Profile",
+  "dontHaveAnAccount": "Don't have an account? ",
+  "userName": "Username"
 
 
 
