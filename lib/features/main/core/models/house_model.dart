@@ -16,11 +16,13 @@ class HouseModel extends HouseEntity {
       required super.price,
       required super.square,
       required super.bathroom,
-      required super.rooms});
+      required super.rooms,
+      required super.houseTitle});
 
   factory HouseModel.fromEntity(HouseEntity entity) {
     return HouseModel(
       id: entity.id,
+      houseTitle: entity.houseTitle,
       houseLocation: entity.houseLocation,
       isFavorite: entity.isFavorite,
       houseType: entity.houseType,
@@ -39,6 +41,7 @@ class HouseModel extends HouseEntity {
   factory HouseModel.fromJson(Map<String, dynamic> json) {
     return HouseModel(
       id: json["id"],
+      houseTitle: json["houseTitle"],
       houseLocation: json["houseLocation"],
       isFavorite: json["isFavorite"],
       houseType: json["houseType"],

@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 class HouseEntity extends Equatable {
   final List<String> images;
   final int id;
+  final String houseTitle;
   final String houseLocation;
   final double lat;
   final double lon;
@@ -18,7 +19,9 @@ class HouseEntity extends Equatable {
   final int bathroom;
   final int rooms;
 
-  HouseEntity({
+  HouseEntity(
+   {
+     required this.houseTitle,
     required this.id,
     required this.houseLocation,
     required this.isFavorite,
@@ -38,6 +41,7 @@ class HouseEntity extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        houseTitle,
         houseLocation,
         houseType,
         category,

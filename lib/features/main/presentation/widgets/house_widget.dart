@@ -135,7 +135,7 @@ class _HouseWidgetState extends State<HouseWidget>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.houses.houseLocation,
+                        widget.houses.houseTitle,
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
