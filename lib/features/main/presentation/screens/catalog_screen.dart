@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:realtor_pass/app_core/app_core_library.dart';
@@ -11,9 +10,7 @@ import 'package:realtor_pass/app_core/utils/app_style.dart';
 import 'package:realtor_pass/app_core/widgets/error_flash_bar.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/house_type/house_type_cubit.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/houses/houses_cubit.dart';
-import 'package:realtor_pass/features/main/presentation/widgets/house_widget.dart';
 import 'package:realtor_pass/features/main/presentation/widgets/search_widget.dart';
-
 import '../../../../app_core/widgets/loading_widget.dart';
 import '../../../../resources/resources.dart';
 import '../../core/entity/house_entity.dart';
@@ -41,7 +38,56 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   initialize() {
     scrollController = ScrollController();
-    houses = [];
+    houses = [
+      HouseEntity(
+          id: -1,
+          houseTitle: "Hello",
+          houseLocation: "20.0,10.4",
+          isFavorite: false,
+          houseType: "",
+          category: "",
+          categoryId: -1,
+          description: "",
+          images: [],
+          price: 10,
+          square: 10,
+          bathroom: 1,
+          rooms: 1,
+          lon: 10,
+          lat: 10),
+      HouseEntity(
+          houseTitle: "Hello",
+          id: -1,
+          houseLocation: "40.0,60.4",
+          isFavorite: false,
+          houseType: "",
+          category: "",
+          categoryId: -1,
+          description: "",
+          images: [],
+          price: 10,
+          square: 10,
+          bathroom: 1,
+          rooms: 1,
+          lon: 10,
+          lat: 10),
+      HouseEntity(
+          houseTitle: "Hello",
+          id: -1,
+          houseLocation: "64.0,50.4",
+          isFavorite: false,
+          houseType: "",
+          category: "",
+          categoryId: -1,
+          description: "",
+          images: [],
+          price: 10,
+          square: 10,
+          bathroom: 1,
+          rooms: 1,
+          lon: 10,
+          lat: 10),
+    ];
     BlocProvider.of<HousesCubit>(context).load();
 
     scrollController.addListener(_scrollListener);
@@ -89,7 +135,9 @@ class _CatalogScreenState extends State<CatalogScreen> {
               SizedBox(height: 20.h),
               _buildSearchRow(),
               SizedBox(height: 20.h),
-MapWidget(),
+              MapWidget(
+                houses: houses,
+              ),
               BlocBuilder<HouseTypeCubit, HouseTypeState>(
                 builder: (context, state) {
                   if (state is HouseTypeLoaded) {
@@ -141,7 +189,6 @@ MapWidget(),
                   return const SizedBox();
                 },
               ),
-
               BlocConsumer<HousesCubit, HousesState>(
                 listener: (context, state) {
                   if (state is HousesError) {
@@ -155,7 +202,6 @@ MapWidget(),
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Column(
                         children: [
-
                           Container(
                             height: 100.h,
                             width: 1.sw,
@@ -228,7 +274,7 @@ MapWidget(),
             onSearch: (value) {
               BlocProvider.of<HousesCubit>(context).load(search: value);
             },
-            onFilter: (){},
+            onFilter: () {},
             suggestionsCallback: suggestionsCallback,
             itemBuilder: (BuildContext context, HouseEntity house) {
               return Container(

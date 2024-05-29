@@ -7,7 +7,6 @@
   "signUp": "Registration",
   "email": "Email",
   "password": "Password",
-  "confirm": "Confirm password",
   "get": "Get a code",
   "agree": "By logging in you agree to the policy\nprocessing of personal data",
   "forgotPassword": "Forgot Password?",
@@ -31,8 +30,19 @@
   "favorite": "Favorite",
   "profile": "Profile",
   "dontHaveAnAccount": "Don't have an account? ",
-  "userName": "Username"
-
+  "userName": "Username",
+  "name": "Name",
+  "mainInformation": "Main information",
+  "settingsSubTitle":"Some information will be available to car owners",
+  "fillTheForm": "Fill the from",
+  "favConditions": "Favorable conditions",
+  "favorableConditionsText":"Choose the right transport, because every day you live affects your time",
+  "fewItemsBeforeRentHome": "Few items before rent house",
+  "severalImportantStagesBeforeRentHouse": "Several important steps \nreal estate rental registration",
+  "howItAllHappens": "How it all happens",
+ "theStepsThatWeDescribe": "The steps that we describe are absolutely correct and mandatory for registering a lease",
+  "companyAdvantages": "Company advantages",
+  "favConditions":"Profitable terms"
 
 
 }

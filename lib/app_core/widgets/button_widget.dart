@@ -31,7 +31,7 @@ class ButtonWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(65.r),
         child: Ink(
           height: height.h,
-          width: MediaQuery.of(context).size.width,
+          width:  MediaQuery.of(context).size.width ,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(65.r),
             color: isEnabled ? null : AppStyle.blue,

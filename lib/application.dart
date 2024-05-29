@@ -9,8 +9,13 @@ import 'package:realtor_pass/features/main/presentation/screens/main_screen.dart
 import 'features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'features/auth/presentation/cubit/auth/auth_sources/auth_sources_cubit.dart';
 import 'features/auth/presentation/cubit/current_user/current_user_cubit.dart';
+import 'features/auth/presentation/cubit/edit_current_user_cubit/edit_user_cubit.dart';
 import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
+import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
+import 'features/main/presentation/cubit/posters/posters_cubit.dart';
+import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
+import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'locator.dart';
 
 class Application extends StatefulWidget {
@@ -30,6 +35,11 @@ class _ApplicationState extends State<Application>
   late BottomNavCubit bottomNavCubit;
   late HousesCubit housesCubit;
   late HouseTypeCubit houseTypeCubit;
+  late EditUserCubit editUserCubit;
+  late PostersCubit postersCubit;
+  late QuestionsCubit questionsCubit;
+  late FewStepsCubit fewStepsCubit;
+  late ProfitableTermsCubit profitableTermsCubit;
 
   @override
   void initState() {
@@ -46,6 +56,11 @@ class _ApplicationState extends State<Application>
     bottomNavCubit = locator();
     housesCubit = locator();
     houseTypeCubit = locator();
+    editUserCubit = locator();
+    postersCubit = locator();
+    questionsCubit = locator();
+    fewStepsCubit = locator();
+    profitableTermsCubit =  locator();
   }
 
   @override
@@ -61,6 +76,12 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: bottomNavCubit),
         BlocProvider.value(value: housesCubit),
         BlocProvider.value(value: houseTypeCubit),
+        BlocProvider.value(value: editUserCubit),
+        BlocProvider.value(value: postersCubit),
+        BlocProvider.value(value: questionsCubit),
+        BlocProvider.value(value: fewStepsCubit),
+        BlocProvider.value(value: profitableTermsCubit),
+
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -68,7 +89,7 @@ class _ApplicationState extends State<Application>
         splitScreenMode: false,
         builder: (context, child) {
           return MaterialApp(
-            title: 'Royal Pass Car',
+            title: 'Realtor Pass House',
             debugShowCheckedModeBanner: false,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
