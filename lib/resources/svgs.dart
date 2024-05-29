@@ -28,4 +28,5 @@ class Svgs {
   static const String tGeoIcon = "assets/svg/arrow-down.svg";
   static const String tPrivacy =  "assets/svg/privacy_policy.svg";
   static const String tSquare =  "assets/svg/square_icon.svg";
+  static const String tConditions =  "assets/svg/prof_conditions.svg";
 }
