@@ -66,7 +66,7 @@ class SearchWidget<T> extends StatelessWidget {
                             hintStyle: TextStyle(
                                 fontSize: 14.sp,
                                 color: const Color(0xffA1A1A1)),
-                            hintText: hintText ?? "Lamborgini, BMW",
+                            hintText: hintText ?? "Apartment for rent",
                             contentPadding: EdgeInsets.zero,
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
