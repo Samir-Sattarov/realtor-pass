@@ -29,6 +29,14 @@ import 'features/auth/presentation/cubit/forgot_password/forgot_password_cubit.d
 import 'features/auth/presentation/cubit/otp_code/otp_code_cubit.dart';
 import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
+import 'features/main/core/usecases/few_steps_usecase.dart';
+import 'features/main/core/usecases/posters_usecase.dart';
+import 'features/main/core/usecases/profitable_terms_usecase.dart';
+import 'features/main/core/usecases/questions_usecase.dart';
+import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
+import 'features/main/presentation/cubit/posters/posters_cubit.dart';
+import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
+import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 
 final locator = GetIt.I;
 
@@ -65,7 +73,14 @@ void setup() {
   locator.registerLazySingleton(() => ConfirmPasswordUsecase(locator()));
   locator.registerLazySingleton(() => GetHousesUsecase(locator()));
   locator.registerLazySingleton(() => GetHouseTypeUsecase(locator()));
-
+  locator.registerLazySingleton(() => GetPostersUsecase(locator()));
+  locator.registerLazySingleton(() => QuestionsUsecase(locator()));
+  locator.registerFactory(() => GetFewStepsUsecase(
+        locator(),
+      ));
+  locator.registerFactory(() => GetProfitableTermsUsecase(
+        locator(),
+      ));
 
   // ================ External ================ //
 
@@ -121,8 +136,18 @@ void setup() {
         locator(),
       ));
   locator.registerFactory(() => HouseTypeCubit(
-    locator(),
-  ));
+        locator(),
+      ));
+  locator.registerFactory(() => PostersCubit(
+        locator(),
+      ));
+  locator.registerFactory(() => QuestionsCubit(
+        locator(),
+      ));
+  locator.registerFactory(() => FewStepsCubit(
+        locator(),
+      ));
+  locator.registerFactory(() => ProfitableTermsCubit(locator()));
 
   // ================ Repository / Datasource ================ //
 
