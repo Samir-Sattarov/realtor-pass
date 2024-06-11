@@ -42,7 +42,12 @@
   "howItAllHappens": "How it all happens",
  "theStepsThatWeDescribe": "The steps that we describe are absolutely correct and mandatory for registering a lease",
   "companyAdvantages": "Company advantages",
-  "favConditions":"Profitable terms"
-
+  "favConditions":"Profitable terms",
+  "reset": "Reset",
+  "square":" Total area m²",
+  "price": "Price,$",
+  "filter": "Filter",
+  "floors": "Floors in the house",
+  "reset": "Reset"
 
 }

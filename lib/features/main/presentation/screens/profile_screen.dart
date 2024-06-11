@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../app_core/app_core_library.dart';
+import '../../../../app_core/utils/bottom_sheets/bottom_sheets.dart';
 import '../../../../resources/resources.dart';
 import '../../../auth/presentation/cubit/auth/auth_cubit.dart';
 import '../../../auth/presentation/cubit/current_user/current_user_cubit.dart';
@@ -11,7 +12,7 @@ import '../../../auth/presentation/cubit/session/session_cubit.dart';
 import 'settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -86,7 +87,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         _profileItem(
                           svgPath: Svgs.tHelpCircle,
                           title: "support".tr(),
-                          onTap: () {},
+                          onTap: () {
+                            BottomSheets.support(context);
+                          },
                         ),
                         SizedBox(height: 16.h),
                         _profileItem(

@@ -12,10 +12,13 @@ import 'features/auth/presentation/cubit/current_user/current_user_cubit.dart';
 import 'features/auth/presentation/cubit/edit_current_user_cubit/edit_user_cubit.dart';
 import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
+import 'features/main/presentation/cubit/config/config_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
 import 'features/main/presentation/cubit/posters/posters_cubit.dart';
 import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
+import 'features/main/presentation/cubit/support/support_cubit.dart';
+import 'features/main/presentation/screens/profile_screen.dart';
 import 'locator.dart';
 
 class Application extends StatefulWidget {
@@ -40,6 +43,8 @@ class _ApplicationState extends State<Application>
   late QuestionsCubit questionsCubit;
   late FewStepsCubit fewStepsCubit;
   late ProfitableTermsCubit profitableTermsCubit;
+  late ConfigCubit configCubit;
+  late SupportCubit supportCubit;
 
   @override
   void initState() {
@@ -61,6 +66,8 @@ class _ApplicationState extends State<Application>
     questionsCubit = locator();
     fewStepsCubit = locator();
     profitableTermsCubit =  locator();
+    configCubit = locator();
+    supportCubit = locator();
   }
 
   @override
@@ -81,6 +88,10 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: questionsCubit),
         BlocProvider.value(value: fewStepsCubit),
         BlocProvider.value(value: profitableTermsCubit),
+        BlocProvider.value(value: configCubit),
+        BlocProvider.value(value: supportCubit),
+
+
 
       ],
       child: ScreenUtilInit(
@@ -108,7 +119,7 @@ class _ApplicationState extends State<Application>
             home: child,
           );
         },
-        child: const MainScreen(),
+        child: const ProfileScreen(),
       ),
     );
   }

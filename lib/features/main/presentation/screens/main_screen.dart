@@ -45,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: BlocListener<BottomNavCubit, int>(
         listener: (context, state) {
-          if (state != 1) {
+          if (state != -1) {
             if (mounted) {
               Future.delayed(
                 Duration.zero,
