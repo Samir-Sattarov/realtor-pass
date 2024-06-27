@@ -18,7 +18,7 @@ class FewStepsError extends FewStepsState {
 
   FewStepsError(this.message);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [message];
 }
 
 class FewStepsLoaded extends FewStepsState {
