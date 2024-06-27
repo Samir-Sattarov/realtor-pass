@@ -79,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 16.h),
                         _profileItem(
-                          svgPath: Svgs.tPrivacy,
+                          svgPath: Svgs.tHome,
                           title: "applications".tr(),
                           onTap: () {},
                         ),
@@ -125,8 +125,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String title,
     required Function() onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
+    return TextButton(
+      onPressed: onTap,
       child: Row(
         children: [
           SizedBox(
