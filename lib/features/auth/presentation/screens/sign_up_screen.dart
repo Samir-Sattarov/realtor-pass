@@ -10,6 +10,7 @@ import 'package:realtor_pass/app_core/widgets/text_form_field_widget.dart';
 import 'package:realtor_pass/features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'package:realtor_pass/features/auth/presentation/screens/confirm_otp_screen.dart';
 import '../../../../app_core/utils/app_style.dart';
+import '../../../../app_core/widgets/back_widget.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -50,8 +51,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 20.h,),
+                    BackWidget(),
                     SizedBox(
-                      height: 50.h,
+                      height: 10.h,
                     ),
                     Text(
                       "appName".tr(),
