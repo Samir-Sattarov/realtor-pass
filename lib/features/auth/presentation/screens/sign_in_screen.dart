@@ -11,6 +11,7 @@ import 'package:realtor_pass/features/auth/presentation/cubit/auth/auth_cubit.da
 import 'package:realtor_pass/features/auth/presentation/cubit/current_user/current_user_cubit.dart';
 import 'package:realtor_pass/features/auth/presentation/screens/confirm_otp_screen.dart';
 import 'package:realtor_pass/features/main/presentation/screens/main_screen.dart';
+import '../../../../app_core/widgets/back_widget.dart';
 import '../../../../resources/resources.dart';
 import 'forgot_password_screen.dart';
 import 'sign_up_screen.dart';
@@ -50,6 +51,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 10.h,),
+                    const BackWidget(),
                     SizedBox(
                       height: 50.h,
                     ),
