@@ -7,6 +7,7 @@ import 'package:pinput/pinput.dart';
 import 'package:realtor_pass/app_core/widgets/error_flash_bar.dart';
 import 'package:realtor_pass/features/main/presentation/screens/main_screen.dart';
 import '../../../../app_core/app_core_library.dart';
+import '../../../../app_core/widgets/back_widget.dart';
 import '../../../../app_core/widgets/button_widget.dart';
 import '../cubit/otp_code/otp_code_cubit.dart';
 
@@ -27,7 +28,7 @@ class ConfirmOTPScreen extends StatefulWidget {
 class _ConfirmOTPScreenState extends State<ConfirmOTPScreen> {
   @override
   void dispose(){
-    BlocProvider.of<OtpCodeCubit>(context).emit;
+    BlocProvider.of<OtpCodeCubit>(context).confirm(code: controllerCode.text);
   }
   final TextEditingController controllerCode = TextEditingController();
 
@@ -57,7 +58,9 @@ class _ConfirmOTPScreenState extends State<ConfirmOTPScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 55.h),
+                    SizedBox(height: 20.h,),
+                    BackWidget(),
+                    SizedBox(height: 10.h,),
                     Text(
                       "appName".tr(),
                       style: TextStyle(
@@ -97,7 +100,7 @@ class _ConfirmOTPScreenState extends State<ConfirmOTPScreen> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          const TextSpan(text: ""),
+                          const TextSpan(text: " "),
                           TextSpan(
                             text: widget.email,
                             style: TextStyle(
