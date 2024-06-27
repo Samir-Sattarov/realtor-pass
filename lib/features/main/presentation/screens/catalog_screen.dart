@@ -5,17 +5,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:realtor_pass/app_core/app_core_library.dart';
-import 'package:realtor_pass/app_core/utils/app_style.dart';
-import 'package:realtor_pass/app_core/widgets/error_flash_bar.dart';
-import 'package:realtor_pass/features/main/presentation/cubit/house_type/house_type_cubit.dart';
-import 'package:realtor_pass/features/main/presentation/cubit/houses/houses_cubit.dart';
-import 'package:realtor_pass/features/main/presentation/widgets/search_widget.dart';
-import '../../../../app_core/widgets/loading_widget.dart';
+import '../../../../app_core/utils/app_style.dart';
+import '../../../../app_core/utils/bottom_sheets/bottom_sheets.dart';
+import '../../../../app_core/utils/test_dates.dart';
 import '../../../../resources/resources.dart';
+import '../../core/entity/chip_entity.dart';
 import '../../core/entity/house_entity.dart';
-import '../widgets/house_vertical_view_widget.dart';
+import '../cubit/house_type/house_type_cubit.dart';
+import '../cubit/houses/houses_cubit.dart';
+import '../widgets/custom_chip_widget.dart';
+import '../widgets/house_widget.dart';
 import '../widgets/map_widget.dart';
+import '../widgets/search_widget.dart';
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -27,7 +28,7 @@ class CatalogScreen extends StatefulWidget {
 class _CatalogScreenState extends State<CatalogScreen> {
   final TextEditingController controllerSearch = TextEditingController();
   late ScrollController scrollController;
-  int selectedCarCategory = 0;
+  int selectedHouseCategory = 0;
   late List<HouseEntity> houses;
 
   @override
@@ -38,56 +39,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   initialize() {
     scrollController = ScrollController();
-    houses = [
-      HouseEntity(
-          id: -1,
-          houseTitle: "Hello",
-          houseLocation: "20.0,10.4",
-          isFavorite: false,
-          houseType: "",
-          category: "",
-          categoryId: -1,
-          description: "",
-          images: [],
-          price: 10,
-          square: 10,
-          bathroom: 1,
-          rooms: 1,
-          lon: 10,
-          lat: 10),
-      HouseEntity(
-          houseTitle: "Hello",
-          id: -1,
-          houseLocation: "40.0,60.4",
-          isFavorite: false,
-          houseType: "",
-          category: "",
-          categoryId: -1,
-          description: "",
-          images: [],
-          price: 10,
-          square: 10,
-          bathroom: 1,
-          rooms: 1,
-          lon: 10,
-          lat: 10),
-      HouseEntity(
-          houseTitle: "Hello",
-          id: -1,
-          houseLocation: "64.0,50.4",
-          isFavorite: false,
-          houseType: "",
-          category: "",
-          categoryId: -1,
-          description: "",
-          images: [],
-          price: 10,
-          square: 10,
-          bathroom: 1,
-          rooms: 1,
-          lon: 10,
-          lat: 10),
-    ];
+    houses = TestDates.houses;
     BlocProvider.of<HousesCubit>(context).load();
 
     scrollController.addListener(_scrollListener);
@@ -126,101 +78,135 @@ class _CatalogScreenState extends State<CatalogScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildLocationHeader(),
-              SizedBox(height: 20.h),
-              _buildSearchRow(),
-              SizedBox(height: 20.h),
-              MapWidget(
-                houses: houses,
-              ),
-              BlocBuilder<HouseTypeCubit, HouseTypeState>(
-                builder: (context, state) {
-                  if (state is HouseTypeLoaded) {
-                    final categories = state.results.houses;
+        child: SingleChildScrollView(
+          controller: scrollController,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildLocationHeader(),
+                SizedBox(height: 20.h),
+                _buildSearchRow(),
+                SizedBox(height: 16.h),
+                BlocBuilder<HouseTypeCubit, HouseTypeState>(
+                  builder: (context, state) {
                     return SizedBox(
-                      height: 26.h,
+                      height: 30.h,
                       child: ListView.separated(
                         shrinkWrap: true,
                         physics: const ClampingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 21.w),
                         scrollDirection: Axis.horizontal,
                         separatorBuilder: (context, index) =>
                             SizedBox(width: 8.w),
                         itemBuilder: (context, index) {
-                          final category = categories[index];
-
-                          // final ChipEntity chip = ChipEntity(
-                          //   id: category.id,
-                          //   title: category.title,
-                          // );
+                          final entity = TestDates.sorting[index];
                           return GestureDetector(
                             onTap: () {
-                              if (selectedCarCategory == category.id) {
-                                setState(() {
-                                  selectedCarCategory = 0;
-                                });
-
-                                BlocProvider.of<HousesCubit>(context).load();
-                              } else {
-                                setState(() {
-                                  selectedCarCategory = category.id;
-                                });
-
-                                BlocProvider.of<HousesCubit>(context).load(
-                                  category: selectedCarCategory,
-                                );
-                              }
+                              setState(() {
+                                selectedHouseCategory = entity.id;
+                              });
                             },
-                            // child: CustomChipWidget(
-                            //   entity: chip,
-                            //   currentIndex: selectedCarCategory,
-                            // ),
+                            child: CustomChipWidget(
+                              entity: entity,
+                              currentIndex: selectedHouseCategory,
+                            ),
                           );
                         },
-                        itemCount: categories.length,
+                        itemCount: TestDates.sorting.length,
                       ),
                     );
-                  }
-                  return const SizedBox();
-                },
-              ),
-              BlocConsumer<HousesCubit, HousesState>(
-                listener: (context, state) {
-                  if (state is HousesError) {
-                    ErrorFlushBar(state.message).show(context);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is HousesLoaded) {
-                    houses = state.houses;
+                  },
+                ),
+                SizedBox(
+                  height: 16.h,
+                ),
+                MapWidget(
+                  houses: houses,
+                ),
+                SizedBox(
+                  height: 16.h,
+                ),
+
+                BlocConsumer<HousesCubit, HousesState>(
+                  listener: (context, state) {
+                    if (state is HousesLoaded) {
+                      if (mounted) {
+                        Future.delayed(
+                          Duration.zero,
+                          () {
+                            setState(() {
+                              houses = state.houses;
+                            });
+                          },
+                        );
+                      }
+                    }
+                  },
+                  builder: (context, state) {
                     return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
                       child: Column(
                         children: [
-                          Container(
-                            height: 100.h,
-                            width: 1.sw,
-                            color: Colors.grey,
-                          ),
-                          Expanded(
-                            child: HouseVerticalWidget(
-                              houses: houses,
-                            ),
-                          ),
+                          ...List.generate(houses.length, (index) {
+                            final house = houses[index];
+
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 10.h),
+                              child: HouseWidget(houses: house),
+                            );
+                          })
                         ],
                       ),
                     );
-                  } else {
-                    return const Center(child: LoadingWidget());
-                  }
-                },
-              ),
-            ],
+                    // return Expanded(
+                    //   child: ListView.separated(
+                    //     itemBuilder: (context, index) {
+                    //       final house = houses[index];
+                    //
+                    //       return HouseWidget(houses: house);
+                    //     },
+                    //     separatorBuilder: (context, index) =>
+                    //         SizedBox(height: 10.h),
+                    //     itemCount: houses.length,
+                    //   ),
+                    // );
+                  },
+                ),
+
+                // BlocConsumer<HousesCubit, HousesState>(
+                //   listener: (context, state) {
+                //     if (state is HousesError) {
+                //       ErrorFlushBar(state.message).show(context);
+                //     }
+                //   },
+                //   builder: (context, state) {
+                //     if (state is HousesLoaded) {
+                //       houses = state.houses;
+                //       return Padding(
+                //         padding: EdgeInsets.symmetric(horizontal: 20.w),
+                //         child: Column(
+                //           children: [
+                //             Container(
+                //               height: 100.h,
+                //               width: 1.sw,
+                //               color: Colors.grey,
+                //             ),
+                //             Expanded(
+                //               child: HouseVerticalWidget(
+                //                 houses: houses,
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //       );
+                //     } else {
+                //       return const Center(child: LoadingWidget());
+                //     }
+                //   },
+                // ),
+              ],
+            ),
           ),
         ),
       ),
@@ -274,7 +260,35 @@ class _CatalogScreenState extends State<CatalogScreen> {
             onSearch: (value) {
               BlocProvider.of<HousesCubit>(context).load(search: value);
             },
-            onFilter: () {},
+            onFilter: () {
+              BottomSheets.filter(
+                context,
+                category: selectedHouseCategory,
+                onConfirm: (
+                  houseType,
+                  category,
+                  sort,
+                  windows,
+                  rooms,
+                  square,
+                  bathrooms,
+                  location,
+                  maxPrice,
+                  minPrice,
+                ) {
+                  BlocProvider.of<HousesCubit>(context).load(
+                    search: controllerSearch.text,
+                    houseType: houseType,
+                    category: category,
+                    rooms: rooms,
+                    square: square,
+                    bathroom: bathrooms,
+                    maxPrice: maxPrice,
+                    minPrice: minPrice,
+                  );
+                },
+              );
+            },
             suggestionsCallback: suggestionsCallback,
             itemBuilder: (BuildContext context, HouseEntity house) {
               return Container(
