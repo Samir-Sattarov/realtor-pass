@@ -1,4 +1,5 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:realtor_pass/app_core/app_core_library.dart';
-
 import '../../../../app_core/utils/animated_navigation.dart';
 import '../../../../app_core/utils/number_helper.dart';
 import '../../../../app_core/widgets/back_widget.dart';
@@ -33,6 +33,7 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
   @override
   void initState() {
     super.initState();
+    currentImageIndex = 0;
   }
 
   @override
@@ -40,131 +41,142 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
     final entity = widget.entity;
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 21.w),
-                child: SizedBox(
-                  height: 183.h,
-                  width: MediaQuery.of(context).size.width,
-                  child: Stack(
-                    children: [
-                      Swiper(
-                        itemCount: entity.images.length,
-                        onIndexChanged: (value) {
-                          setState(() {
-                            currentImageIndex = value + 1;
-                          });
-                        },
-                        pagination: SwiperCustomPagination(builder:
-                            (BuildContext context, SwiperPluginConfig config) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.w),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    ...List.generate(
-                                      config.itemCount,
-                                      (index) => Expanded(
-                                        child: Padding(
-                                          padding:
-                                              index == entity.images.length - 1
-                                                  ? EdgeInsets.zero
-                                                  : const EdgeInsets.only(
-                                                      right: 10),
-                                          child: Container(
-                                            height: 2.h,
-                                            color: config.activeIndex == index
-                                                ? const Color(0xff474747)
-                                                : const Color(0xffC6C6C6),
-                                          ),
+              SizedBox(
+                height: 228.h,
+                width: MediaQuery.of(context).size.width,
+                child: Stack(
+                  children: [
+                    Swiper(
+                      itemCount: entity.images.length,
+                      onIndexChanged: (value) {
+                        setState(() {
+                          currentImageIndex = value;
+                        });
+                      },
+                      pagination: SwiperCustomPagination(builder:
+                          (BuildContext context, SwiperPluginConfig config) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 3.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  ...List.generate(
+                                    config.itemCount,
+                                    (index) => Expanded(
+                                      child: Padding(
+                                        padding: index ==
+                                                entity.images.length - 1
+                                            ? EdgeInsets.zero
+                                            : const EdgeInsets.only(right: 10),
+                                        child: Container(
+                                          height: 2.h,
+                                          color: config.activeIndex == index
+                                              ? const Color(0xff474747)
+                                              : const Color(0xffC6C6C6),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10.h),
-                            ],
-                          );
-                        }),
-                        itemBuilder: (context, index) => ExtendedImage.network(
-                          entity.images[index],
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        right: 5.w,
-                        top: 5.h,
-                        child: FavoriteButtonWidget(
-                          entity: widget.entity,
-                        ),
-                      ),
-                      Positioned(
-                        left: 5.w,
-                        top: 5.h,
-                        child: BackWidget(
-                          onBack: () {
-                            AnimatedNavigation.pushAndRemoveUntilFade(
-                              context: context,
-                              page: const MainScreen(index: 1),
-                            );
+                            ),
+                            SizedBox(height: 10.h),
+                          ],
+                        );
+                      }),
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            final imageProvider = ExtendedNetworkImageProvider(
+                                entity.images[index]);
+                            showImageViewer(context, imageProvider);
                           },
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 20,
-                        right: 3,
-                        child: Container(
-                          width: 58.r,
-                          height: 24.r,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40.r),
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 7.6,
-                                color: Colors.black.withOpacity(0.25),
-                                offset: const Offset(0, 1),
-                              )
-                            ],
-                            color: const Color(0xffFCFCFC),
+                          child: ExtendedImage.network(
+                            entity.images[index],
+                            fit: BoxFit.cover,
+                            width: 390,
+                            height: 228,
                           ),
-                          child: Center(
-                            child: Text(
-                              "$currentImageIndex / ${entity.images.length}",
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: const Color(0xff1A1E25),
-                              ),
+                        );
+                      },
+                    ),
+                    Positioned(
+                      right: 5.w,
+                      top: 5.h,
+                      child: FavoriteButtonWidget(
+                        entity: widget.entity,
+                      ),
+                    ),
+                    Positioned(
+                      left: 5.w,
+                      top: 5.h,
+                      child: BackWidget(
+                        onBack: () {
+                          AnimatedNavigation.pushAndRemoveUntilFade(
+                            context: context,
+                            page: const MainScreen(index: 1),
+                          );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 20,
+                      right: 3,
+                      child: Container(
+                        width: 58.r,
+                        height: 24.r,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40.r),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 7.6,
+                              color: Colors.black.withOpacity(0.25),
+                              offset: const Offset(0, 1),
+                            )
+                          ],
+                          color: const Color(0xffFCFCFC),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "${currentImageIndex + 1} / ${entity.images.length}",
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: const Color(0xff1A1E25),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
+              SizedBox(
+                height: 20.h,
+              ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 21.w),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Text(
-                  entity.houseLocation,
+                  entity.houseTitle,
                   style: TextStyle(
                     fontSize: 20.sp,
                     height: 0,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
                     color: AppStyle.blue,
                   ),
                 ),
               ),
-              SizedBox(height: 5.h),
+              SizedBox(height: 12.h),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 21.w),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Text(
                   entity.houseType,
                   style: TextStyle(
@@ -173,69 +185,81 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    Svgs.tSquare,
-                    width: 14.r,
-                    height: 14.r,
-                  ),
-                  SizedBox(width: 4.w),
-                  Text(
-                    entity.square.toString(),
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      height: 0,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xff474747),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.w,
-                  ),
-                  SvgPicture.asset(
-                    Svgs.tRooms,
-                    width: 14.r,
-                    height: 14.r,
-                  ),
-                  SizedBox(width: 4.w),
-                  Text(
-                    entity.rooms.toString(),
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      height: 0,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xff474747),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16.w,
-                  ),
-                  SvgPicture.asset(
-                    Svgs.tRestroom,
-                    width: 14.r,
-                    height: 14.r,
-                  ),
-                  SizedBox(width: 4.w),
-                  Text(
-                    entity.bathroom.toString(),
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      height: 0,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xff474747),
-                    ),
-                  )
-                ],
+              SizedBox(
+                height: 14.h,
               ),
-              Text(
-                entity.description,
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12.sp,
-                    color: AppStyle.darkGrey),
-              )
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(
+                      Svgs.tSquare,
+                      width: 14.r,
+                      height: 14.r,
+                    ),
+                    SizedBox(width: 4.w),
+                    Text(
+                      entity.square.toString(),
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        height: 0,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xff474747),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 40.w,
+                    ),
+                    SvgPicture.asset(
+                      Svgs.tRooms,
+                      width: 14.r,
+                      height: 14.r,
+                    ),
+                    SizedBox(width: 4.w),
+                    Text(
+                      entity.rooms.toString(),
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        height: 0,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xff474747),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 40.w,
+                    ),
+                    SvgPicture.asset(
+                      Svgs.tRestroom,
+                      width: 14.r,
+                      height: 14.r,
+                    ),
+                    SizedBox(width: 4.w),
+                    Text(
+                      entity.bathroom.toString(),
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        height: 0,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xff474747),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  entity.description,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12.sp,
+                      color: AppStyle.darkGrey),
+                ),
+              ),
             ],
           ),
         ),
@@ -265,13 +289,20 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                         context: context,
                         page: const SignInScreen(),
                       );
-                    } else {}
+                    } else {
+                      // Handle authenticated scenario
+                    }
                   },
                   child: Container(
                     width: 180.w,
                     height: 40.h,
                     decoration: BoxDecoration(
-                      color: const Color(0xff474747),
+                      color: AppStyle.blue,
+                      gradient: const LinearGradient(
+                        colors: [AppStyle.blue, AppStyle.darkBlue],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(78.r),
                     ),
                     child: Center(
@@ -283,15 +314,14 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                         ),
                       ),
                     ),
-                  ),
-                ).animate().shimmer(duration: 250.milliseconds).shimmer(
-                      delay: 250.milliseconds,
-                      angle: 180,
-                    ),
+                  ).animate().shimmer(duration: 250.milliseconds).shimmer(
+                        delay: 250.milliseconds,
+                        angle: 180,
+                      ),
+                ),
                 SizedBox(width: 20.w),
                 Flexible(
                   child: Text(
-                    // ignore: prefer_interpolation_to_compose_strings
                     NumberHelper.format(entity.price) +
                         '\$' +
                         "/" +

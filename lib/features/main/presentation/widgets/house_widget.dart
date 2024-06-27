@@ -118,7 +118,7 @@ class _HouseWidgetState extends State<HouseWidget>
                             );
                           }),
                           itemCount: widget.houses.images.length,
-                          itemBuilder: (context, index) => Image.network(
+                          itemBuilder: (context, index) => Image.asset(
                             widget.houses.images[index],
                             fit: BoxFit.cover,
                           ),
@@ -130,9 +130,8 @@ class _HouseWidgetState extends State<HouseWidget>
                 ),
                 SizedBox(width: 10.w),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 10.h, top: 13.h),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.houses.houseTitle,
@@ -142,7 +141,6 @@ class _HouseWidgetState extends State<HouseWidget>
                           color: const Color(0xff474747),
                         ),
                       ),
-                      SizedBox(height: 3.h),
                       Text(
                         widget.houses.houseType,
                         style: TextStyle(
@@ -150,7 +148,6 @@ class _HouseWidgetState extends State<HouseWidget>
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(height: 9.h),
                       Column(
                         children: [
                           Row(
@@ -167,7 +164,6 @@ class _HouseWidgetState extends State<HouseWidget>
                               ),
                             ],
                           ),
-                          SizedBox(height: 11.h),
                           Row(
                             children: [
                               SvgPicture.asset(Svgs.tRooms),
@@ -182,7 +178,6 @@ class _HouseWidgetState extends State<HouseWidget>
                               ),
                             ],
                           ),
-                          SizedBox(height: 11.h),
                           Row(
                             children: [
                               SvgPicture.asset(Svgs.tRestroom),
@@ -408,7 +403,12 @@ class _HouseWidgetState extends State<HouseWidget>
                             height: 25.h,
                             margin: EdgeInsets.only(right: 10.w),
                             decoration: BoxDecoration(
-                              color: const Color(0xff474747),
+                              color: AppStyle.blue,
+                              gradient: const LinearGradient(
+                                colors: [AppStyle.blue, AppStyle.darkBlue],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
                               borderRadius: BorderRadius.circular(78.r),
                             ),
                             child: Center(

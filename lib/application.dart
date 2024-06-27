@@ -10,6 +10,7 @@ import 'features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'features/auth/presentation/cubit/auth/auth_sources/auth_sources_cubit.dart';
 import 'features/auth/presentation/cubit/current_user/current_user_cubit.dart';
 import 'features/auth/presentation/cubit/edit_current_user_cubit/edit_user_cubit.dart';
+import 'features/auth/presentation/cubit/otp_code/otp_code_cubit.dart';
 import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
@@ -19,6 +20,7 @@ import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'features/main/presentation/cubit/support/support_cubit.dart';
 import 'features/main/presentation/screens/profile_screen.dart';
+import 'features/main/presentation/screens/settings_screen.dart';
 import 'locator.dart';
 
 class Application extends StatefulWidget {
@@ -45,6 +47,7 @@ class _ApplicationState extends State<Application>
   late ProfitableTermsCubit profitableTermsCubit;
   late ConfigCubit configCubit;
   late SupportCubit supportCubit;
+  late OtpCodeCubit otpCodeCubit;
 
   @override
   void initState() {
@@ -68,6 +71,7 @@ class _ApplicationState extends State<Application>
     profitableTermsCubit =  locator();
     configCubit = locator();
     supportCubit = locator();
+    otpCodeCubit =  locator();
   }
 
   @override
@@ -90,9 +94,7 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: profitableTermsCubit),
         BlocProvider.value(value: configCubit),
         BlocProvider.value(value: supportCubit),
-
-
-
+        BlocProvider.value(value: otpCodeCubit),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -119,7 +121,7 @@ class _ApplicationState extends State<Application>
             home: child,
           );
         },
-        child: const ProfileScreen(),
+        child: const MainScreen(),
       ),
     );
   }

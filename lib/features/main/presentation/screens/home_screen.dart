@@ -1,20 +1,26 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import '../../../../app_core/app_core_library.dart';
 import '../../../../app_core/utils/app_style.dart';
 import '../../../../app_core/utils/bottom_sheets/bottom_sheets.dart';
+import '../../../../app_core/utils/test_dates.dart';
 import '../../../../resources/resources.dart';
 import '../../core/entity/house_entity.dart';
+import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import '../cubit/houses/houses_cubit.dart';
 import '../cubit/posters/posters_cubit.dart';
 import '../cubit/questions/questions_cubit.dart';
 import '../widgets/fav_conditions_widget.dart';
+import '../widgets/house_widget.dart';
 import '../widgets/questions_widget.dart';
 import '../widgets/search_widget.dart';
+import 'location_result_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<HouseEntity> houses = [];
 
   final TextEditingController controllerSearch = TextEditingController();
+
+  _HomeScreenState();
   Future<List<HouseEntity>> suggestionsCallback(String pattern) async =>
       Future<List<HouseEntity>>.delayed(
         const Duration(milliseconds: 0),
@@ -35,6 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
           return nameLower.contains(patternLower);
         }).toList(),
       );
+  initialize() {
+    BlocProvider.of<PostersCubit>(context).load();
+    BlocProvider.of<HousesCubit>(context).load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,46 +58,62 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "yourLocation".tr(),
-                style: TextStyle(
-                  color: AppStyle.darkGrey,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
+              GestureDetector(
+                onTap: () {
+                  AnimatedNavigation.push(
+                      context: context, page: const LocationResultScreen());
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "yourLocation".tr(),
+                      style: TextStyle(
+                        color: AppStyle.darkGrey,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.location_on_outlined,
+                          color: AppStyle.blue,
+                        ),
+                        SizedBox(width: 5.w),
+                        Text(
+                          "Samarkand, Uzbekistan".tr(),
+                          style: TextStyle(
+                            color: AppStyle.blue,
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: SvgPicture.asset(Svgs.tGeoIcon),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.location_on_outlined,
-                    color: AppStyle.blue,
-                  ),
-                  SizedBox(width: 5.w),
-                  Text(
-                    "Samarkand, Uzbekistan".tr(),
-                    style: TextStyle(
-                      color: AppStyle.blue,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset(Svgs.tGeoIcon),
-                  ),
-                ],
+              SizedBox(
+                height: 20.h,
               ),
               Row(
                 children: [
                   Expanded(
                     child: SearchWidget(
                       controller: controllerSearch,
-                      onSearch: (value) {
+                      onSearch: (String value) {
+                        BlocProvider.of<BottomNavCubit>(context)
+                            .change(ScreenIndex.catalog);
                         BlocProvider.of<HousesCubit>(context)
                             .load(search: value);
                       },
-                      onFilter: () {},
                       suggestionsCallback: suggestionsCallback,
                       itemBuilder: (BuildContext context, HouseEntity house) {
                         return Container(
@@ -193,7 +221,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: "fewItemsBeforeRentHome".tr(),
                   onTap: () {
                     BottomSheets.fewStepsBeforeRent(context);
-
                   },
                 ),
               ),
@@ -204,8 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 1.w),
                 child: FavConditionsWidget(
                   onTap: () {
-                    BottomSheets.favConditions(context, onFillForm: (){});
-
+                    BottomSheets.favConditions(context, onFillForm: () {});
                   },
                 ),
               ).animate().shimmer(),
@@ -222,6 +248,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   return const SizedBox();
                 },
+              ),
+              SizedBox(
+                height: 30.h,
+              ),
+              Container(
+                width: 300.w,
+                height: 300.h,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 22.w),
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) => SizedBox(width: 8.w),
+                  itemBuilder: (context, index) {
+                    if (index < houses.length) {
+                      // Ensure index is within the range
+                      return GestureDetector(
+                        onTap: () {
+                          // Handle tap if necessary
+                        },
+                        child: HouseWidget(
+                          houses: houses[index],
+                        ), // Correctly pass a single HouseEntity
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                  itemCount: TestDates.houses.length,
+                ),
               ),
             ],
           ),
