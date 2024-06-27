@@ -132,8 +132,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<PostersModel> getPosters() async {
-    final response = await apiClient.get(ApiConstants.banners);
-    final model = PostersModel.fromJson(response);
+    // final response = await apiClient.get(ApiConstants.banners);
+    final model = PostersModel(images: TestDates.posters.images);
     return model;
   }
 
