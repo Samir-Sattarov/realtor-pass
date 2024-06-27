@@ -20,9 +20,15 @@ class ConfirmOTPScreen extends StatefulWidget {
 
   @override
   State<ConfirmOTPScreen> createState() => _ConfirmOTPScreenState();
+
 }
 
+
 class _ConfirmOTPScreenState extends State<ConfirmOTPScreen> {
+  @override
+  void dispose(){
+    BlocProvider.of<OtpCodeCubit>(context).emit;
+  }
   final TextEditingController controllerCode = TextEditingController();
 
   @override
