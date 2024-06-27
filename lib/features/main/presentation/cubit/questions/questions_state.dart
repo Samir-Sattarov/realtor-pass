@@ -20,7 +20,7 @@ class QuestionsError extends QuestionsState {
 
   const QuestionsError({required this.message});
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [message];
 }
 
 final class QuestionsLoaded extends QuestionsState {
