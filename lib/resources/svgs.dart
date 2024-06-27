@@ -13,7 +13,7 @@ class Svgs {
   static const String tFacebook = 'assets/svg/facebook.svg';
   static const String tFavorite = 'assets/svg/favorite.svg';
   static const String tFilter = 'assets/svg/filter.svg';
-  static const String tRooms = 'rooms_icon.svg';
+  static const String tRooms = 'assets/svg/rooms_icon.svg';
   static const String tGoogle = 'assets/svg/google.svg';
   static const String tHelpCircle = 'assets/svg/help_circle.svg';
   static const String tHome = 'assets/svg/home.svg';
