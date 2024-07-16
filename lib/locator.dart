@@ -32,11 +32,13 @@ import 'features/auth/presentation/cubit/session/session_cubit.dart';
 import 'features/main/core/usecases/config_usecase.dart';
 import 'features/main/core/usecases/feedback_usecase.dart';
 import 'features/main/core/usecases/few_steps_usecase.dart';
+import 'features/main/core/usecases/get_house_stuff_usecase.dart';
 import 'features/main/core/usecases/posters_usecase.dart';
 import 'features/main/core/usecases/profitable_terms_usecase.dart';
 import 'features/main/core/usecases/questions_usecase.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
+import 'features/main/presentation/cubit/house_stuff/house_stuff_cubit.dart';
 import 'features/main/presentation/cubit/posters/posters_cubit.dart';
 import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
@@ -79,18 +81,20 @@ void setup() {
   locator.registerLazySingleton(() => GetHouseTypeUsecase(locator()));
   locator.registerLazySingleton(() => GetPostersUsecase(locator()));
   locator.registerLazySingleton(() => QuestionsUsecase(locator()));
-  locator.registerFactory(() => GetFewStepsUsecase(
+  locator.registerLazySingleton(() => GetHouseStuffUsecase(locator()));
+
+  locator.registerLazySingleton(() => GetFewStepsUsecase(
         locator(),
       ));
-  locator.registerFactory(() => GetProfitableTermsUsecase(
+  locator.registerLazySingleton(() => GetProfitableTermsUsecase(
         locator(),
       ));
-  locator.registerFactory(() => GetConfigUsecase(
-    locator(),
-  ));
-  locator.registerFactory(() => FeedbackUsecase(
-    locator(),
-  ));
+  locator.registerLazySingleton(() => GetConfigUsecase(
+        locator(),
+      ));
+  locator.registerLazySingleton(() => FeedbackUsecase(
+        locator(),
+      ));
 
   // ================ External ================ //
 
@@ -160,7 +164,7 @@ void setup() {
   locator.registerFactory(() => ProfitableTermsCubit(locator()));
   locator.registerFactory(() => ConfigCubit(locator()));
   locator.registerFactory(() => SupportCubit(locator()));
-
+  locator.registerFactory(() => HouseStuffCubit(locator()));
 
 
   // ================ Repository / Datasource ================ //

@@ -12,6 +12,7 @@ import '../../../auth/presentation/screens/sign_in_screen.dart';
 import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'catalog_screen.dart';
 import 'favorite_screen.dart';
+import 'form_screen.dart';
 import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
     const HomeScreen(),
     const CatalogScreen(),
+    const FormScreen(),
     const FavoriteScreen(),
     const ProfileScreen(),
   ];
@@ -70,10 +72,11 @@ class _MainScreenState extends State<MainScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _item(0, title: "home".tr(), image: Svgs.tHome),
+              _item(0, title: "home".tr(), image: Svgs.tHome,),
               _item(1, title: "catalog".tr(), image: Svgs.tCompass),
+              _item(2, title: "addHouse".tr(), image: Svgs.tAdd),
               _item(
-                2,
+                3,
                 title: "favorite".tr(),
                 image: Svgs.tFavorite,
                 onTap: () {
@@ -87,7 +90,7 @@ class _MainScreenState extends State<MainScreen> {
                 },
               ),
               _item(
-                3,
+                4,
                 title: "profile".tr(),
                 image: Svgs.tProfile,
                 onTap: () {
@@ -132,6 +135,8 @@ class _MainScreenState extends State<MainScreen> {
               child: Center(
                 child: SvgPicture.asset(
                   image,
+                  width: 25,
+                  height: 25,
                   // ignore: deprecated_member_use
                   color: color,
                 ),

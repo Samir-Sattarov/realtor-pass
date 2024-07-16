@@ -38,6 +38,7 @@ class HouseModel extends HouseEntity {
       lon: entity.lon,
     );
   }
+
   factory HouseModel.fromJson(Map<String, dynamic> json) {
     return HouseModel(
       id: json["id"],

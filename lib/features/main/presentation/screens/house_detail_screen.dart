@@ -1,8 +1,8 @@
-import 'package:card_swiper/card_swiper.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:card_swiper/card_swiper.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,13 +15,19 @@ import '../../../../resources/resources.dart';
 import '../../../auth/presentation/cubit/session/session_cubit.dart';
 import '../../../auth/presentation/screens/sign_in_screen.dart';
 import '../../core/entity/house_entity.dart';
+import '../../core/entity/house_stuff_entity.dart';
+import '../cubit/house_stuff/house_stuff_cubit.dart';
 import '../widgets/favorite_button_widget.dart';
+import '../widgets/house_stuff_widget.dart';
 import 'main_screen.dart';
 
 class HouseDetailScreen extends StatefulWidget {
   final HouseEntity entity;
 
-  const HouseDetailScreen({super.key, required this.entity});
+  const HouseDetailScreen({
+    super.key,
+    required this.entity,
+  });
 
   @override
   State<HouseDetailScreen> createState() => _HouseDetailScreenState();
@@ -29,11 +35,13 @@ class HouseDetailScreen extends StatefulWidget {
 
 class _HouseDetailScreenState extends State<HouseDetailScreen> {
   late int currentImageIndex;
+  late List<HouseStuffEntity> houseStuff;
 
   @override
   void initState() {
     super.initState();
     currentImageIndex = 0;
+    houseStuff = []; // Initialize the houseStuff list
   }
 
   @override
@@ -58,41 +66,44 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                           currentImageIndex = value;
                         });
                       },
-                      pagination: SwiperCustomPagination(builder:
-                          (BuildContext context, SwiperPluginConfig config) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 3.w),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  ...List.generate(
-                                    config.itemCount,
-                                    (index) => Expanded(
-                                      child: Padding(
-                                        padding: index ==
-                                                entity.images.length - 1
-                                            ? EdgeInsets.zero
-                                            : const EdgeInsets.only(right: 10),
-                                        child: Container(
-                                          height: 2.h,
-                                          color: config.activeIndex == index
-                                              ? const Color(0xff474747)
-                                              : const Color(0xffC6C6C6),
+                      pagination: SwiperCustomPagination(
+                        builder:
+                            (BuildContext context, SwiperPluginConfig config) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 3.w),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    ...List.generate(
+                                      config.itemCount,
+                                      (index) => Expanded(
+                                        child: Padding(
+                                          padding:
+                                              index == entity.images.length - 1
+                                                  ? EdgeInsets.zero
+                                                  : const EdgeInsets.only(
+                                                      right: 10),
+                                          child: Container(
+                                            height: 2.h,
+                                            color: config.activeIndex == index
+                                                ? const Color(0xff474747)
+                                                : const Color(0xffC6C6C6),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10.h),
-                          ],
-                        );
-                      }),
+                              SizedBox(height: 10.h),
+                            ],
+                          );
+                        },
+                      ),
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
@@ -105,6 +116,20 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                             fit: BoxFit.cover,
                             width: 390,
                             height: 228,
+                            mode: ExtendedImageMode.gesture,
+                            initGestureConfigHandler: (state) {
+                              return GestureConfig(
+                                minScale: 0.9,
+                                animationMinScale: 0.7,
+                                maxScale: 3.0,
+                                animationMaxScale: 3.5,
+                                speed: 1.0,
+                                inertialSpeed: 100.0,
+                                initialScale: 1.0,
+                                inPageView: true,
+                                initialAlignment: InitialAlignment.center,
+                              );
+                            },
                           ),
                         );
                       },
@@ -141,7 +166,7 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                               blurRadius: 7.6,
                               color: Colors.black.withOpacity(0.25),
                               offset: const Offset(0, 1),
-                            )
+                            ),
                           ],
                           color: const Color(0xffFCFCFC),
                         ),
@@ -159,9 +184,7 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 20.h,
-              ),
+              SizedBox(height: 20.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Text(
@@ -185,9 +208,7 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 14.h,
-              ),
+              SizedBox(height: 14.h),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
@@ -208,9 +229,7 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                         color: const Color(0xff474747),
                       ),
                     ),
-                    SizedBox(
-                      width: 40.w,
-                    ),
+                    SizedBox(width: 40.w),
                     SvgPicture.asset(
                       Svgs.tRooms,
                       width: 14.r,
@@ -226,9 +245,7 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                         color: const Color(0xff474747),
                       ),
                     ),
-                    SizedBox(
-                      width: 40.w,
-                    ),
+                    SizedBox(width: 40.w),
                     SvgPicture.asset(
                       Svgs.tRestroom,
                       width: 14.r,
@@ -243,22 +260,56 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                         fontWeight: FontWeight.bold,
                         color: const Color(0xff474747),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: 10.h,
-              ),
+              SizedBox(height: 10.h),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   entity.description,
                   style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12.sp,
-                      color: AppStyle.darkGrey),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12.sp,
+                    color: AppStyle.darkGrey,
+                  ),
                 ),
+              ),
+              BlocConsumer<HouseStuffCubit, HouseStuffState>(
+                listener: (context, state) {
+                  if (state is HouseStuffError) {
+                    if (mounted) {
+                      Future.delayed(
+                        Duration.zero,
+                        () {
+                          setState(() {
+                            // houses = state.houses;
+                          });
+                        },
+                      );
+                    }
+                  }
+                },
+                builder: (context, state) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Column(
+                      children: [
+                        ...List.generate(houseStuff.length, (index) {
+                          final house = houseStuff[index];
+
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 10.h),
+                            child: HouseStuffWidget(
+                              stuffEntity: house,
+                            ),
+                          );
+                        })
+                      ],
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -327,9 +378,10 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                         "/" +
                         "perMonth".tr(),
                     style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                        color: const Color(0xff474747)),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp,
+                      color: const Color(0xff474747),
+                    ),
                   ),
                 ),
               ],

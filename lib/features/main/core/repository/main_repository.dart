@@ -6,6 +6,7 @@ import 'package:realtor_pass/features/main/core/entity/house_type_result_entity.
 import '../../../../app_core/entities/app_error.dart';
 import '../entity/config_entity.dart';
 import '../entity/few_steps_result_entity.dart';
+import '../entity/house_stuff_result_entity.dart';
 import '../entity/porters_entity.dart';
 import '../entity/profitable_terms_result_entity.dart';
 import '../entity/questions_result_entity.dart';
@@ -29,6 +30,9 @@ abstract class MainRepository {
   Future<Either<AppError, QuestionsResultEntity>> getQuestions();
   Future<Either<AppError, FewStepsResultEntity>> getFewSteps();
   Future<Either<AppError, ProfitableTermsResultEntity>> getProfitableTerms();
+  Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff();
+
+
   Future<Either<AppError, ConfigEntity>> getConfig();
   Future<Either<AppError, void>> sendFeedback(
       int id,
@@ -97,5 +101,10 @@ class MainRepositoryImpl extends MainRepository {
   @override
   Future<Either<AppError, void>> sendFeedback(int id, String subject, String feedback) {
     return action(task: remoteDataSource.sendFeedback(id, subject, feedback));
+  }
+
+  @override
+  Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff() {
+   return action(task: remoteDataSource.getHouseStuff());
   }
 }

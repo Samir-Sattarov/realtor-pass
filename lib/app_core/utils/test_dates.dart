@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../features/main/core/entity/chip_entity.dart';
 import '../../features/main/core/entity/house_entity.dart';
+import '../../features/main/core/entity/house_stuff_entity.dart';
 import '../../features/main/core/entity/porters_entity.dart';
 import '../../features/main/core/entity/questions_entity.dart';
 
@@ -27,17 +28,16 @@ class TestDates {
     ChipEntity(id: 3, title: "tigr"),
     ChipEntity(id: 4, title: "tigr"),
     ChipEntity(id: 5, title: "beginExpensive"),
-
   ];
   static List<HouseEntity> houses = [
     HouseEntity(
       id: 1,
       houseType: "Квартира",
       category: "Hetchback",
-      description: "Chevrolet Aveo - это бюджетный легковой автомобиль В-класса, который выпускается с 2002 года. Он представлен в трех вариантах кузова: седан, хэтчбек 3-дверный и хэтчбек 5-дверный. ",
+      description:
+          "Chevrolet Aveo - это бюджетный легковой автомобиль В-класса, который выпускается с 2002 года. Он представлен в трех вариантах кузова: седан, хэтчбек 3-дверный и хэтчбек 5-дверный. ",
       isFavorite: false,
       images: const <String>[
-
         "https://i.pinimg.com/564x/3e/9d/ea/3e9dea20adf1857eb98cb04e5be43db3.jpg",
         "https://i.pinimg.com/474x/5f/61/c4/5f61c42c564b8d32ec2831269d133962.jpg",
         "https://i.pinimg.com/474x/bf/e8/cb/bfe8cbf910ae9a09c3925911a8f934d0.jpg",
@@ -97,5 +97,9 @@ class TestDates {
         name: "Кому принадлежат арендуемые машины",
         description:
             "Все машины первое время абсолютно новые c салона, а также есть автомобили которые предлагают, некоторые пользователи"),
+  ];
+  static const List<HouseStuffEntity> houseStuff = [
+    HouseStuffEntity(
+        title: "title", id: 4, description: "description", image: "https://i.pinimg.com/564x/d4/f4/4b/d4f44b8ccf31e8343adebca4183c4865.jpg")
   ];
 }

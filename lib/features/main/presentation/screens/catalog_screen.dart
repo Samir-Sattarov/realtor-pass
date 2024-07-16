@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +8,6 @@ import '../../../../app_core/utils/app_style.dart';
 import '../../../../app_core/utils/bottom_sheets/bottom_sheets.dart';
 import '../../../../app_core/utils/test_dates.dart';
 import '../../../../resources/resources.dart';
-import '../../core/entity/chip_entity.dart';
 import '../../core/entity/house_entity.dart';
 import '../cubit/house_type/house_type_cubit.dart';
 import '../cubit/houses/houses_cubit.dart';
@@ -50,7 +48,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
         scrollController.position.maxScrollExtent) {
       Future.delayed(
         const Duration(milliseconds: 200),
-        () {
+            () {
           BlocProvider.of<HousesCubit>(context).loadMore();
         },
       );
@@ -67,11 +65,13 @@ class _CatalogScreenState extends State<CatalogScreen> {
   Future<List<HouseEntity>> suggestionsCallback(String pattern) async =>
       Future<List<HouseEntity>>.delayed(
         const Duration(milliseconds: 0),
-        () => houses.where((house) {
-          final nameLower = house.houseType.toLowerCase().replaceAll(' ', '');
-          final patternLower = pattern.toLowerCase().replaceAll(' ', '');
-          return nameLower.contains(patternLower);
-        }).toList(),
+            () =>
+            houses.where((house) {
+              final nameLower = house.houseType.toLowerCase().replaceAll(
+                  ' ', '');
+              final patternLower = pattern.toLowerCase().replaceAll(' ', '');
+              return nameLower.contains(patternLower);
+            }).toList(),
       );
 
   @override
@@ -127,7 +127,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 SizedBox(
                   height: 16.h,
                 ),
-
                 BlocConsumer<HousesCubit, HousesState>(
                   listener: (context, state) {
                     if (state is HousesLoaded) {
@@ -153,58 +152,16 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
                             return Padding(
                               padding: EdgeInsets.only(bottom: 10.h),
-                              child: HouseWidget(houses: house),
+                              child: HouseWidget(
+                                houses: house,
+                              ),
                             );
                           })
                         ],
                       ),
                     );
-                    // return Expanded(
-                    //   child: ListView.separated(
-                    //     itemBuilder: (context, index) {
-                    //       final house = houses[index];
-                    //
-                    //       return HouseWidget(houses: house);
-                    //     },
-                    //     separatorBuilder: (context, index) =>
-                    //         SizedBox(height: 10.h),
-                    //     itemCount: houses.length,
-                    //   ),
-                    // );
                   },
                 ),
-
-                // BlocConsumer<HousesCubit, HousesState>(
-                //   listener: (context, state) {
-                //     if (state is HousesError) {
-                //       ErrorFlushBar(state.message).show(context);
-                //     }
-                //   },
-                //   builder: (context, state) {
-                //     if (state is HousesLoaded) {
-                //       houses = state.houses;
-                //       return Padding(
-                //         padding: EdgeInsets.symmetric(horizontal: 20.w),
-                //         child: Column(
-                //           children: [
-                //             Container(
-                //               height: 100.h,
-                //               width: 1.sw,
-                //               color: Colors.grey,
-                //             ),
-                //             Expanded(
-                //               child: HouseVerticalWidget(
-                //                 houses: houses,
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //       );
-                //     } else {
-                //       return const Center(child: LoadingWidget());
-                //     }
-                //   },
-                // ),
               ],
             ),
           ),
@@ -264,18 +221,16 @@ class _CatalogScreenState extends State<CatalogScreen> {
               BottomSheets.filter(
                 context,
                 category: selectedHouseCategory,
-                onConfirm: (
-                  houseType,
-                  category,
-                  sort,
-                  windows,
-                  rooms,
-                  square,
-                  bathrooms,
-                  location,
-                  maxPrice,
-                  minPrice,
-                ) {
+                onConfirm: (houseType,
+                    category,
+                    sort,
+                    windows,
+                    rooms,
+                    square,
+                    bathrooms,
+                    location,
+                    maxPrice,
+                    minPrice,) {
                   BlocProvider.of<HousesCubit>(context).load(
                     search: controllerSearch.text,
                     houseType: houseType,
@@ -293,7 +248,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
             itemBuilder: (BuildContext context, HouseEntity house) {
               return Container(
                 padding: EdgeInsets.all(8.r),
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 child: Row(
                   children: [
                     Column(

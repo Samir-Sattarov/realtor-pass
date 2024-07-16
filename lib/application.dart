@@ -15,6 +15,7 @@ import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
+import 'features/main/presentation/cubit/house_stuff/house_stuff_cubit.dart';
 import 'features/main/presentation/cubit/posters/posters_cubit.dart';
 import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
@@ -48,6 +49,7 @@ class _ApplicationState extends State<Application>
   late ConfigCubit configCubit;
   late SupportCubit supportCubit;
   late OtpCodeCubit otpCodeCubit;
+  late HouseStuffCubit stuffCubit;
 
   @override
   void initState() {
@@ -72,6 +74,7 @@ class _ApplicationState extends State<Application>
     configCubit = locator();
     supportCubit = locator();
     otpCodeCubit =  locator();
+    stuffCubit =  locator();
   }
 
   @override
@@ -95,6 +98,8 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: configCubit),
         BlocProvider.value(value: supportCubit),
         BlocProvider.value(value: otpCodeCubit),
+        BlocProvider.value(value: stuffCubit),
+
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),

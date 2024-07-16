@@ -48,6 +48,7 @@
   "price": "Price,$",
   "filter": "Filter",
   "floors": "Floors in the house",
-  "reset": "Reset"
+  "reset": "Reset",
+  "addHouse": "Add house"
 
 }

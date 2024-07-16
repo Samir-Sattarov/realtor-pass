@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const baseApiUrl = "http://46.101.73.31/api/";
+  static const baseApiUrl = "https://royalpass.com/api/";
   static const imageUrl = baseApiUrl;
   static const fileUrl = baseApiUrl;
   static const cars = "cars";

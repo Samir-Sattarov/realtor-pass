@@ -12,6 +12,7 @@ import '../../../../app_core/utils/bottom_sheets/bottom_sheets.dart';
 import '../../../../app_core/utils/test_dates.dart';
 import '../../../../resources/resources.dart';
 import '../../core/entity/house_entity.dart';
+import '../../core/entity/house_stuff_entity.dart';
 import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import '../cubit/houses/houses_cubit.dart';
 import '../cubit/posters/posters_cubit.dart';
@@ -30,6 +31,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late List<HouseEntity> houses = [];
+  late List<HouseStuffEntity> houseStuff = [];
 
   final TextEditingController controllerSearch = TextEditingController();
 

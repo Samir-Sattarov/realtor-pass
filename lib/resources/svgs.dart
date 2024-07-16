@@ -29,4 +29,5 @@ class Svgs {
   static const String tPrivacy =  "assets/svg/privacy_policy.svg";
   static const String tSquare =  "assets/svg/square_icon.svg";
   static const String tConditions =  "assets/svg/prof_conditions.svg";
+  static const String tAdd =  'assets/svg/add.svg';
 }

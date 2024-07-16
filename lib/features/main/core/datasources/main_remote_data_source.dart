@@ -4,6 +4,7 @@ import 'package:realtor_pass/features/main/core/models/house_type_result_model.d
 import '../../../../app_core/utils/test_dates.dart';
 import '../models/config_model.dart';
 import '../models/few_steps_result_model.dart';
+import '../models/house_stuff_result_model.dart';
 import '../models/posters_model.dart';
 import '../models/profitable_terms_result_model.dart';
 import '../models/questions_result_model.dart';
@@ -24,6 +25,9 @@ abstract class MainRemoteDataSource {
   );
   Future<HouseTypeResultModel> getHousesTypes();
   Future<PostersModel> getPosters();
+  Future<HouseStuffResultModel> getHouseStuff();
+
+
   Future<QuestionsResultModel> getQuestions();
   Future<FewStepsResultModel> getFewSteps();
   Future<ProfitableTermsResultModel> getProfitableTerms();
@@ -177,5 +181,12 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
       }
 
     );
+  }
+
+  @override
+  Future<HouseStuffResultModel> getHouseStuff() async {
+    // final response = await apiClient.get(ApiConstants.banners);
+    final model = HouseStuffResultModel(houseStuff: TestDates.houseStuff);
+    return model;
   }
 }
