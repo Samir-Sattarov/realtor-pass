@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:realtor_pass/features/main/core/datasources/main_remote_data_source.dart';
 import 'package:realtor_pass/features/main/core/repository/main_repository.dart';
 import 'package:realtor_pass/features/main/core/usecases/houses_usecase.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/house_type/house_type_cubit.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/houses/houses_cubit.dart';
-
 import 'app_core/app_core_library.dart';
 import 'app_core/cubits/network/network_cubit.dart';
 import 'features/auth/core/datasources/auth_local_data_source.dart';
@@ -33,12 +33,14 @@ import 'features/main/core/usecases/config_usecase.dart';
 import 'features/main/core/usecases/feedback_usecase.dart';
 import 'features/main/core/usecases/few_steps_usecase.dart';
 import 'features/main/core/usecases/get_house_stuff_usecase.dart';
+import 'features/main/core/usecases/post_house_usecase.dart';
 import 'features/main/core/usecases/posters_usecase.dart';
 import 'features/main/core/usecases/profitable_terms_usecase.dart';
 import 'features/main/core/usecases/questions_usecase.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
 import 'features/main/presentation/cubit/house_stuff/house_stuff_cubit.dart';
+import 'features/main/presentation/cubit/post_house/house_post_cubit.dart';
 import 'features/main/presentation/cubit/posters/posters_cubit.dart';
 import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
@@ -58,8 +60,20 @@ final cacheInterseptorOptions = CacheOptions(
 void setup() {
   // ================ Core ================ //
 
-  locator.registerLazySingleton(() => Dio()
-    ..interceptors.add(DioCacheInterceptor(options: cacheInterseptorOptions)));
+  locator.registerLazySingleton(
+        () => Dio()
+      ..interceptors.addAll([
+        PrettyDioLogger(
+          requestHeader: true,
+          requestBody: false,
+          responseBody: true,
+          responseHeader: false,
+          request: true,
+          error: true,
+          compact: true,
+        ),
+      ]),
+  );
   locator.registerLazySingleton<ApiClient>(
       () => ApiClientImpl(locator(), locator()));
 
@@ -95,6 +109,9 @@ void setup() {
   locator.registerLazySingleton(() => FeedbackUsecase(
         locator(),
       ));
+  locator.registerLazySingleton(() => PostHouseUsecase(
+    locator(),
+  ));
 
   // ================ External ================ //
 
@@ -165,6 +182,8 @@ void setup() {
   locator.registerFactory(() => ConfigCubit(locator()));
   locator.registerFactory(() => SupportCubit(locator()));
   locator.registerFactory(() => HouseStuffCubit(locator()));
+  locator.registerFactory(() => HousePostCubit(locator()));
+
 
 
   // ================ Repository / Datasource ================ //

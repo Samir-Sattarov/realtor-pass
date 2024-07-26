@@ -6,10 +6,12 @@ import 'package:realtor_pass/features/main/core/entity/house_type_result_entity.
 import '../../../../app_core/entities/app_error.dart';
 import '../entity/config_entity.dart';
 import '../entity/few_steps_result_entity.dart';
+import '../entity/house_post_entity.dart';
 import '../entity/house_stuff_result_entity.dart';
 import '../entity/porters_entity.dart';
 import '../entity/profitable_terms_result_entity.dart';
 import '../entity/questions_result_entity.dart';
+import '../models/house_post_model.dart';
 
 abstract class MainRepository {
   Future<Either<AppError, HouseResultEntity>> getHouses(
@@ -32,13 +34,15 @@ abstract class MainRepository {
   Future<Either<AppError, ProfitableTermsResultEntity>> getProfitableTerms();
   Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff();
 
-
   Future<Either<AppError, ConfigEntity>> getConfig();
   Future<Either<AppError, void>> sendFeedback(
-      int id,
-      String subject,
-      String feedback,
-      );
+    int id,
+    String subject,
+    String feedback,
+  );
+  Future<Either<AppError, void>> postHouse(
+    HousePostEntity entity
+  );
 }
 
 class MainRepositoryImpl extends MainRepository {
@@ -62,7 +66,6 @@ class MainRepositoryImpl extends MainRepository {
         task: remoteDataSource.getHouses(page, search, houseType, category,
             square, rooms, bathroom, fromYear, toYear, maxPrice, minPrice));
   }
-
 
   @override
   Future<Either<AppError, HouseTypeResultEntity>> getHouseTypes() {
@@ -105,6 +108,11 @@ class MainRepositoryImpl extends MainRepository {
 
   @override
   Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff() {
-   return action(task: remoteDataSource.getHouseStuff());
+    return action(task: remoteDataSource.getHouseStuff());
+  }
+
+  @override
+  Future<Either<AppError, void>> postHouse(HousePostEntity entity) {
+    return action(task: remoteDataSource.postHouse(HousePostModel.fromEntity(entity)));
   }
 }

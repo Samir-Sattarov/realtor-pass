@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:realtor_pass/features/main/presentation/screens/houses_horizontal_view_screen.dart';
 import 'package:realtor_pass/features/main/presentation/screens/profile_screen.dart';
 import '../../../../app_core/utils/animated_navigation.dart';
 import '../../../../resources/resources.dart';
@@ -12,8 +11,8 @@ import '../../../auth/presentation/screens/sign_in_screen.dart';
 import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'catalog_screen.dart';
 import 'favorite_screen.dart';
-import 'form_screen.dart';
 import 'home_screen.dart';
+import 'listing_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final int? index;
@@ -30,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
     const HomeScreen(),
     const CatalogScreen(),
-    const FormScreen(),
+    const ListingScreen(),
     const FavoriteScreen(),
     const ProfileScreen(),
   ];

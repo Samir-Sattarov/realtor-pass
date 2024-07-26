@@ -2,8 +2,10 @@ import 'package:realtor_pass/app_core/app_core_library.dart';
 import 'package:realtor_pass/features/main/core/models/house_model_result.dart';
 import 'package:realtor_pass/features/main/core/models/house_type_result_model.dart';
 import '../../../../app_core/utils/test_dates.dart';
+import '../entity/house_post_entity.dart';
 import '../models/config_model.dart';
 import '../models/few_steps_result_model.dart';
+import '../models/house_post_model.dart';
 import '../models/house_stuff_result_model.dart';
 import '../models/posters_model.dart';
 import '../models/profitable_terms_result_model.dart';
@@ -26,14 +28,12 @@ abstract class MainRemoteDataSource {
   Future<HouseTypeResultModel> getHousesTypes();
   Future<PostersModel> getPosters();
   Future<HouseStuffResultModel> getHouseStuff();
-
-
   Future<QuestionsResultModel> getQuestions();
   Future<FewStepsResultModel> getFewSteps();
   Future<ProfitableTermsResultModel> getProfitableTerms();
   Future<ConfigModel> getConfig();
   Future<void> sendFeedback(int id, String subject, String feedback);
-
+  Future<void> postHouse(HousePostModel model);
 }
 
 class MainRemoteDataSourceImpl extends MainRemoteDataSource {
@@ -188,5 +188,12 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     // final response = await apiClient.get(ApiConstants.banners);
     final model = HouseStuffResultModel(houseStuff: TestDates.houseStuff);
     return model;
+  }
+
+  @override
+  Future<void> postHouse(HousePostModel model) async {
+    await apiClient.post(ApiConstants.postHouse, params: {
+      "subject": model,
+    });
   }
 }
