@@ -10,18 +10,18 @@ import 'features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'features/auth/presentation/cubit/auth/auth_sources/auth_sources_cubit.dart';
 import 'features/auth/presentation/cubit/current_user/current_user_cubit.dart';
 import 'features/auth/presentation/cubit/edit_current_user_cubit/edit_user_cubit.dart';
+import 'features/auth/presentation/cubit/forgot_password/forgot_password_cubit.dart';
 import 'features/auth/presentation/cubit/otp_code/otp_code_cubit.dart';
 import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
 import 'features/main/presentation/cubit/house_stuff/house_stuff_cubit.dart';
+import 'features/main/presentation/cubit/post_house/house_post_cubit.dart';
 import 'features/main/presentation/cubit/posters/posters_cubit.dart';
 import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'features/main/presentation/cubit/support/support_cubit.dart';
-import 'features/main/presentation/screens/profile_screen.dart';
-import 'features/main/presentation/screens/settings_screen.dart';
 import 'locator.dart';
 
 class Application extends StatefulWidget {
@@ -50,6 +50,8 @@ class _ApplicationState extends State<Application>
   late SupportCubit supportCubit;
   late OtpCodeCubit otpCodeCubit;
   late HouseStuffCubit stuffCubit;
+  late HousePostCubit postCubit;
+  late ForgotPasswordCubit forgotPasswordCubit;
 
   @override
   void initState() {
@@ -75,6 +77,8 @@ class _ApplicationState extends State<Application>
     supportCubit = locator();
     otpCodeCubit =  locator();
     stuffCubit =  locator();
+    postCubit = locator();
+    forgotPasswordCubit = locator();
   }
 
   @override
@@ -99,6 +103,9 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: supportCubit),
         BlocProvider.value(value: otpCodeCubit),
         BlocProvider.value(value: stuffCubit),
+        BlocProvider.value(value: postCubit),
+        BlocProvider.value(value: forgotPasswordCubit),
+
 
       ],
       child: ScreenUtilInit(

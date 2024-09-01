@@ -2,8 +2,9 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'application.dart';
 import 'locator.dart';
 
@@ -16,10 +17,12 @@ const optionsForListView = LiveOptions(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   await EasyLocalization.ensureInitialized();
   await Hive.initFlutter();
-
-  // final box = await Hive.openBox("storage");
 
   setup();
 

@@ -2,7 +2,6 @@ import 'package:realtor_pass/app_core/app_core_library.dart';
 import 'package:realtor_pass/features/main/core/models/house_model_result.dart';
 import 'package:realtor_pass/features/main/core/models/house_type_result_model.dart';
 import '../../../../app_core/utils/test_dates.dart';
-import '../entity/house_post_entity.dart';
 import '../models/config_model.dart';
 import '../models/few_steps_result_model.dart';
 import '../models/house_post_model.dart';
@@ -29,7 +28,7 @@ abstract class MainRemoteDataSource {
   Future<PostersModel> getPosters();
   Future<HouseStuffResultModel> getHouseStuff();
   Future<QuestionsResultModel> getQuestions();
-  Future<FewStepsResultModel> getFewSteps();
+  Future<FewStepsResultModel> getFewSteps(String locale);
   Future<ProfitableTermsResultModel> getProfitableTerms();
   Future<ConfigModel> getConfig();
   Future<void> sendFeedback(int id, String subject, String feedback);
@@ -122,8 +121,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
     params.addAll(additionalParams);
 
-    // final response = await apiClient.get(ApiConstants.cars, params: params);
-    final model = HouseResultModel(houses: TestDates.houses);
+    final response = await apiClient.get(ApiConstants.houses, params: params);
+    final model = HouseResultModel.fromJson(response);
     return model;
   }
 
@@ -136,8 +135,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<PostersModel> getPosters() async {
-    // final response = await apiClient.get(ApiConstants.banners);
-    final model = PostersModel(images: TestDates.posters.images);
+    final response = await apiClient.get(ApiConstants.banners);
+    final model = PostersModel.fromJson(response);
     return model;
   }
 
@@ -149,9 +148,9 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   }
 
   @override
-  Future<FewStepsResultModel> getFewSteps() async {
+  Future<FewStepsResultModel> getFewSteps(String locale) async {
     final response = await apiClient.get(ApiConstants.importantStages);
-    final model = FewStepsResultModel.fromJson(response);
+    final model = FewStepsResultModel.fromJson(response, locale: locale);
     return model;
   }
 

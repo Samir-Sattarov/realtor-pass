@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:realtor_pass/features/main/core/datasources/main_remote_data_source.dart';
 import 'package:realtor_pass/features/main/core/repository/main_repository.dart';

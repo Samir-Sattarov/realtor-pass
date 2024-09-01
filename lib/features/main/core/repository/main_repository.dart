@@ -30,7 +30,7 @@ abstract class MainRepository {
   Future<Either<AppError, HouseTypeResultEntity>> getHouseTypes();
   Future<Either<AppError, PostersEntity>> getPosters();
   Future<Either<AppError, QuestionsResultEntity>> getQuestions();
-  Future<Either<AppError, FewStepsResultEntity>> getFewSteps();
+  Future<Either<AppError, FewStepsResultEntity>> getFewSteps(String locale);
   Future<Either<AppError, ProfitableTermsResultEntity>> getProfitableTerms();
   Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff();
 
@@ -87,8 +87,8 @@ class MainRepositoryImpl extends MainRepository {
   }
 
   @override
-  Future<Either<AppError, FewStepsResultEntity>> getFewSteps() {
-    return action(task: remoteDataSource.getFewSteps());
+  Future<Either<AppError, FewStepsResultEntity>> getFewSteps(String locale) {
+    return action(task: remoteDataSource.getFewSteps(locale));
   }
 
   @override

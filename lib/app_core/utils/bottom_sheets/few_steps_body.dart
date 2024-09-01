@@ -17,16 +17,14 @@ class FewStepsBeforeRentBody extends StatefulWidget {
 
 class _FewStepsBeforeRentBodyState extends State<FewStepsBeforeRentBody> {
   @override
-  void initState() {
-    BlocProvider.of<FewStepsCubit>(context).load();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: BlocListener<FewStepsCubit, FewStepsState>(
+        bloc: BlocProvider.of<FewStepsCubit>(context)..load(locale: context.locale.languageCode),
+
         listener: (context, state) {
           if (state is FewStepsError) {
             ErrorFlushBar(state.message).show(context);

@@ -65,6 +65,7 @@ class ApiClientImpl extends ApiClient {
     final header = {
       'Authorization': "Bearer $sessionId",
     };
+    print(header);
 
     final Directory dir = await getApplicationDocumentsDirectory();
 
@@ -116,7 +117,7 @@ class ApiClientImpl extends ApiClient {
   @override
   Future<dynamic> get(
     String path, {
-    bool withParse = true,
+    bool withParse = false,
     bool getRealApi = false,
     Map<dynamic, dynamic>? filter,
     Map<String, dynamic>? params,

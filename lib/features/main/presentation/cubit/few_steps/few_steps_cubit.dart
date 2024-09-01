@@ -12,9 +12,9 @@ class FewStepsCubit extends Cubit<FewStepsState> {
   final GetFewStepsUsecase fewStepsUsecase;
   FewStepsCubit(this.fewStepsUsecase) : super(FewStepsInitial());
 
-  load() async {
+  load({required String locale}) async {
     FewStepsLoading();
-    final response = await fewStepsUsecase.call(NoParams());
+    final response = await fewStepsUsecase.call(ImportantStagesUsecaseParams(locale:locale ));
     response.fold((l) => emit(FewStepsError(l.errorMessage)),
         (r) => emit(FewStepsLoaded(r)));
   }
