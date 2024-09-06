@@ -19,9 +19,9 @@ class HouseStuffError extends HouseStuffState {
   List<Object?> get props => [];
 }
 class HouseStuffLoaded extends HouseStuffState {
-  final List<HouseStuffEntity> houses;
+  final List<HouseStuffEntity> data;
 
-  HouseStuffLoaded({required this.houses});
+  HouseStuffLoaded({required this.data});
 
   @override
   List<Object?> get props => [];

@@ -49,6 +49,18 @@
   "filter": "Filter",
   "floors": "Floors in the house",
   "reset": "Reset",
-  "addHouse": "Add house"
+  "addHouse": "Add house",
+  "yourListing": "Your listing",
+  "describeYourPlace": "Which of these best describes your place?",
+  "getStarted": "Get Started",
+  "share": "Share some basics about your place",
+  "select":"Please select a category and ensure all data is loaded properly.",
+  "error": "Error",
+  "tell": "Tell guests what your place has to offer",
+  "houseDescription": "Now, lets give your house a little",
+  "shortDescription": "Short titles work best. Have fun with it - you can always change it later ",
+  "enterHouseTitle": "Enter your house title here",
+  "enterYourHouseDesc":"Enter your house description here",
+  "enter": "Enter"
 
 }

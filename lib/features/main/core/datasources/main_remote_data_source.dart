@@ -12,6 +12,7 @@ import '../models/questions_result_model.dart';
 
 abstract class MainRemoteDataSource {
   Future<HouseResultModel> getHouses(
+    String locale,
     int page,
     String search,
     int? houseType,
@@ -24,9 +25,9 @@ abstract class MainRemoteDataSource {
     int? maxPrice,
     int? minPrice,
   );
-  Future<HouseTypeResultModel> getHousesTypes();
+  Future<HouseTypeResultModel> getHousesTypes(String locale);
   Future<PostersModel> getPosters();
-  Future<HouseStuffResultModel> getHouseStuff();
+  Future<HouseStuffResultModel> getHouseStuff(String locale);
   Future<QuestionsResultModel> getQuestions();
   Future<FewStepsResultModel> getFewSteps(String locale);
   Future<ProfitableTermsResultModel> getProfitableTerms();
@@ -90,6 +91,7 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<HouseResultModel> getHouses(
+    String locale,
     int page,
     String search,
     int? houseType,
@@ -103,7 +105,7 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     int? minPrice,
   ) async {
     Map<String, dynamic> params = {
-      "page": page,
+      // "page": page,
     };
 
     final additionalParams = _createRarParams(
@@ -122,14 +124,14 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     params.addAll(additionalParams);
 
     final response = await apiClient.get(ApiConstants.houses, params: params);
-    final model = HouseResultModel.fromJson(response);
+    final model = HouseResultModel.fromJson(response, locale: locale);
     return model;
   }
 
   @override
-  Future<HouseTypeResultModel> getHousesTypes() async {
-    final response = await apiClient.get(ApiConstants.carCategories);
-    final model = HouseTypeResultModel.fromJson(response);
+  Future<HouseTypeResultModel> getHousesTypes( String locale) async {
+    final response = await apiClient.get(ApiConstants.houseCategories);
+    final model = HouseTypeResultModel.fromJson(response, locale: locale);
     return model;
   }
 
@@ -170,22 +172,17 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<void> sendFeedback(int id, String subject, String feedback) async {
-    await apiClient.post(
-      ApiConstants.support,
-      params: {
-        "userId": id,
-        "subject": subject,
-        "description": feedback,
-
-      }
-
-    );
+    await apiClient.post(ApiConstants.support, params: {
+      "userId": id,
+      "subject": subject,
+      "description": feedback,
+    });
   }
 
   @override
-  Future<HouseStuffResultModel> getHouseStuff() async {
-    // final response = await apiClient.get(ApiConstants.banners);
-    final model = HouseStuffResultModel(houseStuff: TestDates.houseStuff);
+  Future<HouseStuffResultModel> getHouseStuff(String locale) async {
+    final response = await apiClient.get(ApiConstants.houseFeatures);
+    final model = HouseStuffResultModel.fromJson(response,locale: locale);
     return model;
   }
 

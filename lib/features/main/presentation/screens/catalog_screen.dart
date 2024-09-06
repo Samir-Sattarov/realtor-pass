@@ -6,8 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../app_core/utils/app_style.dart';
 import '../../../../app_core/utils/bottom_sheets/bottom_sheets.dart';
-import '../../../../app_core/utils/test_dates.dart';
+import '../../../../app_core/widgets/error_flash_bar.dart';
 import '../../../../resources/resources.dart';
+import '../../core/entity/chip_entity.dart';
 import '../../core/entity/house_entity.dart';
 import '../cubit/house_type/house_type_cubit.dart';
 import '../cubit/houses/houses_cubit.dart';
@@ -35,10 +36,14 @@ class _CatalogScreenState extends State<CatalogScreen> {
     super.initState();
   }
 
-  initialize() {
+  initialize() async {
     scrollController = ScrollController();
-    houses = TestDates.houses;
-    BlocProvider.of<HousesCubit>(context).load();
+    houses = [];
+
+    await EasyLocalization.ensureInitialized().then((value) {
+      BlocProvider.of<HousesCubit>(context)
+          .load(locale: context.locale.languageCode.toString());
+    });
 
     scrollController.addListener(_scrollListener);
   }
@@ -48,8 +53,9 @@ class _CatalogScreenState extends State<CatalogScreen> {
         scrollController.position.maxScrollExtent) {
       Future.delayed(
         const Duration(milliseconds: 200),
-            () {
-          BlocProvider.of<HousesCubit>(context).loadMore();
+        () {
+          BlocProvider.of<HousesCubit>(context)
+              .loadMore(locale: context.locale.languageCode);
         },
       );
     }
@@ -65,13 +71,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
   Future<List<HouseEntity>> suggestionsCallback(String pattern) async =>
       Future<List<HouseEntity>>.delayed(
         const Duration(milliseconds: 0),
-            () =>
-            houses.where((house) {
-              final nameLower = house.houseType.toLowerCase().replaceAll(
-                  ' ', '');
-              final patternLower = pattern.toLowerCase().replaceAll(' ', '');
-              return nameLower.contains(patternLower);
-            }).toList(),
+        () => houses.where((house) {
+          final nameLower = house.houseType.toLowerCase().replaceAll(' ', '');
+          final patternLower = pattern.toLowerCase().replaceAll(' ', '');
+          return nameLower.contains(patternLower);
+        }).toList(),
       );
 
   @override
@@ -91,36 +95,46 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 SizedBox(height: 16.h),
                 BlocBuilder<HouseTypeCubit, HouseTypeState>(
                   builder: (context, state) {
-                    return SizedBox(
-                      height: 30.h,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 8.w),
-                        itemBuilder: (context, index) {
-                          final entity = TestDates.sorting[index];
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedHouseCategory = entity.id;
-                              });
-                            },
-                            child: CustomChipWidget(
-                              entity: entity,
-                              currentIndex: selectedHouseCategory,
-                            ),
-                          );
-                        },
-                        itemCount: TestDates.sorting.length,
-                      ),
-                    );
+                    if (state is HouseTypeLoaded) {
+                      final categories = state.results.houses;
+                      return SizedBox(
+                        height: 30.h,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(width: 8.w),
+                          itemBuilder: (context, index) {
+                            final entity = categories[index];
+                            final ChipEntity chip = ChipEntity(
+                              id: entity.id,
+                              title: entity.title,
+                            );
+
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedHouseCategory = entity.id;
+                                });
+                              },
+                              child: CustomChipWidget(
+                                entity: chip,
+                                currentIndex: selectedHouseCategory,
+                              ),
+                            );
+                          },
+                          itemCount: categories.length,
+                        ),
+                      );
+                    }
+                    return SizedBox();
                   },
                 ),
                 SizedBox(
                   height: 16.h,
                 ),
+
                 MapWidget(
                   houses: houses,
                 ),
@@ -215,32 +229,26 @@ class _CatalogScreenState extends State<CatalogScreen> {
           child: SearchWidget(
             controller: controllerSearch,
             onSearch: (value) {
-              BlocProvider.of<HousesCubit>(context).load(search: value);
+              BlocProvider.of<HousesCubit>(context).load(
+                  search: value,
+                  locale: context.locale.languageCode.toString());
             },
             onFilter: () {
               BottomSheets.filter(
                 context,
                 category: selectedHouseCategory,
-                onConfirm: (houseType,
-                    category,
-                    sort,
-                    windows,
-                    rooms,
-                    square,
-                    bathrooms,
-                    location,
-                    maxPrice,
-                    minPrice,) {
+                onConfirm: (houseType, category, sort, windows, rooms, square,
+                    bathrooms, location, maxPrice, minPrice) {
                   BlocProvider.of<HousesCubit>(context).load(
-                    search: controllerSearch.text,
-                    houseType: houseType,
-                    category: category,
-                    rooms: rooms,
-                    square: square,
-                    bathroom: bathrooms,
-                    maxPrice: maxPrice,
-                    minPrice: minPrice,
-                  );
+                      search: controllerSearch.text,
+                      houseType: houseType,
+                      category: category,
+                      rooms: rooms,
+                      square: square,
+                      bathroom: bathrooms,
+                      maxPrice: maxPrice,
+                      minPrice: minPrice,
+                      locale: context.locale.languageCode.toString());
                 },
               );
             },
@@ -248,10 +256,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
             itemBuilder: (BuildContext context, HouseEntity house) {
               return Container(
                 padding: EdgeInsets.all(8.r),
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                width: MediaQuery.of(context).size.width,
                 child: Row(
                   children: [
                     Column(

@@ -11,6 +11,8 @@ import 'package:realtor_pass/app_core/app_core_library.dart';
 import '../../../../app_core/utils/animated_navigation.dart';
 import '../../../../app_core/utils/number_helper.dart';
 import '../../../../app_core/widgets/back_widget.dart';
+import '../../../../app_core/widgets/error_flash_bar.dart';
+import '../../../../app_core/widgets/loading_widget.dart';
 import '../../../../resources/resources.dart';
 import '../../../auth/presentation/cubit/session/session_cubit.dart';
 import '../../../auth/presentation/screens/sign_in_screen.dart';
@@ -40,8 +42,18 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
   @override
   void initState() {
     super.initState();
+
     currentImageIndex = 0;
-    houseStuff = []; // Initialize the houseStuff list
+    houseStuff = [];
+
+    initialize();
+  }
+
+  initialize() async {
+    await EasyLocalization.ensureInitialized().then((value) {
+      BlocProvider.of<HouseStuffCubit>(context)
+        .load(locale: context.locale.languageCode);
+    });
   }
 
   @override
@@ -279,12 +291,16 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
               BlocConsumer<HouseStuffCubit, HouseStuffState>(
                 listener: (context, state) {
                   if (state is HouseStuffError) {
+                    ErrorFlushBar(state.message).show(context);
+                  }
+
+                  if (state is HouseStuffLoaded) {
                     if (mounted) {
                       Future.delayed(
                         Duration.zero,
                         () {
                           setState(() {
-                            // houses = state.houses;
+                            houseStuff = state.data;
                           });
                         },
                       );
@@ -292,22 +308,20 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                   }
                 },
                 builder: (context, state) {
-                  return Padding(
+                  return ListView.separated(
                     padding: EdgeInsets.symmetric(vertical: 10.h),
-                    child: Column(
-                      children: [
-                        ...List.generate(houseStuff.length, (index) {
-                          final house = houseStuff[index];
 
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 10.h),
-                            child: HouseStuffWidget(
-                              stuffEntity: house,
-                            ),
-                          );
-                        })
-                      ],
-                    ),
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    addAutomaticKeepAlives: true,
+                    itemCount: houseStuff.length,
+                    itemBuilder: (context, index) {
+                      final stuff = houseStuff[index];
+
+                      return HouseStuffWidget(
+                        stuffEntity: stuff,
+                      );
+                    }, separatorBuilder: (BuildContext context, int index) => SizedBox(height: 10.h),
                   );
                 },
               ),
