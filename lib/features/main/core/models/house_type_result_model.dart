@@ -1,12 +1,14 @@
-import 'package:realtor_pass/features/main/core/entity/house_type_result_entity.dart';
-import 'package:realtor_pass/features/main/core/models/house_type_model.dart';
+
+import '../entity/house_type_result_entity.dart';
+import 'house_type_model.dart';
 
 class HouseTypeResultModel extends HouseTypeResultEntity {
-  const HouseTypeResultModel({required super.houses});
-  factory HouseTypeResultModel.fromJson(Map<String, dynamic> json) {
+  const HouseTypeResultModel({required super.housesType});
+  factory HouseTypeResultModel.fromJson(Map<String, dynamic> json, {String locale = 'ru'}) {
+    final  categoriesJson = List<dynamic>.from(json['data']  ?? []);
     return HouseTypeResultModel(
-        houses: List<Map<String, dynamic>>.from(json["houses"])
-            .map((e) => HouseTypeModel.fromJson(e))
+        housesType: categoriesJson
+            .map((e) => HouseTypeModel.fromJson(e, locale: locale))
             .toList());
   }
 }

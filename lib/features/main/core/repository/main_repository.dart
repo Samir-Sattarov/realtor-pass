@@ -15,6 +15,7 @@ import '../models/house_post_model.dart';
 
 abstract class MainRepository {
   Future<Either<AppError, HouseResultEntity>> getHouses(
+      String locale,
     int page,
     String search,
     int? houseType,
@@ -27,12 +28,12 @@ abstract class MainRepository {
     int? maxPrice,
     int? minPrice,
   );
-  Future<Either<AppError, HouseTypeResultEntity>> getHouseTypes();
+  Future<Either<AppError, HouseTypeResultEntity>> getHouseTypes(String locale);
   Future<Either<AppError, PostersEntity>> getPosters();
   Future<Either<AppError, QuestionsResultEntity>> getQuestions();
   Future<Either<AppError, FewStepsResultEntity>> getFewSteps(String locale);
   Future<Either<AppError, ProfitableTermsResultEntity>> getProfitableTerms();
-  Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff();
+  Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff(String locale);
 
   Future<Either<AppError, ConfigEntity>> getConfig();
   Future<Either<AppError, void>> sendFeedback(
@@ -51,6 +52,7 @@ class MainRepositoryImpl extends MainRepository {
   MainRepositoryImpl(this.remoteDataSource);
   @override
   Future<Either<AppError, HouseResultEntity>> getHouses(
+      String locale,
       int page,
       String search,
       int? houseType,
@@ -63,14 +65,14 @@ class MainRepositoryImpl extends MainRepository {
       int? maxPrice,
       int? minPrice) async {
     return action(
-        task: remoteDataSource.getHouses(page, search, houseType, category,
-            square, rooms, bathroom, fromYear, toYear, maxPrice, minPrice));
+        task: remoteDataSource.getHouses(locale,page, search, houseType, category,
+            square, rooms, bathroom, fromYear, toYear, maxPrice, minPrice,));
   }
 
   @override
-  Future<Either<AppError, HouseTypeResultEntity>> getHouseTypes() {
-    return action<HouseTypeResultEntity>(
-      task: remoteDataSource.getHousesTypes(),
+  Future<Either<AppError, HouseTypeResultEntity>> getHouseTypes(String locale) {
+    return action(
+      task: remoteDataSource.getHousesTypes(locale),
     );
   }
 
@@ -107,8 +109,8 @@ class MainRepositoryImpl extends MainRepository {
   }
 
   @override
-  Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff() {
-    return action(task: remoteDataSource.getHouseStuff());
+  Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff(String locale) {
+    return action(task: remoteDataSource.getHouseStuff(locale));
   }
 
   @override

@@ -10,6 +10,7 @@ import '../../../../app_core/widgets/error_flash_bar.dart';
 import '../../../../resources/resources.dart';
 import '../../core/entity/chip_entity.dart';
 import '../../core/entity/house_entity.dart';
+import '../../core/entity/house_type_entity.dart';
 import '../cubit/house_type/house_type_cubit.dart';
 import '../cubit/houses/houses_cubit.dart';
 import '../widgets/custom_chip_widget.dart';
@@ -29,6 +30,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   late ScrollController scrollController;
   int selectedHouseCategory = 0;
   late List<HouseEntity> houses;
+  late List<HouseTypeEntity> houseType;
 
   @override
   void initState() {
@@ -39,9 +41,14 @@ class _CatalogScreenState extends State<CatalogScreen> {
   initialize() async {
     scrollController = ScrollController();
     houses = [];
+    houseType = [];
 
     await EasyLocalization.ensureInitialized().then((value) {
       BlocProvider.of<HousesCubit>(context)
+          .load(locale: context.locale.languageCode.toString());
+    });
+    await EasyLocalization.ensureInitialized().then((value) {
+      BlocProvider.of<HouseTypeCubit>(context)
           .load(locale: context.locale.languageCode.toString());
     });
 
@@ -93,48 +100,75 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 SizedBox(height: 20.h),
                 _buildSearchRow(),
                 SizedBox(height: 16.h),
-                BlocBuilder<HouseTypeCubit, HouseTypeState>(
-                  builder: (context, state) {
-                    if (state is HouseTypeLoaded) {
-                      final categories = state.results.houses;
-                      return SizedBox(
-                        height: 30.h,
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(width: 8.w),
-                          itemBuilder: (context, index) {
-                            final entity = categories[index];
-                            final ChipEntity chip = ChipEntity(
-                              id: entity.id,
-                              title: entity.title,
-                            );
-
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedHouseCategory = entity.id;
-                                });
-                              },
-                              child: CustomChipWidget(
-                                entity: chip,
-                                currentIndex: selectedHouseCategory,
-                              ),
-                            );
-                          },
-                          itemCount: categories.length,
-                        ),
-                      );
+                BlocListener<HouseTypeCubit, HouseTypeState>(
+                  listener: (context, state) {
+                    if (state is HouseTypeError) {
+                      ErrorFlushBar(state.message).show(context);
                     }
-                    return SizedBox();
+                    if (state is HouseTypeLoaded) {
+                      if (mounted) {
+                        Future.delayed(
+                          Duration.zero,
+                          () {
+                            houseType = state.results.housesType;
+
+                            print("House type $houseType");
+                            setState(() {});
+                          },
+                        );
+                      }
+                    }
                   },
+                  child: SizedBox(
+                    height: 27.h,
+                    width: 1.sw,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      separatorBuilder: (context, index) =>
+                          SizedBox(width: 8.w),
+                      itemBuilder: (context, index) {
+                        final entity = houseType[index];
+                        final ChipEntity chip = ChipEntity(
+                            id: entity.id,
+                            title: entity.title,
+                            image: entity.image);
+
+                        return GestureDetector(
+                          onTap: () {
+                            if (selectedHouseCategory == entity.id) {
+                              setState(() {
+                                selectedHouseCategory = 0;
+                              });
+
+                              BlocProvider.of<HousesCubit>(context)
+                                  .load(locale: context.locale.languageCode);
+                            } else {
+                              setState(() {
+                                selectedHouseCategory = entity.id;
+                              });
+
+                              BlocProvider.of<HousesCubit>(context).load(
+                                locale:
+                                    context.locale.languageCode.toString(),
+                                category: selectedHouseCategory,
+                              );
+                            }
+                          },
+                          child: CustomChipWidget(
+                            entity: chip,
+                            currentIndex: selectedHouseCategory,
+                          ),
+                        );
+                      },
+                      itemCount: houseType.length,
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 16.h,
                 ),
-
                 MapWidget(
                   houses: houses,
                 ),

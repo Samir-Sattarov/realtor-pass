@@ -1,7 +1,7 @@
 part of 'house_type_cubit.dart';
 
 @immutable
-abstract class HouseTypeState {}
+abstract class HouseTypeState  {}
 
 class HouseTypeInitial extends HouseTypeState {}
 final class HouseTypeLoading extends HouseTypeState {}

@@ -4,11 +4,10 @@ import 'house_type_entity.dart';
 
 
 class HouseTypeResultEntity extends Equatable {
-  final List<HouseTypeEntity> houses;
+  final List<HouseTypeEntity> housesType;
 
-  const HouseTypeResultEntity({required this.houses});
+  const HouseTypeResultEntity({required this.housesType});
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [houses.length];
+  List<Object?> get props => [housesType.length];
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:realtor_pass/app_core/app_core_library.dart';
 import 'package:realtor_pass/features/main/core/models/house_model_result.dart';
 import 'package:realtor_pass/features/main/core/models/house_type_result_model.dart';
@@ -131,6 +133,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   @override
   Future<HouseTypeResultModel> getHousesTypes( String locale) async {
     final response = await apiClient.get(ApiConstants.houseCategories);
+
+    log("Response from server categories ${response}");
     final model = HouseTypeResultModel.fromJson(response, locale: locale);
     return model;
   }
