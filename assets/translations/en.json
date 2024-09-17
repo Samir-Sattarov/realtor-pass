@@ -61,6 +61,13 @@
   "shortDescription": "Short titles work best. Have fun with it - you can always change it later ",
   "enterHouseTitle": "Enter your house title here",
   "enterYourHouseDesc":"Enter your house description here",
-  "enter": "Enter"
+  "enter": "Enter",
+  "guests": "Guests",
+  "bathrooms": "Bathrooms",
+  "bedrooms": "Bedrooms",
+  "beds": "Beds",
+  "selectFeatures": "Please select at least one feature",
+  "setPrice": "Now,set your price",
+  "uCanChange": "You can change it anytime"
 
 }

@@ -39,27 +39,28 @@ class HouseModel extends HouseEntity {
     );
   }
 
-  factory HouseModel.fromJson(Map<String, dynamic> json) {
+  factory HouseModel.fromJson(Map<String, dynamic> json, {required String locale}) {
+    final description = json['${locale}description'] ?? '';
     return HouseModel(
       id: json["id"],
-      houseTitle: json["houseTitle"],
-      houseLocation: json["houseLocation"],
-      isFavorite: json["isFavorite"],
-      houseType: json["houseType"],
-      category: json["category"],
-      categoryId: json["categoryId"],
+      houseTitle: json["title"] ,
+      houseLocation: json["${locale}address"] ?? '',
+      isFavorite: json["isFavorite"]?? false,
+      houseType: json["houseType"]??"",
+      category: json["${locale}category"] ?? '',
+      categoryId: json["categoryId"] ?? "",
       description: json["description"],
       images: List<String>.from(List<Map<String, dynamic>>.from(json['images'])
-          .map((Map<String, dynamic> e) => e["url"])
-          .toList()),
+          .map((Map<String, dynamic> e) => e["url"] ?? '').toList()),
       price: json["price"],
-      square: json["square"],
-      bathroom: json["bathroom"],
-      rooms: json["rooms"],
-      lon: json["lon"],
-      lat: json["lat"],
+      square: json["square"] ??2,
+      bathroom: json["bathroom"]??2,
+      rooms: json["${locale}rooms"]?? 2,
+      lon: json["lon"]??3,
+      lat: json["lat"]??3,
     );
   }
+
   Map<String, dynamic> toJson() {
     return {
       "id": id,
