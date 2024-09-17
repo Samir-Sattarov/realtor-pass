@@ -13,12 +13,16 @@ class HousePostEntity extends Equatable {
   final String description;
   final List<String> images;
   final int price;
-  final int square;
+  final int beds;
   final int bathrooms;
-  final int rooms;
+  final int guests;
   final bool isFavorite;
+  final int bedrooms;
+  final List<String>? features;
 
-  const HousePostEntity({
+  const HousePostEntity( {
+    required this .features,
+    required this.bedrooms,
     required this.id,
     required this.title,
     required this.location,
@@ -29,28 +33,29 @@ class HousePostEntity extends Equatable {
     required this.description,
     required this.images,
     required this.price,
-    required this.square,
+    required this.beds,
     required this.bathrooms,
-    required this.rooms,
+    required this.guests,
     required this.isFavorite,
   });
 
   factory HousePostEntity.empty() {
     return const HousePostEntity(
-      id: 3,
+      id: 0,
       title: "title",
       location: "location",
-      lat: 44,
-      lon: 44,
+      lat: 0,
+      lon: 0,
       type: "type",
       category: "category",
       description: "description",
       images: [],
-      price: 45,
-      square: 44,
-      bathrooms: 4,
-      rooms: 4,
+      price: 0,
+      beds: 0,
+      bathrooms: 0,
+      guests: 0,
       isFavorite: false,
+      bedrooms: 0, features: [],
     );
   }
 
@@ -64,11 +69,14 @@ class HousePostEntity extends Equatable {
     String? category,
     String? description,
     List<String>? images,
-    double? price,
+    int? price,
     int? bathrooms,
     double? square,
-    int? rooms,
+    int? guests,
     bool? isFavorite,
+    int ?bedrooms,
+    int? beds,
+    List<String>? features
   }) {
     return HousePostEntity(
       id: id ?? this.id,
@@ -81,10 +89,12 @@ class HousePostEntity extends Equatable {
       description: description ?? this.description,
       images: images ?? this.images,
       bathrooms: bathrooms ?? this.bathrooms,
-      rooms: rooms ?? this.rooms,
+      guests: guests ?? this.guests,
       isFavorite: isFavorite ?? this.isFavorite,
-      price: 4,
-      square: 4,
+      price: price ?? this.price,
+      beds: beds?? this.beds,
+      bedrooms: bedrooms?? this.bedrooms,
+        features: features ?? this.features
     );
   }
 
@@ -100,9 +110,11 @@ class HousePostEntity extends Equatable {
         description,
         images,
         price,
-        square,
+        beds,
         bathrooms,
-        rooms,
+        guests,
         isFavorite,
+    bedrooms,
+    features
       ];
 }

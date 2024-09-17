@@ -84,6 +84,7 @@ void setup() {
   locator.registerLazySingleton(() => CheckActiveSession(locator()));
   locator.registerLazySingleton(() => AuthSourceUsecase(locator()));
   locator.registerLazySingleton(() => LoginUsecase(locator()));
+  locator.registerLazySingleton(() => LogOutUsecase(locator()));
   locator.registerLazySingleton(() => GetCurrentUserUsecase(locator()));
   locator.registerLazySingleton(() => RegistrationUsecase(locator()));
   locator.registerLazySingleton(() => ConfirmOTPUsecase(locator()));
@@ -150,6 +151,7 @@ void setup() {
   locator.registerFactory(() => AuthCubit(
         locator(),
         locator(),
+    locator()
       ));
 
   locator.registerFactory(() => CurrentUserCubit(

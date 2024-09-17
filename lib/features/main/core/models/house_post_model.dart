@@ -4,6 +4,7 @@ import '../entity/house_post_entity.dart';
 
 class HousePostModel extends HousePostEntity {
   const HousePostModel({
+    required super.features,
     required super.id,
     required super.title,
     required super.location,
@@ -14,13 +15,14 @@ class HousePostModel extends HousePostEntity {
     required super.description,
     required super.images,
     required super.price,
-    required super.square,
+    required super.beds,
     required super.bathrooms,
-    required super.rooms,
-    required super.isFavorite,
+    required super.guests,
+    required super.isFavorite, required super.bedrooms,
   });
   factory HousePostModel.fromEntity(HousePostEntity entity) {
     return HousePostModel(
+      features: entity.features,
       id: entity.id,
       title: entity.title,
       location: entity.location,
@@ -31,15 +33,16 @@ class HousePostModel extends HousePostEntity {
       description: entity.description,
       images: entity.images,
       price: entity.price,
-      square: entity.square,
+      beds: entity.beds,
       bathrooms: entity.bathrooms,
-      rooms: entity.rooms,
-      isFavorite: entity.isFavorite,
+      guests: entity.guests,
+      isFavorite: entity.isFavorite, bedrooms: entity.bedrooms,
     );
   }
 
   factory HousePostModel.fromJson(Map<String, dynamic> json) {
     return HousePostModel(
+      features: json["features"],
       id: json['id'],
       title: json['title'],
       location: json['location'],
@@ -50,10 +53,10 @@ class HousePostModel extends HousePostEntity {
       description: json['description'],
       images: List<String>.from(json['images']),
       price: json['price'],
-      square: json['square'],
+      beds: json['square'],
       bathrooms: json['bathrooms'],
-      rooms: json['rooms'],
-      isFavorite: json['isFavorite'],
+      guests: json['rooms'],
+      isFavorite: json['isFavorite'], bedrooms: json["bedrooms"],
     );
   }
 
@@ -69,10 +72,12 @@ class HousePostModel extends HousePostEntity {
       'description': description,
       'images': images,
       'price': price,
-      'square': square,
+      'square': beds,
       'bathrooms': bathrooms,
-      'rooms': rooms,
+      'rooms': guests,
       'isFavorite': isFavorite,
+      'bedrooms':bedrooms,
+      'features':features
     };
   }
 

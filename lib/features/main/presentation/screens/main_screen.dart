@@ -84,7 +84,7 @@ class _MainScreenState extends State<MainScreen> {
                     AnimatedNavigation.push(
                         context: context, page: const SignInScreen());
                   } else {
-                    setState(() => currentIndex = 2);
+                    setState(() => currentIndex = 3);
                   }
                 },
               ),
@@ -101,7 +101,7 @@ class _MainScreenState extends State<MainScreen> {
                     AnimatedNavigation.push(
                         context: context, page: const SignInScreen());
                   } else {
-                    setState(() => currentIndex = 3);
+                    setState(() => currentIndex = 4);
                   }
                 },
               ),
