@@ -5,6 +5,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app_core/widgets/button_widget.dart';
 import '../../core/entity/house_post_entity.dart';
+import 'house_post_images_screen.dart';
 
 class HousePostPriceScreen extends StatefulWidget {
   final HousePostEntity entity;
@@ -108,8 +109,8 @@ class _HousePostPriceScreenState extends State<HousePostPriceScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        HousePostPriceScreen(
-                                            entity: postEntity),
+                                        HousePostImagesScreen(
+                                            postEntity: postEntity),
                                   ),
                                 );
                               }
