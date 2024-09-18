@@ -16,7 +16,13 @@ class HousePostSecondScreen extends StatefulWidget {
 }
 
 class HousePostSecondScreenState extends State<HousePostSecondScreen> {
-   HousePostEntity postEntity = HousePostEntity.empty();
+   late HousePostEntity postEntity;
+
+   @override
+   void initState() {
+     super.initState();
+     postEntity = widget.entity;
+   }
 
 
   void incrementCounter(String type) {
