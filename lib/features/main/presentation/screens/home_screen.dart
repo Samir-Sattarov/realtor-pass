@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
   initialize() {
     BlocProvider.of<PostersCubit>(context).load();
-    BlocProvider.of<HousesCubit>(context).load();
+    BlocProvider.of<HousesCubit>(context).load(locale: context.locale.languageCode);
   }
 
   @override
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         BlocProvider.of<BottomNavCubit>(context)
                             .change(ScreenIndex.catalog);
                         BlocProvider.of<HousesCubit>(context)
-                            .load(search: value);
+                            .load(search: value, locale: context.locale.languageCode);
                       },
                       suggestionsCallback: suggestionsCallback,
                       itemBuilder: (BuildContext context, HouseEntity house) {
@@ -237,6 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ).animate().shimmer(),
+
               BlocBuilder<QuestionsCubit, QuestionsState>(
                 builder: (context, state) {
                   if (state is QuestionsLoaded) {
@@ -264,21 +265,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   separatorBuilder: (context, index) => SizedBox(width: 8.w),
                   itemBuilder: (context, index) {
+
+
                     if (index < houses.length) {
-                      // Ensure index is within the range
                       return GestureDetector(
                         onTap: () {
                           // Handle tap if necessary
                         },
                         child: HouseWidget(
                           houses: houses[index],
-                        ), // Correctly pass a single HouseEntity
+                        ),
                       );
                     } else {
                       return const SizedBox();
                     }
                   },
-                  itemCount: TestDates.houses.length,
+                  itemCount: houses.length,
                 ),
               ),
             ],
