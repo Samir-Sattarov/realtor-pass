@@ -228,8 +228,8 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
                   children: [
                     SvgPicture.asset(
                       Svgs.tSquare,
-                      width: 14.r,
-                      height: 14.r,
+                      width: 16.r,
+                      height: 16.r,
                     ),
                     SizedBox(width: 4.w),
                     Text(

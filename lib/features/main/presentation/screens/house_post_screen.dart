@@ -127,7 +127,7 @@ class _HousePostScreenState extends State<HousePostScreen> {
                             gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              childAspectRatio: 3 / 2,
+                              childAspectRatio: 3 / 2.4,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 10,
                             ),
@@ -137,48 +137,45 @@ class _HousePostScreenState extends State<HousePostScreen> {
                               final isSelected = selectedCategory == category;
                               return Material(
                                 color: Colors.transparent,
-                                child: AnimatedSwitcher(
-                                  duration: Duration(milliseconds: 1000),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(10.r),
-                                    splashColor: Colors.white30,
-                                    onTap: () => onCategoryTap(category),
-                                    child: Ink(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            10.r),
-                                        border: Border.all(
-                                            color: isSelected
-                                                ? Colors.transparent
-                                                : Colors.grey.shade200,
-                                            width: 2),
-                                        color: isSelected
-                                            ? AppStyle.blue
-                                            : const Color(0xffFAFAFA),
-                                      ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Image.network(category.image),
-                                              SizedBox(height: 10.h),
-                                              FittedBox(
-                                                child: Text(
-                                                  category.title,
-                                                  style: TextStyle(
-                                                    fontSize: 16.sp,
-                                                    color: isSelected
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                  ),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  splashColor: Colors.white30,
+                                  onTap: () => onCategoryTap(category),
+                                  child: Ink(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          10.r),
+                                      border: Border.all(
+                                          color: isSelected
+                                              ? Colors.transparent
+                                              : Colors.grey.shade200,
+                                          width: 2),
+                                      color: isSelected
+                                          ? AppStyle.blue
+                                          : const Color(0xffFAFAFA),
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(child: Center(child: Image.network(category.image, fit: BoxFit.contain,)), height: 64.r, width: 64.r,),
+                                            SizedBox(height: 10.h),
+                                            FittedBox(
+                                              child: Text(
+                                                category.title,
+                                                style: TextStyle(
+                                                  fontSize: 16.sp,
+                                                  color: isSelected
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -191,6 +188,7 @@ class _HousePostScreenState extends State<HousePostScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 10.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

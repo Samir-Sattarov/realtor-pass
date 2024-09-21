@@ -169,7 +169,7 @@ class _PostHouseStuffScreenState extends State<PostHouseStuffScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Image.network(features.image),
+                                              SizedBox(child: Center(child: Image.network(features.image, fit: BoxFit.contain,height: 64.r,width: 64.r,))),
                                               SizedBox(height: 10.h),
                                               FittedBox(
                                                 child: Text(
