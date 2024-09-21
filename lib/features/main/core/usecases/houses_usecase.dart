@@ -14,6 +14,7 @@ class GetHousesUsecase
   Future<Either<AppError, HouseResultEntity>> call(
       GetHousesUsecaseParams params) {
     return mainRepository.getHouses(
+      params.locale,
         params.page,
         params.search,
         params.houseType,
@@ -28,18 +29,23 @@ class GetHousesUsecase
   }
 }
 
-class GetHouseTypeUsecase extends UseCase<HouseTypeResultEntity, NoParams> {
+class GetHouseTypeUsecase extends UseCase<HouseTypeResultEntity, GetHousesTypeUsecaseParams> {
   final MainRepository repository;
 
   GetHouseTypeUsecase(this.repository);
 
   @override
-  Future<Either<AppError, HouseTypeResultEntity>> call(NoParams params) {
-    return repository.getHouseTypes();
+  Future<Either<AppError, HouseTypeResultEntity>> call(GetHousesTypeUsecaseParams params) {
+    return repository.getHouseTypes(params.locale);
   }
 }
+class GetHousesTypeUsecaseParams{
+  final String locale;
 
+  GetHousesTypeUsecaseParams({ required this.locale});
+}
 class GetHousesUsecaseParams {
+  final String locale;
   final int page;
   final String search;
   final int? houseType;
@@ -52,7 +58,8 @@ class GetHousesUsecaseParams {
   final int? maxPrice;
   final int? minPrice;
 
-  GetHousesUsecaseParams({
+  GetHousesUsecaseParams( {
+    required this.locale,
     required this.page,
     required this.search,
     this.houseType,

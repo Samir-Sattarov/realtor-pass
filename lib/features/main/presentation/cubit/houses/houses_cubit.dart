@@ -11,6 +11,7 @@ class HousesCubit extends Cubit<HousesState> {
   int page = 1;
 
   load({
+    required String locale,
     String search = "",
     int? houseType,
     int? category,
@@ -26,6 +27,7 @@ class HousesCubit extends Cubit<HousesState> {
     houses.clear();
     emit(HousesLoading());
     final response = await housesUsecase.call(GetHousesUsecaseParams(
+        locale: locale,
         page: page,
         search: search,
         houseType: houseType,
@@ -43,11 +45,11 @@ class HousesCubit extends Cubit<HousesState> {
     });
   }
 
-  loadMore() async {
+  loadMore({required String locale}) async {
     page++;
     print("Page $page");
     final response = await housesUsecase.call(
-      GetHousesUsecaseParams(page: page, search: ''),
+      GetHousesUsecaseParams(page: page, search: '', locale: locale),
     );
 
     response.fold(
