@@ -1,5 +1,7 @@
 // house_post_entity.dart
 
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 
 class HousePostEntity extends Equatable {
@@ -11,7 +13,7 @@ class HousePostEntity extends Equatable {
   final String type;
   final String category;
   final String description;
-  final List<String> images;
+  final List<File> images;
   final int price;
   final int beds;
   final int bathrooms;
@@ -55,7 +57,8 @@ class HousePostEntity extends Equatable {
       bathrooms: 0,
       guests: 0,
       isFavorite: false,
-      bedrooms: 0, features: [],
+      bedrooms: 0,
+      features: [],
     );
   }
 
@@ -68,7 +71,7 @@ class HousePostEntity extends Equatable {
     String? type,
     String? category,
     String? description,
-    List<String>? images,
+    List<File>? images,
     int? price,
     int? bathrooms,
     double? square,
@@ -87,7 +90,7 @@ class HousePostEntity extends Equatable {
       type: type ?? this.type,
       category: category ?? this.category,
       description: description ?? this.description,
-      images: images ?? this.images,
+      images: images?? this.images,
       bathrooms: bathrooms ?? this.bathrooms,
       guests: guests ?? this.guests,
       isFavorite: isFavorite ?? this.isFavorite,

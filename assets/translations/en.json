@@ -68,6 +68,11 @@
   "beds": "Beds",
   "selectFeatures": "Please select at least one feature",
   "setPrice": "Now,set your price",
-  "uCanChange": "You can change it anytime"
+  "uCanChange": "You can change it anytime",
+  "addSomePhoto": "Add some photos of your house",
+  "youNeed5Photos": "You'll need 5 photos to get started. You can add more or make changes later",
+  "pleaseSelectPhotos": "Please select photos",
+  "gallery": "Gallery",
+  "camera": "Camera"
 
 }

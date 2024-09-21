@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import '../entity/house_post_entity.dart';
 
 
@@ -51,7 +53,7 @@ class HousePostModel extends HousePostEntity {
       type: json['type'],
       category: json['category'],
       description: json['description'],
-      images: List<String>.from(json['images']),
+      images: List<File>.from(json['images']),
       price: json['price'],
       beds: json['square'],
       bathrooms: json['bathrooms'],
