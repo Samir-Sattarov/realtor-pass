@@ -40,7 +40,7 @@
   "fewItemsBeforeRentHome": "Few items before rent house",
   "severalImportantStagesBeforeRentHouse": "Several important steps \nreal estate rental registration",
   "howItAllHappens": "How it all happens",
- "theStepsThatWeDescribe": "The steps that we describe are absolutely correct and mandatory for registering a lease",
+  "theStepsThatWeDescribe": "The steps that we describe are absolutely correct and mandatory for registering a lease",
   "companyAdvantages": "Company advantages",
   "favConditions":"Profitable terms",
   "reset": "Reset",
@@ -73,6 +73,9 @@
   "youNeed5Photos": "You'll need 5 photos to get started. You can add more or make changes later",
   "pleaseSelectPhotos": "Please select photos",
   "gallery": "Gallery",
-  "camera": "Camera"
+  "camera": "Camera",
+  "search": "Search",
+  "locationChoose": "Please choose your location",
+  "onlyGuestCanSeeLocation": "Your address is only shared with guests after they've made a reservation."
 
 }
