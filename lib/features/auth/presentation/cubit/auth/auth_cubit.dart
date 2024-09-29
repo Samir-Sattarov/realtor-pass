@@ -10,8 +10,9 @@ part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final LoginUsecase _loginUsecase;
+  final LogOutUsecase _logOutUsecase;
   final CurrentUserCubit currentUserCubit;
-  AuthCubit(this._loginUsecase,  this.currentUserCubit)
+  AuthCubit(this._loginUsecase,  this.currentUserCubit, this._logOutUsecase)
       : super(AuthInitial());
 
   signIn({required String email, required String password}) async {
@@ -39,6 +40,14 @@ class AuthCubit extends Cubit<AuthState> {
       (r) {
         emit(AuthLoginSuccess());
       },
+    );
+  }
+  logOut() async {
+    final response = await _logOutUsecase.call(NoParams());
+
+    response.fold(
+          (l) => emit(AuthError(message: l.errorMessage)),
+          (r) => emit(AuthLogOutSuccess()),
     );
   }
 

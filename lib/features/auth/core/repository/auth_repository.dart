@@ -22,12 +22,13 @@ abstract class AuthRepository {
   Future<Either<AppError, UserEntity>> editCurrentUser(UserEntity user);
   Future<Either<AppError, void>> confirmPassword(String password, String email);
   Future<Either<AppError, void>> forgotPassword(String email);
+  Future<Either<AppError, void>> logOut();
+
 
   Future<Either<AppError, void>> getCodeForEditUser(String email);
   Future<Either<AppError, void>> signUp({
     required String email,
     required String username,
-    required String password
   });
   Future<Either<AppError, UserEntity>> confirmOtp({
     required String code,
@@ -74,10 +75,9 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<AppError, void>> signUp({
     required String email,
     required String username,
-    required String password
   }) async {
     return action(
-      task: remoteDataSource.signUp(email: email, username: username, password: password),
+      task: remoteDataSource.signUp(email: email, username: username, ),
     );
   }
 
@@ -174,5 +174,11 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<AppError, void>> forgotPassword(String email) {
     return action(task: remoteDataSource.forgotPassword(email: email));
+  }
+
+  @override
+  Future<Either<AppError, void>> logOut() async {
+    await localDataSource.logOut();
+    return const Right(null);
   }
 }

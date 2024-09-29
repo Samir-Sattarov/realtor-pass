@@ -5,7 +5,6 @@ import '../../presentation/cubit/auth/auth_sources/auth_sources_cubit.dart';
 import '../entities/user_entity.dart';
 import '../repository/auth_repository.dart';
 
-// ================ USE CASSES ================ //
 
 class AuthSourceUsecase extends UseCase<String, AuthSourcesUsecaseParams> {
   final AuthRepository authRepository;
@@ -27,17 +26,17 @@ class LoginUsecase extends UseCase<void, LoginUsecaseParams> {
       authRepository.signIn(email: params.email, password: params.password);
 }
 
-// class LogOutUsecase extends UseCase<void, NoParams> {
-//   final AuthRepository authRepository;
-//
-//   LogOutUsecase(this.authRepository);
-//
-//   @override
-//   Future<Either<AppError, void>> call(NoParams params) =>
-//       authRepository.logOut();
-// }
+class LogOutUsecase extends UseCase<void, NoParams> {
+  final AuthRepository authRepository;
 
-// ================ PARAMS ================ //
+  LogOutUsecase(this.authRepository);
+
+  @override
+  Future<Either<AppError, void>> call(NoParams params) =>
+      authRepository.logOut();
+}
+
+
 
 class AuthSourcesUsecaseParams {
   final AuthSource source;

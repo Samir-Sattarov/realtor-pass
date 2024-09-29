@@ -22,6 +22,7 @@ import 'features/main/presentation/cubit/posters/posters_cubit.dart';
 import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'features/main/presentation/cubit/support/support_cubit.dart';
+import 'features/main/presentation/screens/house_post_images_screen.dart';
 import 'locator.dart';
 
 class Application extends StatefulWidget {

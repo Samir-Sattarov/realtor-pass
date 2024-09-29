@@ -17,7 +17,6 @@ abstract class AuthRemoteDataSource {
   Future<void> signUp({
     required String username,
     required String email,
-    required String password,
   });
   Future<void> getCodeForEditUser({
     required String email,
@@ -66,12 +65,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   Future<void> signUp({
     required String username,
     required String email,
-    required String password
   }) async {
-    final response = await client.post(ApiConstants.signUp, params: {
-      "email": email,
-      "username": username,
-    });
+    final response = await client.post(
+      ApiConstants.signUp,
+      params: {
+        "username": username,
+        "email": email,
+      },
+      withToken: false,
+    );
 
     print("Response $response");
   }
@@ -122,9 +124,9 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       ApiConstants.otp,
       withParse: false,
       params: {
-        "method": "forgotPassword",
+        "method": "checkCode",
         "data": {
-          "email": email,
+          "code": email,
         },
       },
     );
@@ -157,7 +159,9 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       ApiConstants.otp,
       params: {
         "method": "checkCode",
-        "data": data,
+        "data": {
+          "code":forgotPassword
+        },
       },
     );
   }
