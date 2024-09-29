@@ -9,6 +9,7 @@ import '../../../../resources/resources.dart';
 import '../../../auth/presentation/cubit/auth/auth_cubit.dart';
 import '../../../auth/presentation/cubit/current_user/current_user_cubit.dart';
 import '../../../auth/presentation/cubit/session/session_cubit.dart';
+import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -33,6 +34,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (state is AuthLogOutSuccess) {
             BlocProvider.of<CurrentUserCubit>(context).load();
             BlocProvider.of<SessionCubit>(context).checkSession();
+            BlocProvider.of<BottomNavCubit>(context).change(ScreenIndex.home);
+
+
           }
         },
         child: BlocBuilder<CurrentUserCubit, CurrentUserState>(
@@ -104,7 +108,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         _profileItem(
                           svgPath: Svgs.tLogOut,
                           title: "logOut".tr(),
-                          onTap: () {},
+                          onTap: () {
+                            BlocProvider.of<AuthCubit>(context).logOut();
+
+                          },
                           color: Colors.red,
                         ),
                       ],
