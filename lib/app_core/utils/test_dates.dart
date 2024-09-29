@@ -14,20 +14,13 @@ class TestDates {
   ]);
 
   static const List<ChipEntity> carCategory = [
-    ChipEntity(id: 0, title: "Внедорожник"),
-    ChipEntity(id: 1, title: "Кабриолеты"),
-    ChipEntity(id: 2, title: "Хэтчбэки"),
-    ChipEntity(id: 3, title: "Внедорожник"),
-    ChipEntity(id: 4, title: "Внедорожник"),
-    ChipEntity(id: 5, title: "Внедорожник"),
+    ChipEntity(id: 0, title: "Внедорожник", image: ""),
+
   ];
 
   static const List<ChipEntity> sorting = [
-    ChipEntity(id: 1, title: "beginChip"),
-    ChipEntity(id: 2, title: "beginExpensive"),
-    ChipEntity(id: 3, title: "tigr"),
-    ChipEntity(id: 4, title: "tigr"),
-    ChipEntity(id: 5, title: "beginExpensive"),
+    ChipEntity(id: 1, title: "beginChip", image: ""),
+
   ];
   static List<HouseEntity> houses = [
     HouseEntity(

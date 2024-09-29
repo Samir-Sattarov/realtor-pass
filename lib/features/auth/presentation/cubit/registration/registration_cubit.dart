@@ -9,12 +9,11 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   final RegistrationUsecase registrationUsecase;
   RegistrationCubit(this.registrationUsecase) : super(RegistrationInitial());
 
-  signUp({required String email, required String username, required String password}) async {
+  signUp({required String email, required String username}) async {
     emit(RegistrationLoading());
     final response = await registrationUsecase(RegistrationUsecaseParams(
       email: email,
       username: username,
-      password: password
     ));
 
     response.fold(

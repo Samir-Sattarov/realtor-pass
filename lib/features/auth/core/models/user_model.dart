@@ -6,7 +6,6 @@ class UserModel extends UserEntity {
     required super.username,
     required super.email,
     required super.password,
-    // required super.rentedCars,
     required super.isVerified,
     // required super.favoriteCars,
   });
@@ -25,7 +24,7 @@ class UserModel extends UserEntity {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'] ?? -1,
+      id: json['id'] ,
       username: json['username'],
       email: json['email'],
       password: json['password'] ?? "",
