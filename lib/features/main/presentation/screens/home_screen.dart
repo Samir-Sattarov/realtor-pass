@@ -21,7 +21,6 @@ import '../widgets/fav_conditions_widget.dart';
 import '../widgets/house_widget.dart';
 import '../widgets/questions_widget.dart';
 import '../widgets/search_widget.dart';
-import 'location_result_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -62,8 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               GestureDetector(
                 onTap: () {
-                  AnimatedNavigation.push(
-                      context: context, page: const LocationResultScreen());
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
