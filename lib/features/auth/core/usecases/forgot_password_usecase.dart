@@ -11,7 +11,7 @@ class ForgotPasswordUsecase extends UseCase<void, ForgotPasswordUsecaseParams> {
 
   @override
   Future<Either<AppError, void>> call(ForgotPasswordUsecaseParams params) =>
-      authRepository.forgotPassword(params.email);
+      authRepository.getCodeForEditUser(params.email);
 }
 
 class ForgotPasswordUsecaseParams {

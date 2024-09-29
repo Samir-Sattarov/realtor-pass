@@ -23,7 +23,7 @@ class TextFormFieldWidget extends StatefulWidget {
   final int? maxLines;
 
   const TextFormFieldWidget({
-    Key? key,
+    super.key,
     required this.hintText,
     this.onTap,
     this.title,
@@ -38,7 +38,7 @@ class TextFormFieldWidget extends StatefulWidget {
     this.focusBorder,
     this.height,
     this.maxLines,
-  }) : super(key: key);
+  });
 
   @override
   State<TextFormFieldWidget> createState() => _TextFormFieldWidgetState();
