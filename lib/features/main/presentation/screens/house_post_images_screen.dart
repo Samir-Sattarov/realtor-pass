@@ -137,21 +137,28 @@ class _HousePostImagesScreenState extends State<HousePostImagesScreen> {
                 ),
               ),
               SizedBox(
-                height: 50.h,
+                height: 20.h,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Row(
                 children: [
-                  ButtonWidget(
-                      onTap: pickImagesFromGallery, title: 'gallery'.tr()),
-                  SizedBox(
-                    height: 10.h,
+                  Expanded(
+                    child: ButtonWidget(
+                      onTap: pickImagesFromGallery,
+                      title: 'gallery'.tr(),
+                      height: 35.h,
+                    ),
                   ),
-                  ButtonWidget(
-                      onTap: takePhotoWithCamera, title: 'camera'.tr()),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: ButtonWidget(
+                      onTap: takePhotoWithCamera,
+                      title: 'camera'.tr(),
+                      height: 35.h,
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 30.h),
               Expanded(
                 child: buildImageList(),
               ),
@@ -169,22 +176,25 @@ class _HousePostImagesScreenState extends State<HousePostImagesScreen> {
                       title: "next".tr(),
                       onTap: () {
                         final updatedPostEntity =
-                        widget.postEntity.copyWith(images: selectedImages);
+                            widget.postEntity.copyWith(images: selectedImages);
                         if (selectedImages.length != 5) {
                           showDialog(
                             context: context,
                             builder: (context) {
                               return AlertDialog(
                                 title: Text("error".tr()),
-                                content: Text("Please select at least 5 photos".tr()),
+                                content: Text(
+                                    "Please select at least 5 photos".tr()),
                                 actions: <Widget>[
                                   TextButton(
                                     child: Text(
                                       "OK",
-                                      style: TextStyle(color: Colors.black, fontSize: 12.sp),
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 12.sp),
                                     ),
                                     onPressed: () {
-                                      Navigator.of(context).pop(); // Dismiss the dialog
+                                      Navigator.of(context)
+                                          .pop(); // Dismiss the dialog
                                     },
                                   ),
                                 ],
