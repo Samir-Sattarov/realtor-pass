@@ -27,9 +27,6 @@ class ConfirmOTPScreen extends StatefulWidget {
 
 class _ConfirmOTPScreenState extends State<ConfirmOTPScreen> {
   @override
-  void dispose(){
-    BlocProvider.of<OtpCodeCubit>(context).confirm(code: controllerCode.text);
-  }
   final TextEditingController controllerCode = TextEditingController();
 
   @override
@@ -175,8 +172,6 @@ class _ConfirmOTPScreenState extends State<ConfirmOTPScreen> {
                             );
                           }
                         }
-                        AnimatedNavigation.push(
-                            context: context, page: const MainScreen());
                       },
                     ),
                     SizedBox(height: 8.h),

@@ -8,10 +8,12 @@ import '../../../../app_core/utils/animated_navigation.dart';
 import '../../../../resources/resources.dart';
 import '../../../auth/presentation/cubit/session/session_cubit.dart';
 import '../../../auth/presentation/screens/sign_in_screen.dart';
+import '../../core/entity/house_post_entity.dart';
 import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'catalog_screen.dart';
 import 'favorite_screen.dart';
 import 'home_screen.dart';
+import 'house_post_location_screen.dart';
 import 'listing_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -29,7 +31,8 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
     const HomeScreen(),
     const CatalogScreen(),
-    const ListingScreen(),
+    HousePostLocationScreen(entity: HousePostEntity.empty(),),
+    // const ListingScreen(),
     const FavoriteScreen(),
     const ProfileScreen(),
   ];
