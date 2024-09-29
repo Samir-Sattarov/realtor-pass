@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../features/main/core/entity/chip_entity.dart';
 import '../../../features/main/core/entity/config_entity.dart';
 import '../../../features/main/presentation/cubit/config/config_cubit.dart';
-import '../../../features/main/presentation/cubit/house_type/house_type_cubit.dart';
 import '../../../features/main/presentation/cubit/houses/houses_cubit.dart';
 import '../../../features/main/presentation/widgets/custom_chip_widget.dart';
 import '../../app_core_library.dart';
@@ -843,7 +841,7 @@ class _FilterBodyState extends State<FilterBody> {
                               ),
                               color: Colors.transparent,
                               onTap: () {
-                                BlocProvider.of<HousesCubit>(context).load();
+                                BlocProvider.of<HousesCubit>(context).load(locale: context.locale.languageCode);
                               },
                             ),
                           ),
