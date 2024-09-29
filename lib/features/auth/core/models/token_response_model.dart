@@ -11,7 +11,7 @@ class TokenResponseModel {
 
   factory TokenResponseModel.fromJson(Map<String, dynamic> json) {
     return TokenResponseModel(
-      user: UserModel.fromJson(json['user']),
+      user: UserModel.fromJson(json['data']),
       token: json['accessToken'],
     );
   }

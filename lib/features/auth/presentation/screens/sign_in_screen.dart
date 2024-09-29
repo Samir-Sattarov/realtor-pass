@@ -92,7 +92,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       height: 46.h,
                     ),
                     ButtonWidget(
-                        title: "get".tr(),
+                        title: "enter".tr(),
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
                             BlocProvider.of<AuthCubit>(context).signIn(
@@ -100,13 +100,6 @@ class _SignInScreenState extends State<SignInScreen> {
                               password: controllerPassword.text,
                             );
                           }
-
-                          AnimatedNavigation.push(
-                            context: context,
-                            page: ConfirmOTPScreen(
-                              email: controllerEmail.text,
-                            ),
-                          );
                         }),
                     SizedBox(
                       height: 14.h,

@@ -92,12 +92,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: 21.h,
                     ),
-                    TextFormFieldWidget(
-                        hintText: "12345",
-                        isPassword: true,
-                        controller: controllerPassword,
-                        title: "password".tr(),
-                        validator: FormValidator.password),
                     SizedBox(
                       height: 64.h,
                     ),
@@ -108,7 +102,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           BlocProvider.of<RegistrationCubit>(context).signUp(
                             email: controllerEmail.text,
                             username: controllerUsername.text,
-                            password: controllerPassword.text,
                           );
                         }
                       },
