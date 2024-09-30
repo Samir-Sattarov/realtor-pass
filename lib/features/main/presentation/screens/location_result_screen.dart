@@ -162,7 +162,7 @@ class _LocationResultScreenState extends State<LocationResultScreen> {
           child: SearchWidget(
             controller: controllerSearch,
             onSearch: (value) {
-              BlocProvider.of<HousesCubit>(context).load(search: value);
+              BlocProvider.of<HousesCubit>(context).load(locale: context.locale.languageCode,search: value);
             },
             onFilter: (){
 

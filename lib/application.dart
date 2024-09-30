@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:realtor_pass/features/main/core/entity/house_post_entity.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/house_type/house_type_cubit.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/houses/houses_cubit.dart';
@@ -23,6 +24,7 @@ import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'features/main/presentation/cubit/support/support_cubit.dart';
 import 'features/main/presentation/screens/house_post_images_screen.dart';
+import 'features/main/presentation/screens/house_post_location_screen.dart';
 import 'locator.dart';
 
 class Application extends StatefulWidget {
@@ -134,7 +136,7 @@ class _ApplicationState extends State<Application>
             home: child,
           );
         },
-        child: const MainScreen(),
+        child:   HousePostLocationScreen(entity: HousePostEntity.empty()),
       ),
     );
   }
