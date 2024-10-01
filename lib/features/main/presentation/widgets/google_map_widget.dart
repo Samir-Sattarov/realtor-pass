@@ -19,14 +19,15 @@ class LocationEntity {
   final double south;
   final String address;
 
-  LocationEntity(
-      {required this.lat,
-      required this.lon,
-      required this.east,
-      required this.west,
-      required this.north,
-      required this.south,
-      required this.address});
+  LocationEntity({
+    required this.lat,
+    required this.lon,
+    required this.east,
+    required this.west,
+    required this.north,
+    required this.south,
+    required this.address,
+  });
 }
 
 class GoogleMapWidget extends StatefulWidget {
@@ -47,9 +48,29 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
     zoom: 14.4746,
   );
 
+  @override
+  void initState() {
+    moveToUseLocation();
+
+    super.initState();
+  }
+
+  moveToUseLocation() async {
+    final location = await _getCurrentUserLocation();
+    await mapController!.moveCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          zoom: 20,
+          target: LatLng(
+            location.latitude,
+            location.longitude,
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<Position> _getCurrentUserLocation() async {
-
-
     PermissionStatus permission = await _requestLocation();
 
     while (permission == PermissionStatus.denied) {
@@ -82,6 +103,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
           myLocationButtonEnabled: false,
           onMapCreated: (GoogleMapController controller) {
             mapController = controller;
+            setState(() {});
           },
           onTap: _handleTap,
           markers: selectedMarker != null ? {selectedMarker!} : {},
@@ -94,17 +116,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
               child: _button(
                 Icons.location_on_outlined,
                 () async {
-                  final location = await _getCurrentUserLocation();
-                  await mapController!.moveCamera(
-                    CameraUpdate.newCameraPosition(
-                      CameraPosition(
-                        target: LatLng(
-                          location.latitude,
-                          location.longitude,
-                        ),
-                      ),
-                    ),
-                  );
+                  await moveToUseLocation();
                 },
               ),
             ),
