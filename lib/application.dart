@@ -136,7 +136,7 @@ class _ApplicationState extends State<Application>
             home: child,
           );
         },
-        child:   HousePostLocationScreen(entity: HousePostEntity.empty()),
+        child:  const MainScreen(),
       ),
     );
   }

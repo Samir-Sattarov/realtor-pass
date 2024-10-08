@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../app_core/app_core_library.dart';
 import '../../../../app_core/utils/app_style.dart';
 import '../../../../app_core/utils/bottom_sheets/bottom_sheets.dart';
-import '../../../../app_core/utils/test_dates.dart';
 import '../../../../resources/resources.dart';
 import '../../core/entity/house_entity.dart';
 import '../../core/entity/house_stuff_entity.dart';
@@ -18,7 +17,6 @@ import '../cubit/houses/houses_cubit.dart';
 import '../cubit/posters/posters_cubit.dart';
 import '../cubit/questions/questions_cubit.dart';
 import '../widgets/fav_conditions_widget.dart';
-import '../widgets/house_widget.dart';
 import '../widgets/questions_widget.dart';
 import '../widgets/search_widget.dart';
 
@@ -44,9 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
           return nameLower.contains(patternLower);
         }).toList(),
       );
-  initialize() {
-    BlocProvider.of<PostersCubit>(context).load();
-    BlocProvider.of<HousesCubit>(context).load(locale: context.locale.languageCode);
+  @override
+  void initState() {
+    initialize();
+    super.initState();
+  }
+  initialize()  {
+
+      BlocProvider.of<PostersCubit>(context).load();
+
   }
 
   @override
@@ -136,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 34.h),
+
               BlocBuilder<PostersCubit, PostersState>(
                 builder: (context, state) {
                   if (state is PostersLoaded) {
@@ -144,62 +149,40 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? const SizedBox()
                         : Column(
                             children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 21.w),
-                                child: AbsorbPointer(
-                                  child: Container(
-                                    height: 198.h,
-                                    width: MediaQuery.of(context).size.width,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12.r),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Center(
-                                          child: SizedBox(
-                                            height: MediaQuery.of(context)
-                                                .size
-                                                .height,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Center(
-                                              child: Swiper(
-                                                autoplay: true,
-                                                itemCount: images.length,
-                                                itemBuilder: (context, index) {
-                                                  final image = images[index];
-                                                  return Image.network(
-                                                    image,
-                                                    fit: BoxFit.cover,
-                                                  );
-                                                },
-                                              ),
+                              AbsorbPointer(
+                                child: Container(
+                                  height: 198.h,
+                                  width: MediaQuery.of(context).size.width,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Center(
+                                        child: SizedBox(
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height,
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width,
+                                          child: Center(
+                                            child: Swiper(
+                                              autoplay: true,
+                                              itemCount: images.length,
+                                              itemBuilder: (context, index) {
+                                                final image = images[index];
+                                                return Image.network(
+                                                  image,
+                                                  fit: BoxFit.cover,
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.all(16.r),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                "homeScreenPosterText".tr(),
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -248,37 +231,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   return const SizedBox();
                 },
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              Container(
-                width: 300.w,
-                height: 300.h,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 22.w),
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, index) => SizedBox(width: 8.w),
-                  itemBuilder: (context, index) {
-
-
-                    if (index < houses.length) {
-                      return GestureDetector(
-                        onTap: () {
-                          // Handle tap if necessary
-                        },
-                        child: HouseWidget(
-                          houses: houses[index],
-                        ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                  itemCount: houses.length,
-                ),
               ),
             ],
           ),
