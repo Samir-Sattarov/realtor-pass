@@ -23,7 +23,7 @@ class LoginUsecase extends UseCase<void, LoginUsecaseParams> {
 
   @override
   Future<Either<AppError, void>> call(LoginUsecaseParams params) =>
-      authRepository.signIn(email: params.email, password: params.password);
+      authRepository.signIn(email: params.email, password: params.password, role: params.role);
 }
 
 class LogOutUsecase extends UseCase<void, NoParams> {
@@ -47,6 +47,7 @@ class AuthSourcesUsecaseParams {
 class LoginUsecaseParams {
   final String email;
   final String password;
+  final String role;
 
-  LoginUsecaseParams({required this.email, required this.password});
+  LoginUsecaseParams({required this.email, required this.password, required this.role});
 }

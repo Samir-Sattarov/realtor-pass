@@ -12,11 +12,15 @@ abstract class AuthRemoteDataSource {
   Future<TokenResponseModel> signIn({
     required String email,
     required String password,
+    required String role
   });
 
   Future<void> signUp({
     required String username,
     required String email,
+    required String password,
+    required String role,
+    required String phone
   });
   Future<void> getCodeForEditUser({
     required String email,
@@ -30,13 +34,14 @@ abstract class AuthRemoteDataSource {
 
   Future<TokenResponseModel> confirmOTP({
     required String code,
+    required String email,
   });
   Future<void> confirmOTPForEditUser({
     required String code,
     required bool forgotPassword,
   });
 
-  Future<UserModel> getCurrentUser(int userId);
+  Future<UserModel> getCurrentUser();
 
   Future<String> authFromSource(AuthSource source);
 }
@@ -48,12 +53,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
   @override
   Future<TokenResponseModel> signIn({
+    required String role,
     required String email,
     required String password,
+
   }) async {
     final response = await client.post(ApiConstants.signIn, params: {
       "email": email,
       "password": password,
+      "role":role
     });
 
     final model = TokenResponseModel.fromJson(response);
@@ -65,12 +73,18 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   Future<void> signUp({
     required String username,
     required String email,
+    required String password,
+    required String role,
+    required String phone,
   }) async {
     final response = await client.post(
       ApiConstants.signUp,
       params: {
         "username": username,
         "email": email,
+        "password":password,
+        "role":role,
+        "phone":phone
       },
       withToken: false,
     );
@@ -79,22 +93,20 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<UserModel> getCurrentUser(int userId) async {
-    final response = await client.get("${ApiConstants.currentUser}$userId/");
+  Future<UserModel> getCurrentUser() async {
+    final response = await client.get(ApiConstants.currentUser);
 
     print("resposne current user $response ");
-    final model = UserModel.fromJson(response['data']);
+    final model = UserModel.fromJson(response);
 
     return model;
   }
 
   @override
-  Future<TokenResponseModel> confirmOTP({required String code}) async {
+  Future<TokenResponseModel> confirmOTP({required String code, required String email}) async {
     final response = await client.post(ApiConstants.otp, params: {
-      "method": "checkCode",
-      "data": {
-        "code": int.parse(code),
-      }
+        "email": email.toString(),
+        "code":code.toString()
     });
     debugPrint("Response $response");
 
@@ -140,6 +152,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         "method": "changeUser",
         "data": {
           "email": email,
+          "forgotPassword": true,
         }
       },
     );

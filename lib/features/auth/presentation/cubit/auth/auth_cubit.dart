@@ -15,11 +15,11 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this._loginUsecase,  this.currentUserCubit, this._logOutUsecase)
       : super(AuthInitial());
 
-  signIn({required String email, required String password}) async {
+  signIn({required String email, required String password, required String role}) async {
     emit(AuthLoading());
 
     final response = await _loginUsecase(
-        LoginUsecaseParams(email: email, password: password));
+        LoginUsecaseParams(email: email, password: password, role: role));
 
     response.fold(
       (l) => emit(AuthError(message: l.errorMessage)),
@@ -29,11 +29,11 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  getCode({required String email, required String password}) async {
+  getCode({required String email, required String password, required String role}) async {
     emit(AuthLoading());
 
     final response = await _loginUsecase(
-        LoginUsecaseParams(email: email, password: password));
+        LoginUsecaseParams(email: email, password: password,role:role ));
 
     response.fold(
       (l) => emit(AuthError(message: l.errorMessage)),

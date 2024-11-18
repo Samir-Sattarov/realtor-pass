@@ -10,6 +10,8 @@ class AuthError extends AuthState {
 
   AuthError({required this.message});
 }
-class AuthLoginSuccess extends AuthState {}
+class AuthLoginSuccess extends AuthState {
+
+}
 class AuthLogOutSuccess extends AuthState {}
 class AuthRegisterSuccess extends AuthState {}

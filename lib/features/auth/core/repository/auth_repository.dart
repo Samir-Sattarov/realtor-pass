@@ -15,6 +15,7 @@ abstract class AuthRepository {
   Future<Either<AppError, void>> signIn({
     required String email,
     required String password,
+    required String role,
   });
 
   Future<Either<AppError, bool>> checkActiveSession();
@@ -29,9 +30,14 @@ abstract class AuthRepository {
   Future<Either<AppError, void>> signUp({
     required String email,
     required String username,
+    required String password,
+    required String role,
+    required String phone
+
   });
   Future<Either<AppError, UserEntity>> confirmOtp({
     required String code,
+    required String email
   });
 
   Future<Either<AppError, void>> confirmOTPForEditUser(
@@ -50,17 +56,23 @@ class AuthRepositoryImpl extends AuthRepository {
   );
 
   @override
-  Future<Either<AppError, void>> signIn(
-      {required String email, required String password}) async {
+  Future<Either<AppError, void>> signIn({
+    required String email,
+    required String password,
+    required String role,
+  }) async {
     try {
-      final response =
-          await remoteDataSource.signIn(email: email, password: password);
+      final response = await remoteDataSource.signIn(
+        email: email,
+        password: password,
+        role: role,
+      );
 
       await localDataSource.saveToken(response.token);
 
-      await localDataSource.saveUserId(response.user.id);
 
-      return Right(Future.value(null));
+
+      return const Right(null);
     } catch (error) {
       return Left(
         AppError(
@@ -71,13 +83,20 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
+
+
+
   @override
   Future<Either<AppError, void>> signUp({
     required String email,
     required String username,
+    required String password,
+    required String role,
+    required String phone
+
   }) async {
     return action(
-      task: remoteDataSource.signUp(email: email, username: username, ),
+      task: remoteDataSource.signUp(email: email, username: username, password: password, role: role, phone: phone),
     );
   }
 
@@ -99,27 +118,30 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<Either<AppError, UserEntity>> getCurrentUser() async {
-    final userId = await localDataSource.getUserId();
-    debugPrint("User id $userId");
-    if (userId == null) return Right(UserEntity.empty());
     return action(
-      task: remoteDataSource.getCurrentUser(userId),
+      task: remoteDataSource.getCurrentUser(),
     );
   }
 
-  @override
-  Future<Either<AppError, UserEntity>> confirmOtp(
-      {required String code}) async {
+  Future<Either<AppError, UserEntity>> confirmOtp({
+    required String code,
+    required String email,
+  }) async {
     try {
-      final response = await remoteDataSource.confirmOTP(code: code);
+      final response = await remoteDataSource.confirmOTP(code: code, email: email);
 
       await localDataSource.saveToken(response.token);
-      await localDataSource.saveUserId(response.user.id);
 
-      UserEntity updatedUser = response.user;
-      updatedUser.isVerified;
-
-      return Right(updatedUser);
+      if (response.user != null) {
+        await localDataSource.saveUserId(response.user!.id);
+        UserEntity updatedUser = response.user!;
+        return Right(updatedUser);
+      } else {
+        return const Left(AppError(
+          appErrorType: AppErrorType.api,
+          errorMessage: "User data is missing in the response.",
+        ));
+      }
     } catch (error) {
       return Left(AppError(
         appErrorType: AppErrorType.api,
@@ -127,6 +149,8 @@ class AuthRepositoryImpl extends AuthRepository {
       ));
     }
   }
+
+
 
   @override
   Future<Either<AppError, UserEntity>> editCurrentUser(UserEntity user) async {
