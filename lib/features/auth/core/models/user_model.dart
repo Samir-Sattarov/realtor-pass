@@ -6,17 +6,17 @@ class UserModel extends UserEntity {
     required super.username,
     required super.email,
     required super.password,
-    required super.isVerified,
+    required super.role
     // required super.favoriteCars,
   });
 
   factory UserModel.fromEntity(UserEntity entity) {
     return UserModel(
+      role: entity.role,
       id: entity.id,
       username: entity.username,
       email: entity.email,
       password: entity.password,
-      isVerified: entity.isVerified,
       // rentedCars: entity.rentedCars,
       // favoriteCars: entity.favoriteCars,
     );
@@ -28,7 +28,7 @@ class UserModel extends UserEntity {
       username: json['username'],
       email: json['email'],
       password: json['password'] ?? "",
-      isVerified: json['isVerified'],
+      role: json['role']
       // rentedCars: const [],
       // favoriteCars: const [],
     );
@@ -39,6 +39,7 @@ class UserModel extends UserEntity {
     json['username'] = username;
     json['email'] = email;
     json['password'] = password;
+    json['role'] =  role;
 
     return json;
   }

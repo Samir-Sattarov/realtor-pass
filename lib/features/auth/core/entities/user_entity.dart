@@ -5,7 +5,7 @@ class UserEntity extends Equatable {
   late String username;
   late String email;
   late String password;
-  final bool isVerified;
+  late String role;
   // final List<CarEntity> rentedCars;
   // final List<CarEntity> favoriteCars;
 
@@ -14,7 +14,7 @@ class UserEntity extends Equatable {
     required this.username,
     required this.email,
     required this.password,
-    required this.isVerified,
+    required this.role
     // required this.rentedCars,
     // required this.favoriteCars,
   });
@@ -25,7 +25,7 @@ class UserEntity extends Equatable {
       username: "",
       email: "",
       password: "",
-      isVerified: false,
+      role: ""
       // rentedCars: [],
       // favoriteCars: [],
     );

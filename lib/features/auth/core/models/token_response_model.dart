@@ -1,18 +1,15 @@
-// ignore: unused_import
-import 'dart:convert';
-
-import 'user_model.dart';
+import 'package:realtor_pass/features/auth/core/models/user_model.dart';
 
 class TokenResponseModel {
-  final UserModel user;
+  final UserModel? user;
   final String token;
 
-  TokenResponseModel({required this.user, required this.token});
+  TokenResponseModel({this.user, required this.token});
 
   factory TokenResponseModel.fromJson(Map<String, dynamic> json) {
     return TokenResponseModel(
-      user: UserModel.fromJson(json['data']),
-      token: json['accessToken'],
+      user: json.containsKey('user') ? UserModel.fromJson(json['user']) : null,
+      token: json['access_token'], // Убедитесь, что ключ соответствует ответу сервера
     );
   }
 }

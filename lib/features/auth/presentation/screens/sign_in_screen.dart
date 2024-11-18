@@ -26,7 +26,17 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController controllerEmail = TextEditingController();
   final TextEditingController controllerPassword = TextEditingController();
+  final TextEditingController controllerRole = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    controllerEmail.text = 'shakhaweb@gmail.com';
+    controllerPassword.text = '12345678';
+    controllerRole.text = 'owner';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     SizedBox(height: 10.h,),
                     const BackWidget(),
                     SizedBox(
-                      height: 50.h,
+                      height: 20.h,
                     ),
                     Text(
                       "appName".tr(),
@@ -72,7 +82,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           fontSize: 32.sp),
                     ),
                     SizedBox(
-                      height: 58.h,
+                      height: 30.h,
                     ),
                     TextFormFieldWidget(
                       hintText: "name@email.com",
@@ -80,7 +90,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       title: "email".tr(),
                     ),
                     SizedBox(
-                      height: 30.h,
+                      height: 20.h,
                     ),
                     TextFormFieldWidget(
                       hintText: "12345",
@@ -89,7 +99,15 @@ class _SignInScreenState extends State<SignInScreen> {
                       isPassword: true,
                     ),
                     SizedBox(
-                      height: 46.h,
+                      height: 20.h,
+                    ),
+                    TextFormFieldWidget(
+                      hintText: "Owner",
+                      controller: controllerRole,
+                      title: "Role".tr(),
+                    ),
+                    SizedBox(
+                      height: 60.h,
                     ),
                     ButtonWidget(
                         title: "enter".tr(),
@@ -98,6 +116,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             BlocProvider.of<AuthCubit>(context).signIn(
                               email: controllerEmail.text,
                               password: controllerPassword.text,
+                              role: controllerRole.text
                             );
                           }
                         }),
