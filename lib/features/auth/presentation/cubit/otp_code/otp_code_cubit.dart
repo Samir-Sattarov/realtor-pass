@@ -52,7 +52,6 @@ class OtpCodeCubit extends Cubit<OtpCodeState> {
       (l) => emit(OtpCodeError(message: l.errorMessage)),
       (r) {
         sessionCubit.checkSession();
-        currentUserCubit.setUser = r;
         emit(OtpCodeSuccess());
       },
     );

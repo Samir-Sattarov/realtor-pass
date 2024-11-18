@@ -23,6 +23,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController controllerEmail = TextEditingController();
   final TextEditingController controllerPassword = TextEditingController();
   final TextEditingController controllerUsername = TextEditingController();
+  final TextEditingController controllerRole = TextEditingController();
+  final TextEditingController controllerPhone =  TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -72,13 +75,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           fontSize: 32.sp),
                     ),
                     SizedBox(
-                      height: 58.h,
+                      height: 30.h,
                     ),
                     TextFormFieldWidget(
                       hintText: "name@email.com",
                       controller: controllerEmail,
                       title: "email".tr(),
                       validator: FormValidator.validateEmail,
+                    ),
+                    SizedBox(
+                      height: 21.h,
+                    ),
+                    TextFormFieldWidget(
+                      hintText: "+998979106225",
+                      controller: controllerPhone,
+                      title: "Phone number".tr(),
+                      validator: FormValidator.empty,
                     ),
                     SizedBox(
                       height: 21.h,
@@ -92,16 +104,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: 21.h,
                     ),
+                    TextFormFieldWidget(
+                      hintText: "password",
+                      controller: controllerPassword,
+                      title: "Password".tr(),
+                      validator: FormValidator.password,
+                    ),
+                    SizedBox(height: 21.h,),
+                    TextFormFieldWidget(
+                      hintText: "Role",
+                      controller: controllerRole,
+                      title: "Select the role".tr(),
+                      validator: FormValidator.empty,
+                    ),
+                    SizedBox(height: 21.h,),
                     SizedBox(
                       height: 64.h,
                     ),
                     ButtonWidget(
-                      title: "Get a code",
+                      title: "get".tr(),
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
                           BlocProvider.of<RegistrationCubit>(context).signUp(
                             email: controllerEmail.text,
                             username: controllerUsername.text,
+                            password: controllerPassword.text,
+                            role: controllerRole.text,
+                            phone:  controllerPhone.text
                           );
                         }
                       },

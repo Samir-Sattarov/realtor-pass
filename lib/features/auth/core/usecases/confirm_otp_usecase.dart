@@ -6,12 +6,12 @@ import '../../../../app_core/usecases/usecase.dart';
 import '../entities/user_entity.dart';
 import '../repository/auth_repository.dart';
 
-class ConfirmOTPUsecase extends UseCase<UserEntity, ConfirmOtpUsecaseParams> {
+class ConfirmOTPUsecase extends UseCase<void, ConfirmOtpUsecaseParams> {
   final AuthRepository authRepository;
 
   ConfirmOTPUsecase(this.authRepository);
   @override
-  Future<Either<AppError, UserEntity>> call(ConfirmOtpUsecaseParams params) =>
+  Future<Either<AppError, void>> call(ConfirmOtpUsecaseParams params) =>
       authRepository.confirmOtp(code: params.code);
 }
 

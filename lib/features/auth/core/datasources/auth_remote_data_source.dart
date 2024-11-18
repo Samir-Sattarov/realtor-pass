@@ -32,9 +32,8 @@ abstract class AuthRemoteDataSource {
   Future<void> confirmPassword(
       {required String newPassword, required String email});
 
-  Future<TokenResponseModel> confirmOTP({
+  Future<String> confirmOTP({
     required String code,
-    required String email,
   });
   Future<void> confirmOTPForEditUser({
     required String code,
@@ -103,16 +102,14 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<TokenResponseModel> confirmOTP({required String code, required String email}) async {
+  Future<String> confirmOTP({required String code}) async {
     final response = await client.post(ApiConstants.otp, params: {
-        "email": email.toString(),
+
         "code":code.toString()
     });
     debugPrint("Response $response");
 
-    final model = TokenResponseModel.fromJson(response);
-
-    return model;
+    return response['userToken'];
   }
 
   @override

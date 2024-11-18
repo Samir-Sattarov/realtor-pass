@@ -9,7 +9,7 @@ class ApiConstants {
   static const config = "config";
   static const signIn = "auth/login";
   static const signUp = "auth/register-mobile";
-  static const otp = "auth/verify-mobile";
+  static const otp = "auth/verify-mobile/";
   static const currentUser = "me/";
   static const uploadAvatar = "upload/avatar/";
   static const signInApple = "auth/apple/";

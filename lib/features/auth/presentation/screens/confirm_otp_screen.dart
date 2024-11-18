@@ -168,7 +168,7 @@ class _ConfirmOTPScreenState extends State<ConfirmOTPScreen> {
                             widget.onTapConfirm!.call(controllerCode.text);
                           } else {
                             BlocProvider.of<OtpCodeCubit>(context).confirm(
-                              code: controllerCode.text,
+                              code: controllerCode.text
                             );
                           }
                         }

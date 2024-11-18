@@ -5,7 +5,6 @@ import 'package:dartz/dartz.dart';
 import '../../../../app_core/app_core_library.dart';
 import '../../presentation/cubit/auth/auth_sources/auth_sources_cubit.dart';
 import '../entities/user_entity.dart';
-import 'package:flutter/material.dart';
 
 import '../datasources/auth_local_data_source.dart';
 import '../datasources/auth_remote_data_source.dart';
@@ -25,20 +24,16 @@ abstract class AuthRepository {
   Future<Either<AppError, void>> forgotPassword(String email);
   Future<Either<AppError, void>> logOut();
 
-
   Future<Either<AppError, void>> getCodeForEditUser(String email);
-  Future<Either<AppError, void>> signUp({
-    required String email,
-    required String username,
-    required String password,
-    required String role,
-    required String phone
+  Future<Either<AppError, void>> signUp(
+      {required String email,
+      required String username,
+      required String password,
+      required String role,
+      required String phone});
 
-  });
-  Future<Either<AppError, UserEntity>> confirmOtp({
-    required String code,
-    required String email
-  });
+  Future<Either<AppError, void>> confirmOtp(
+      {required String code});
 
   Future<Either<AppError, void>> confirmOTPForEditUser(
       {required String code, required bool forgotPassword});
@@ -70,8 +65,6 @@ class AuthRepositoryImpl extends AuthRepository {
 
       await localDataSource.saveToken(response.token);
 
-
-
       return const Right(null);
     } catch (error) {
       return Left(
@@ -83,20 +76,20 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
-
-
-
   @override
-  Future<Either<AppError, void>> signUp({
-    required String email,
-    required String username,
-    required String password,
-    required String role,
-    required String phone
-
-  }) async {
+  Future<Either<AppError, void>> signUp(
+      {required String email,
+      required String username,
+      required String password,
+      required String role,
+      required String phone}) async {
     return action(
-      task: remoteDataSource.signUp(email: email, username: username, password: password, role: role, phone: phone),
+      task: remoteDataSource.signUp(
+          email: email,
+          username: username,
+          password: password,
+          role: role,
+          phone: phone),
     );
   }
 
@@ -123,25 +116,16 @@ class AuthRepositoryImpl extends AuthRepository {
     );
   }
 
-  Future<Either<AppError, UserEntity>> confirmOtp({
+  @override
+  Future<Either<AppError, void>> confirmOtp({
     required String code,
-    required String email,
   }) async {
     try {
-      final response = await remoteDataSource.confirmOTP(code: code, email: email);
+      final response = await remoteDataSource.confirmOTP(code: code);
 
-      await localDataSource.saveToken(response.token);
+      await localDataSource.saveToken(response);
 
-      if (response.user != null) {
-        await localDataSource.saveUserId(response.user!.id);
-        UserEntity updatedUser = response.user!;
-        return Right(updatedUser);
-      } else {
-        return const Left(AppError(
-          appErrorType: AppErrorType.api,
-          errorMessage: "User data is missing in the response.",
-        ));
-      }
+      return const Right(true);
     } catch (error) {
       return Left(AppError(
         appErrorType: AppErrorType.api,
@@ -149,8 +133,6 @@ class AuthRepositoryImpl extends AuthRepository {
       ));
     }
   }
-
-
 
   @override
   Future<Either<AppError, UserEntity>> editCurrentUser(UserEntity user) async {
