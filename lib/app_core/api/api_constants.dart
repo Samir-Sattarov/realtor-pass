@@ -6,7 +6,7 @@ class ApiConstants {
   static const houses =  "publications/";
   static const banners = "banners/";
   static const houseCategories = "categories/";
-  static const config = "config";
+  static const config = "config/";
   static const signIn = "auth/login";
   static const signUp = "auth/register-mobile";
   static const otp = "auth/verify-mobile/";

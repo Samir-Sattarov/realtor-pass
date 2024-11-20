@@ -77,7 +77,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
       Future<List<HouseEntity>>.delayed(
         const Duration(milliseconds: 0),
         () => houses.where((house) {
-          final nameLower = house.houseLocation.toLowerCase().replaceAll(' ', '');
+          final nameLower =
+              house.houseLocation.toLowerCase().replaceAll(' ', '');
           final patternLower = pattern.toLowerCase().replaceAll(' ', '');
           return nameLower.contains(patternLower);
         }).toList(),
@@ -148,9 +149,8 @@ class _CatalogScreenState extends State<CatalogScreen> {
                               });
 
                               BlocProvider.of<HousesCubit>(context).load(
-                                locale:
-                                    context.locale.languageCode.toString(),
-                                category: selectedHouseCategory,
+                                locale: context.locale.languageCode.toString(),
+                                houseType: selectedHouseCategory,
                               );
                             }
                           },
@@ -272,14 +272,19 @@ class _CatalogScreenState extends State<CatalogScreen> {
               BottomSheets.filter(
                 context,
                 category: selectedHouseCategory,
-                onConfirm: (houseType, category, sort, windows, rooms, square,
-                    bathrooms, location, maxPrice, minPrice) {
+                onConfirm: (
+                  int houseType,
+                  int bedrooms,
+                  int beds,
+                  int maxPrice,
+                  int minPrice,
+                ) {
                   BlocProvider.of<HousesCubit>(context).load(
                       search: controllerSearch.text,
+                      sellingType: houseType,
                       houseType: houseType,
-                      category: category,
-                      rooms: rooms,
-                      bathroom: bathrooms,
+                      rooms: beds,
+                      bathroom: bedrooms,
                       maxPrice: maxPrice,
                       minPrice: minPrice,
                       locale: context.locale.languageCode.toString());

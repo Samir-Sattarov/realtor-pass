@@ -77,16 +77,11 @@ class BottomSheets {
     BuildContext context, {
     required int category,
     required void Function(
-      int mark,
-      int category,
-      int sort,
-      int mileage,
-      int consumption,
-      int acceleration,
-      int fromYear,
-      int toYear,
-      int maxPrice,
-      int minPrice,
+        int houseType,
+        int bedrooms,
+        int beds,
+        int maxPrice,
+        int minPrice,
     ) onConfirm,
   }) {
     return showModalBottomSheet(
@@ -106,13 +101,12 @@ class BottomSheets {
       ),
       builder: (BuildContext context) {
         return FilterBody(
-          category: category,
-          onConfirm: (int category,
-              int sort,
-              int fromYear,
-              int toYear,
+          houseType: category,
+          onConfirm: (int houseType,
+              int bedrooms,
+              int beds,
               int maxPrice,
-              int minPrice) {},
+              int minPrice,) {},
         );
       },
     );

@@ -54,13 +54,13 @@ class FavConditionsWidget extends StatelessWidget {
                       'favConditions'.tr(),
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24.sp,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                   SizedBox(
-                    width: 170.w,
+                    width: 165.w,
                     child: Text(
                       "favorableConditionsText".tr(),
                       style: TextStyle(
@@ -70,7 +70,7 @@ class FavConditionsWidget extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 65.h,
+                    height: 40.h,
                   ),
                   Container(
                     padding:

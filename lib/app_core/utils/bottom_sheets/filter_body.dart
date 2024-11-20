@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:numberpicker/numberpicker.dart';
 import '../../../features/main/core/entity/chip_entity.dart';
 import '../../../features/main/core/entity/config_entity.dart';
 import '../../../features/main/presentation/cubit/config/config_cubit.dart';
@@ -14,21 +13,19 @@ import '../../../features/main/presentation/cubit/houses/houses_cubit.dart';
 import '../../../features/main/presentation/widgets/custom_chip_widget.dart';
 import '../../app_core_library.dart';
 import '../../widgets/button_widget.dart';
-import '../test_dates.dart';
 
 class FilterBody extends StatefulWidget {
   final Function(
-    int category,
-    int sort,
-    int mileage,
-    int consumption,
+    int houseType,
+    int bedrooms,
+    int beds,
     int maxPrice,
     int minPrice,
   ) onConfirm;
-  final int category;
+  final int houseType;
   const FilterBody({
     super.key,
-    required this.category,
+    required this.houseType,
     required this.onConfirm,
   });
 
@@ -40,60 +37,23 @@ class _FilterBodyState extends State<FilterBody> {
   final TextEditingController controllerPriceFrom = TextEditingController();
   final TextEditingController controllerPriceTo = TextEditingController();
 
-  int selectedHouseCategory = 0;
-  int selectedSortCategory = 0;
-  int selectedBeds = 100;
+  int selectedBeds = 0;
   int selectedBedRooms = 0;
   int selectedSellType = 0;
-  int selectedWindows = 0;
-  int selectedRepair = 0;
   int selectedHousingType = 0;
-  int maxRooms = 100;
-  int minRooms = 0;
-  int maxPrice = 1000;
+  int maxPrice = 0;
   int minPrice = 0;
-  int maxSquare = 1000;
-  int minSquare = 0;
-  int maxFloors = 1000;
 
-  int _selectedBeds = 1;
-  int _selectedBedRooms = 1;
-
-  List<int> roomsList = [];
-
-  List<int> repairList = [];
-
-  List<int> windowsList = [];
 
   @override
   void initState() {
-    selectedHouseCategory = widget.category;
-    selectedBeds = widget.category;
-    selectedRepair = widget.category;
-    selectedSortCategory = widget.category;
-    selectedWindows = widget.category;
+    selectedBeds = widget.houseType;
     super.initState();
   }
 
   initialize(ConfigEntity config) {
-    maxRooms = config.roomsMax;
-    minRooms = config.roomsMin;
     maxPrice = config.priceMax;
     minPrice = config.priceMin;
-    maxSquare = config.squareMax;
-    minSquare = config.squareMin;
-    maxFloors = config.floorsMax;
-
-    for (var i = config.squareMin; i <= minSquare; i += 100) {
-      repairList.add(i);
-    }
-
-    for (var i = config.squareMax; i <= maxSquare; i++) {
-      roomsList.add(i);
-    }
-    for (var i = config.floorsMax; i <= maxFloors; i++) {
-      windowsList.add(i);
-    }
   }
 
   generateData(int min, int max, List listData) {
@@ -240,7 +200,7 @@ class _FilterBodyState extends State<FilterBody> {
                                     controller: controllerPriceTo,
                                     keyboardType: TextInputType.phone,
                                     decoration: InputDecoration(
-                                      hintText: "${"to".tr()} $maxSquare",
+                                      hintText: "${"to".tr()} $maxPrice",
                                       hintStyle: TextStyle(
                                         fontSize: 14.sp,
                                         color: AppStyle.blue,
@@ -417,13 +377,13 @@ class _FilterBodyState extends State<FilterBody> {
                                 IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      if (_selectedBedRooms > 1) _selectedBedRooms--;
+                                      if (selectedBedRooms > 1) selectedBedRooms--;
                                     });
                                   },
                                   icon: Icon(Icons.remove, color: AppStyle.blue),
                                 ),
                                 Text(
-                                  "$_selectedBedRooms",
+                                  "$selectedBedRooms",
                                   style: TextStyle(
                                     fontSize: 16.sp,
                                     fontWeight: FontWeight.w500,
@@ -432,7 +392,7 @@ class _FilterBodyState extends State<FilterBody> {
                                 IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      if (_selectedBedRooms < 10) _selectedBedRooms++;
+                                      if (selectedBedRooms < 10) selectedBedRooms++;
                                     });
                                   },
                                   icon: Icon(Icons.add, color: AppStyle.blue),
@@ -464,13 +424,13 @@ class _FilterBodyState extends State<FilterBody> {
                               IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    if (_selectedBeds > 1) _selectedBeds--;
+                                    if (selectedBeds > 1) selectedBeds--;
                                   });
                                 },
                                 icon: Icon(Icons.remove, color: AppStyle.blue),
                               ),
                               Text(
-                                "$_selectedBeds",
+                                "$selectedBeds",
                                 style: TextStyle(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w500,
@@ -479,7 +439,7 @@ class _FilterBodyState extends State<FilterBody> {
                               IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    if (_selectedBeds < 10) _selectedBeds++;
+                                    if (selectedBeds < 10) selectedBeds++;
                                   });
                                 },
                                 icon: Icon(Icons.add, color: AppStyle.blue),
@@ -501,20 +461,19 @@ class _FilterBodyState extends State<FilterBody> {
                             child: ButtonWidget(
                               title: "confirm".tr(),
                               onTap: () {
-                                maxRooms =
+                                maxPrice =
                                     int.tryParse(controllerPriceFrom.text) ??
-                                        maxRooms;
-                                minRooms =
+                                        maxPrice;
+                                minPrice =
                                     int.tryParse(controllerPriceTo.text) ??
-                                        minRooms;
+                                        minPrice;
 
                                 widget.onConfirm.call(
-                                  selectedHouseCategory,
-                                  selectedBeds,
-                                  maxRooms,
-                                  minRooms,
+                                  selectedHousingType,
                                   maxPrice,
                                   minPrice,
+                                  selectedBeds,
+                                  selectedBedRooms
                                 );
                               },
                               color: const Color(0xff474747),

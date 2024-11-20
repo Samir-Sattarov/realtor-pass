@@ -103,7 +103,7 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: questionsCubit),
         BlocProvider.value(value: fewStepsCubit),
         BlocProvider.value(value: profitableTermsCubit),
-        BlocProvider.value(value: configCubit),
+        BlocProvider.value(value: configCubit..load()),
         BlocProvider.value(value: supportCubit),
         BlocProvider.value(value: otpCodeCubit),
         BlocProvider.value(value: stuffCubit),

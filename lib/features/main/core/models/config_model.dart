@@ -15,17 +15,17 @@ class ConfigModel extends ConfigEntity {
       required super.windowsMax});
   factory ConfigModel.fromJson(Map<String, dynamic> json) {
     return ConfigModel(
-      redirectLink: json['redirectLink'],
-      priceMin: json['priceMin'],
-      priceMax: json['priceMax'],
-      floorsMin: json['gasMin'],
-      floorsMax: json['gasMax'],
-      squareMin: json['mileageMin'],
-      squareMax: json['mileageMax'],
-      roomsMin: json['speedMin'],
-      roomsMax: json['speedMax'],
-      windowsMin: json['yearMin'],
-      windowsMax: json['yearMax'],
+      redirectLink: json['redirectLink'] ?? '',
+      priceMin: json['priceMin'] ?? 0,
+      priceMax: json['priceMax'] ?? 0,
+      floorsMin: json['floorsMin'] ?? 0,
+      floorsMax: json['floorsMax'] ?? 0,
+      squareMin: json['squareMin'] ?? 0,
+      squareMax: json['squareMax'] ?? 0,
+      roomsMin: json['roomsMin'] ?? 0,
+      roomsMax: json['roomsMax'] ?? 0,
+      windowsMin: json['windowsMin'] ?? 0,
+      windowsMax: json['windowsMax'] ?? 0,
     );
   }
 }
