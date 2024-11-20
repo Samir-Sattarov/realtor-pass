@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:numberpicker/numberpicker.dart';
+import '../../../features/main/core/entity/chip_entity.dart';
 import '../../../features/main/core/entity/config_entity.dart';
 import '../../../features/main/presentation/cubit/config/config_cubit.dart';
+import '../../../features/main/presentation/cubit/house_selling_type/house_selling_type_cubit.dart';
+import '../../../features/main/presentation/cubit/house_type/house_type_cubit.dart';
 import '../../../features/main/presentation/cubit/houses/houses_cubit.dart';
 import '../../../features/main/presentation/widgets/custom_chip_widget.dart';
 import '../../app_core_library.dart';
@@ -18,9 +22,6 @@ class FilterBody extends StatefulWidget {
     int sort,
     int mileage,
     int consumption,
-    int acceleration,
-    int fromYear,
-    int toYear,
     int maxPrice,
     int minPrice,
   ) onConfirm;
@@ -36,18 +37,14 @@ class FilterBody extends StatefulWidget {
 }
 
 class _FilterBodyState extends State<FilterBody> {
-  final TextEditingController controllerSquareFrom = TextEditingController();
-  final TextEditingController controllerSquareTo = TextEditingController();
   final TextEditingController controllerPriceFrom = TextEditingController();
   final TextEditingController controllerPriceTo = TextEditingController();
-  final TextEditingController controllerFloorsTo = TextEditingController();
-  final TextEditingController controllerFloorFrom = TextEditingController();
 
   int selectedHouseCategory = 0;
   int selectedSortCategory = 0;
-  int selectedRooms = 100;
-  int selectedBathRooms = 0 ;
-  int selectedSeller = 0;
+  int selectedBeds = 100;
+  int selectedBedRooms = 0;
+  int selectedSellType = 0;
   int selectedWindows = 0;
   int selectedRepair = 0;
   int selectedHousingType = 0;
@@ -59,6 +56,8 @@ class _FilterBodyState extends State<FilterBody> {
   int minSquare = 0;
   int maxFloors = 1000;
 
+  int _selectedBeds = 1;
+  int _selectedBedRooms = 1;
 
   List<int> roomsList = [];
 
@@ -69,7 +68,7 @@ class _FilterBodyState extends State<FilterBody> {
   @override
   void initState() {
     selectedHouseCategory = widget.category;
-    selectedRooms = widget.category;
+    selectedBeds = widget.category;
     selectedRepair = widget.category;
     selectedSortCategory = widget.category;
     selectedWindows = widget.category;
@@ -281,169 +280,11 @@ class _FilterBodyState extends State<FilterBody> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    Container(
-                      color: const Color(0xffDADADA),
-                      height: 5.h,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    SizedBox(height: 16.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.h),
-                      child: Text(
-                        "numberOfRooms",
-                        style: TextStyle(
-                            color: AppStyle.blue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 12.h,
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 8.w),
-                        itemBuilder: (context, index) {
-                          final entity = TestDates.sorting[index];
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedRooms = entity.id;
-                              });
-                            },
-                            child: CustomChipWidget(
-                              entity: entity,
-                              currentIndex: selectedRooms,
-                            ),
-                          );
-                        },
-                        itemCount: TestDates.sorting.length,
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                    SizedBox(height: 12.h),
-
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "square".tr(),
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: AppStyle.blue,
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                          SizedBox(
-                            height: 36.h,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    controller: controllerSquareFrom,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FieldMasks.yearMarks,
-                                    ],
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(
-                                          left: 19.w, right: 8.w),
-                                      hintText: "${"from".tr()} $minSquare",
-                                      hintStyle: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: AppStyle.blue,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: TextFormField(
-                                    controller: controllerSquareTo,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FieldMasks.yearMarks,
-                                    ],
-                                    decoration: InputDecoration(
-                                      hintText: "${"to".tr()} $maxSquare",
-                                      hintStyle: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: AppStyle.blue,
-                                      ),
-                                      contentPadding: EdgeInsets.only(
-                                          left: 19.w, right: 8.w),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     SizedBox(height: 28.h),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 22.h),
                       child: Text(
-                        "houseCategory",
+                        "houseType".tr(),
                         style: TextStyle(
                             color: AppStyle.blue,
                             fontWeight: FontWeight.w500,
@@ -451,340 +292,207 @@ class _FilterBodyState extends State<FilterBody> {
                       ),
                     ),
                     SizedBox(
-                      height: 12.h,
+                      height: 14.h,
                     ),
-                    SizedBox(
-                      height: 30.h,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 8.w),
-                        itemBuilder: (context, index) {
-                          final entity = TestDates.sorting[index];
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedSortCategory = entity.id;
-                              });
-                            },
-                            child: CustomChipWidget(
-                              entity: entity,
-                              currentIndex: selectedSortCategory,
-                            ),
-                          );
-                        },
-                        itemCount: TestDates.sorting.length,
-                      ),
-                    ),
-                    SizedBox(height: 28.h,),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.h),
-                      child: Text(
-                        "seller",
-                        style: TextStyle(
-                            color: AppStyle.blue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 12.h,
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 8.w),
-                        itemBuilder: (context, index) {
-                          final entity = TestDates.sorting[index];
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedSeller = entity.id;
-                              });
-                            },
-                            child: CustomChipWidget(
-                              entity: entity,
-                              currentIndex: selectedSeller,
-                            ),
-                          );
-                        },
-                        itemCount: TestDates.sorting.length,
-                      ),
-                    ),
-                    SizedBox(height: 28.h,),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.h),
-                      child: Text(
-                        "repair",
-                        style: TextStyle(
-                            color: AppStyle.blue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 12.h,
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 8.w),
-                        itemBuilder: (context, index) {
-                          final entity = TestDates.sorting[index];
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedRepair = entity.id;
-                              });
-                            },
-                            child: CustomChipWidget(
-                              entity: entity,
-                              currentIndex: selectedRepair,
-                            ),
-                          );
-                        },
-                        itemCount: TestDates.sorting.length,
-                      ),
-                    ),
-                    SizedBox(height: 28.h,),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.h),
-                      child: Text(
-                        "bathroom",
-                        style: TextStyle(
-                            color: AppStyle.blue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 12.h,
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 8.w),
-                        itemBuilder: (context, index) {
-                          final entity = TestDates.sorting[index];
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedBathRooms = entity.id;
-                              });
-                            },
-                            child: CustomChipWidget(
-                              entity: entity,
-                              currentIndex: selectedBathRooms,
-                            ),
-                          );
-                        },
-                        itemCount: TestDates.sorting.length,
-                      ),
-                    ),
-                    SizedBox(height: 28.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "floors".tr(),
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: AppStyle.blue,
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                          SizedBox(
+                    BlocBuilder<HouseTypeCubit, HouseTypeState>(
+                      builder: (context, state) {
+                        if (state is HouseTypeLoaded) {
+                          final categories = state.results.housesType;
+                          return SizedBox(
                             height: 30.h,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              padding: EdgeInsets.symmetric(horizontal: 22.w),
+                              scrollDirection: Axis.horizontal,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(width: 8.w),
+                              itemBuilder: (context, index) {
+                                final category = categories[index];
+                                final ChipEntity chip = ChipEntity(
+                                  id: category.id,
+                                  title: category.title,
+                                  image: '',
+                                );
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedHousingType = chip.id;
+                                    });
+                                  },
+                                  child: CustomChipWidget(
+                                    entity: chip,
+                                    currentIndex: selectedHousingType,
+                                  ),
+                                );
+                              },
+                              itemCount: categories.length,
+                            ),
+                          );
+                        }
+                        return SizedBox();
+                      },
+                    ),
+                    SizedBox(height: 16.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 22.h),
+                      child: Text(
+                        "sellingType".tr(),
+                        style: TextStyle(
+                            color: AppStyle.blue,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.sp),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12.h,
+                    ),
+                    BlocBuilder<HouseSellingTypeCubit, HouseSellingTypeState>(
+                      builder: (context, state) {
+                        if (state is HouseSellingTypeLoaded) {
+                          final sellingType =
+                              state.resultEntity.houseSellingType;
+                          return SizedBox(
+                            height: 30.h,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              padding: EdgeInsets.symmetric(horizontal: 22.w),
+                              scrollDirection: Axis.horizontal,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(width: 8.w),
+                              itemBuilder: (context, index) {
+                                final sellingTypes = sellingType[index];
+                                final ChipEntity chip = ChipEntity(
+                                  id: sellingTypes.id,
+                                  title: sellingTypes.title,
+                                  image: '',
+                                );
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedSellType = sellingTypes.id;
+                                    });
+                                  },
+                                  child: CustomChipWidget(
+                                    entity: chip,
+                                    currentIndex: selectedSellType,
+                                  ),
+                                );
+                              },
+                              itemCount: sellingType.length,
+                            ),
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    ),
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Minimum Bedrooms
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 22.h),
+                            child: Text(
+                              "MinimumBedRooms".tr(),
+                              style: TextStyle(
+                                color: AppStyle.blue,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 12.h),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    controller: controllerFloorFrom,
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(
-                                          left: 19.w, right: 8.w),
-                                      hintText: "${"from".tr()} $minSquare",
-                                      hintStyle: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: AppStyle.blue,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (_selectedBedRooms > 1) _selectedBedRooms--;
+                                    });
+                                  },
+                                  icon: Icon(Icons.remove, color: AppStyle.blue),
+                                ),
+                                Text(
+                                  "$_selectedBedRooms",
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Expanded(
-                                  child: TextFormField(
-                                    controller: controllerFloorsTo,
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      hintText: "${"to".tr()} $maxSquare",
-                                      hintStyle: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: AppStyle.blue,
-                                      ),
-                                      contentPadding: EdgeInsets.only(
-                                          left: 19.w, right: 8.w),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.r),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xffA1A1A1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (_selectedBedRooms < 10) _selectedBedRooms++;
+                                    });
+                                  },
+                                  icon: Icon(Icons.add, color: AppStyle.blue),
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 28.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.h),
-                      child: Text(
-                        "houseType",
-                        style: TextStyle(
-                            color: AppStyle.blue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 14.h,
-                    ),
-                    SizedBox(
-                      height: 30.h,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 8.w),
-                        itemBuilder: (context, index) {
-                          final entity = TestDates.sorting[index];
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedHousingType = entity.id;
-                              });
-                            },
-                            child: CustomChipWidget(
-                              entity: entity,
-                              currentIndex: selectedHousingType,
+                      // Minimum Beds
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 22.h),
+                            child: Text(
+                              "MinimumBeds".tr(),
+                              style: TextStyle(
+                                color: AppStyle.blue,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                              ),
                             ),
-                          );
-                        },
-                        itemCount: TestDates.sorting.length,
+                          ),
+                          SizedBox(height: 12.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    if (_selectedBeds > 1) _selectedBeds--;
+                                  });
+                                },
+                                icon: Icon(Icons.remove, color: AppStyle.blue),
+                              ),
+                              Text(
+                                "$_selectedBeds",
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    if (_selectedBeds < 10) _selectedBeds++;
+                                  });
+                                },
+                                icon: Icon(Icons.add, color: AppStyle.blue),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(height: 28.h,),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 22.h),
-                      child: Text(
-                        "windows",
-                        style: TextStyle(
-                            color: AppStyle.blue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 14.h,
-                    ),
+                    ],
+                  ),
 
-                    SizedBox(
-                      height: 30.h,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 8.w),
-                        itemBuilder: (context, index) {
-                          final entity = TestDates.sorting[index];
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedWindows = entity.id;
-                              });
-                            },
-                            child: CustomChipWidget(
-                              entity: entity,
-                              currentIndex: selectedWindows,
-                            ),
-                          );
-                        },
-                        itemCount: TestDates.sorting.length,
-                      ),
-                    ),
-                    SizedBox(height: 28.h),
+
+                  SizedBox(height: 28.h),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 22.w),
                       child: Row(
@@ -794,18 +502,15 @@ class _FilterBodyState extends State<FilterBody> {
                               title: "confirm".tr(),
                               onTap: () {
                                 maxRooms =
-                                    int.tryParse(controllerSquareFrom.text) ??
+                                    int.tryParse(controllerPriceFrom.text) ??
                                         maxRooms;
                                 minRooms =
-                                    int.tryParse(controllerSquareTo.text) ??
+                                    int.tryParse(controllerPriceTo.text) ??
                                         minRooms;
 
                                 widget.onConfirm.call(
                                   selectedHouseCategory,
-                                  selectedSortCategory,
-                                  selectedRooms,
-                                  selectedWindows,
-                                  selectedRepair,
+                                  selectedBeds,
                                   maxRooms,
                                   minRooms,
                                   maxPrice,
@@ -841,7 +546,8 @@ class _FilterBodyState extends State<FilterBody> {
                               ),
                               color: Colors.transparent,
                               onTap: () {
-                                BlocProvider.of<HousesCubit>(context).load(locale: context.locale.languageCode);
+                                BlocProvider.of<HousesCubit>(context)
+                                    .load(locale: context.locale.languageCode);
                               },
                             ),
                           ),

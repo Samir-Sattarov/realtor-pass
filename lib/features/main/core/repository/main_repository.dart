@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:realtor_pass/app_core/app_core_library.dart';
 import 'package:realtor_pass/features/main/core/datasources/main_remote_data_source.dart';
@@ -7,6 +9,8 @@ import '../../../../app_core/entities/app_error.dart';
 import '../entity/config_entity.dart';
 import '../entity/few_steps_result_entity.dart';
 import '../entity/house_post_entity.dart';
+import '../entity/house_selling_type_entity.dart';
+import '../entity/house_selling_type_result_entity.dart';
 import '../entity/house_stuff_result_entity.dart';
 import '../entity/porters_entity.dart';
 import '../entity/profitable_terms_result_entity.dart';
@@ -15,7 +19,7 @@ import '../models/house_post_model.dart';
 
 abstract class MainRepository {
   Future<Either<AppError, HouseResultEntity>> getHouses(
-      String locale,
+    String locale,
     int page,
     String search,
     int? houseType,
@@ -41,9 +45,10 @@ abstract class MainRepository {
     String subject,
     String feedback,
   );
-  Future<Either<AppError, void>> postHouse(
-    HousePostEntity entity
-  );
+  Future<Either<AppError, void>> postHouse(HousePostEntity entity);
+  // Future<Either<AppError, List<String>>> uploadImages(List<File> images);
+  Future<Either<AppError, HouseSellingTypeResultEntity>> getHouseSellingType(
+      String locale);
 }
 
 class MainRepositoryImpl extends MainRepository {
@@ -65,8 +70,20 @@ class MainRepositoryImpl extends MainRepository {
       int? maxPrice,
       int? minPrice) async {
     return action(
-        task: remoteDataSource.getHouses(locale,page, search, houseType, category,
-            square, rooms, bathroom, fromYear, toYear, maxPrice, minPrice,));
+        task: remoteDataSource.getHouses(
+      locale,
+      page,
+      search,
+      houseType,
+      category,
+      square,
+      rooms,
+      bathroom,
+      fromYear,
+      toYear,
+      maxPrice,
+      minPrice,
+    ));
   }
 
   @override
@@ -104,17 +121,31 @@ class MainRepositoryImpl extends MainRepository {
   }
 
   @override
-  Future<Either<AppError, void>> sendFeedback(int id, String subject, String feedback) {
+  Future<Either<AppError, void>> sendFeedback(
+      int id, String subject, String feedback) {
     return action(task: remoteDataSource.sendFeedback(id, subject, feedback));
   }
 
   @override
-  Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff(String locale) {
+  Future<Either<AppError, HouseStuffResultEntity>> getHouseStuff(
+      String locale) {
     return action(task: remoteDataSource.getHouseStuff(locale));
   }
 
   @override
   Future<Either<AppError, void>> postHouse(HousePostEntity entity) {
-    return action(task: remoteDataSource.postHouse(HousePostModel.fromEntity(entity)));
+    return action(
+        task: remoteDataSource.postHouse(HousePostModel.fromEntity(entity)));
   }
+
+  @override
+  Future<Either<AppError, HouseSellingTypeResultEntity>> getHouseSellingType(
+      String locale) {
+    return action(task: remoteDataSource.getHouseSellingType(locale));
+  }
+
+  // @override
+  // Future<Either<AppError, List<String>>> uploadImages(List<File> images) async {
+  //   return action(task: remoteDataSource.uploadImages(images));
+  // }
 }

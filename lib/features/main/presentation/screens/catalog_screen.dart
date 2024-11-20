@@ -14,7 +14,6 @@ import '../cubit/house_type/house_type_cubit.dart';
 import '../cubit/houses/houses_cubit.dart';
 import '../widgets/custom_chip_widget.dart';
 import '../widgets/house_widget.dart';
-import '../widgets/map_widget.dart';
 import '../widgets/search_widget.dart';
 
 class CatalogScreen extends StatefulWidget {
@@ -78,7 +77,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
       Future<List<HouseEntity>>.delayed(
         const Duration(milliseconds: 0),
         () => houses.where((house) {
-          final nameLower = house.houseType.toLowerCase().replaceAll(' ', '');
+          final nameLower = house.houseLocation.toLowerCase().replaceAll(' ', '');
           final patternLower = pattern.toLowerCase().replaceAll(' ', '');
           return nameLower.contains(patternLower);
         }).toList(),
@@ -168,12 +167,15 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 SizedBox(
                   height: 16.h,
                 ),
-                MapWidget(
-                  houses: houses,
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
+                // ClipRRect(
+                //   borderRadius:  BorderRadius.horizontal(
+                // right: Radius.circular(10.r), left: Radius.circular(10.r)),
+                //   child: SizedBox(width: 340.w,height: 200.h,
+                //       child: GoogleMapWidget()),
+                // ),
+                // SizedBox(
+                //   height: 16.h,
+                // ),
                 BlocConsumer<HousesCubit, HousesState>(
                   listener: (context, state) {
                     if (state is HousesLoaded) {
@@ -277,7 +279,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
                       houseType: houseType,
                       category: category,
                       rooms: rooms,
-                      square: square,
                       bathroom: bathrooms,
                       maxPrice: maxPrice,
                       minPrice: minPrice,

@@ -1,9 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/foundation.dart';
@@ -32,9 +30,15 @@ abstract class ApiClient {
     required Map<String, dynamic> params,
   });
 
-  Future<dynamic> postPhoto({
-    required File file,
-  });
+  Future<Response> postPhoto(
+      String path, {
+        dynamic data,
+        required Map<String, dynamic> params,
+        Options? options,
+        bool withToken = false,
+        bool withParse = true,
+      });
+
 
   Future<dynamic> download({
     required String fileUrl,
@@ -84,35 +88,10 @@ class ApiClientImpl extends ApiClient {
     }
   }
 
-  @override
-  Future<dynamic> postPhoto({
-    required File file,
-  }) async {
-    String? token = await _authenticationLocalDataSource.getToken();
-    final userId = await _authenticationLocalDataSource.getUserId();
 
-    var headers = {
-      'Content-Type': 'multipart/form-data',
-    };
 
-    if (token != '') {
-      headers.addAll({
-        'Authorization': "Bearer $token",
-      });
-    }
-    String fileName = file.path.split('/').last;
-    FormData formData = FormData.fromMap({
-      "file": await MultipartFile.fromFile(file.path, filename: fileName),
-    });
 
-    final response = await clientDio.post(
-      "${ApiConstants.baseApiUrl}${ApiConstants.uploadAvatar}$userId",
-      data: formData,
-      options: Options(headers: headers),
-    );
 
-    return _errorHandler(response);
-  }
 
   @override
   Future<dynamic> get(
@@ -242,6 +221,45 @@ class ApiClientImpl extends ApiClient {
 
     return _errorHandler(response, withParse: withParse);
   }
+
+
+  @override
+  Future<Response> postPhoto(
+      String path, {
+        dynamic data,
+        required Map<String, dynamic> params,
+        Options? options,
+        bool withToken = false,
+        bool withParse = true,
+      }) async {
+    String? sessionId = await _authenticationLocalDataSource.getToken();
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "Accept": "*/*"
+    };
+
+    if (sessionId != null && sessionId.isNotEmpty) {
+      headers['Authorization'] = "Bearer $sessionId";
+    }
+
+    final uri = getPath(path);
+
+    final body = jsonEncode(params);
+
+    final response = await clientDio.post(
+      uri,
+      data: data ?? body,
+      options: options ??
+          Options(
+            receiveDataWhenStatusError: true,
+            headers: headers,
+          ),
+    );
+
+    return response;
+  }
+
+
 
   _errorHandler(
     Response response, {

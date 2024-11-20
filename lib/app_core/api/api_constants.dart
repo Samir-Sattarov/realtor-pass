@@ -20,5 +20,6 @@ class ApiConstants {
   static const support = "support/";
   static const postHouse  = "publications/";
   static const houseFeatures = "features";
+  static const houseSellingType = "selling-type/";
   // static const googleMap = "AIzaSyD3d7hj2oSaarverdM6thtnGL3VlrKYtTQ";
 }

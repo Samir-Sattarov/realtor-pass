@@ -1,12 +1,16 @@
 import 'dart:developer';
-
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:path/path.dart' as path;
 import 'package:realtor_pass/app_core/app_core_library.dart';
 import 'package:realtor_pass/features/main/core/models/house_model_result.dart';
 import 'package:realtor_pass/features/main/core/models/house_type_result_model.dart';
-import '../../../../app_core/utils/test_dates.dart';
+import '../../../auth/core/datasources/auth_local_data_source.dart';
 import '../models/config_model.dart';
 import '../models/few_steps_result_model.dart';
 import '../models/house_post_model.dart';
+import '../models/house_selling_type_model.dart';
+import '../models/house_selling_type_result_model.dart';
 import '../models/house_stuff_result_model.dart';
 import '../models/posters_model.dart';
 import '../models/profitable_terms_result_model.dart';
@@ -36,12 +40,20 @@ abstract class MainRemoteDataSource {
   Future<ConfigModel> getConfig();
   Future<void> sendFeedback(int id, String subject, String feedback);
   Future<void> postHouse(HousePostModel model);
+  // Future<List<String>> uploadImages(List<File> images);
+  Future<HouseSellingTypeResultModel> getHouseSellingType(String locale);
+
+
+
+
 }
 
 class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   final ApiClient apiClient;
+  final AuthLocalDataSource authLocalDataSource;
 
-  MainRemoteDataSourceImpl(this.apiClient);
+
+  MainRemoteDataSourceImpl(this.apiClient, this.authLocalDataSource);
   Map<String, dynamic> _createRarParams(
     String search,
     int? houseType,
@@ -131,7 +143,7 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   }
 
   @override
-  Future<HouseTypeResultModel> getHousesTypes( String locale) async {
+  Future<HouseTypeResultModel> getHousesTypes(String locale) async {
     final response = await apiClient.get(ApiConstants.houseCategories);
 
     log("Response from server categories ${response}");
@@ -186,7 +198,7 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   @override
   Future<HouseStuffResultModel> getHouseStuff(String locale) async {
     final response = await apiClient.get(ApiConstants.houseFeatures);
-    final model = HouseStuffResultModel.fromJson(response,locale: locale);
+    final model = HouseStuffResultModel.fromJson(response, locale: locale);
     return model;
   }
 
@@ -196,4 +208,23 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
       "subject": model,
     });
   }
+
+  @override
+  Future<HouseSellingTypeResultModel> getHouseSellingType(String locale) async {
+    final response =  await apiClient.get(ApiConstants.houseSellingType);
+    final model =  HouseSellingTypeResultModel.fromJson(response, locale: locale);
+    return model;
+
+
+  }
+
+  // @override
+  // Future<List<String>> uploadImages(List<File> images) async {
+  //   await apiClient.postPhoto(ApiConstants.imageUrl, params: {
+  //
+  //   });
+  //   return ;
+  //
+  //
+  // }
 }

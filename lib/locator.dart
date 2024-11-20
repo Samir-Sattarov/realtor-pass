@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:realtor_pass/features/main/core/datasources/main_remote_data_source.dart';
 import 'package:realtor_pass/features/main/core/repository/main_repository.dart';
@@ -34,12 +33,14 @@ import 'features/main/core/usecases/config_usecase.dart';
 import 'features/main/core/usecases/feedback_usecase.dart';
 import 'features/main/core/usecases/few_steps_usecase.dart';
 import 'features/main/core/usecases/get_house_stuff_usecase.dart';
+import 'features/main/core/usecases/house_selling_type_usecase.dart';
 import 'features/main/core/usecases/post_house_usecase.dart';
 import 'features/main/core/usecases/posters_usecase.dart';
 import 'features/main/core/usecases/profitable_terms_usecase.dart';
 import 'features/main/core/usecases/questions_usecase.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
+import 'features/main/presentation/cubit/house_selling_type/house_selling_type_cubit.dart';
 import 'features/main/presentation/cubit/house_stuff/house_stuff_cubit.dart';
 import 'features/main/presentation/cubit/post_house/house_post_cubit.dart';
 import 'features/main/presentation/cubit/posters/posters_cubit.dart';
@@ -114,6 +115,13 @@ void setup() {
   locator.registerLazySingleton(() => PostHouseUsecase(
     locator(),
   ));
+  locator.registerLazySingleton(() => GetHouseSellingTypeUsecase(
+    locator(),
+  ));
+  // locator.registerLazySingleton(() => UploadImagesUseCase(
+  //   locator(),
+  // ));
+
 
   // ================ External ================ //
 
@@ -186,6 +194,8 @@ void setup() {
   locator.registerFactory(() => SupportCubit(locator()));
   locator.registerFactory(() => HouseStuffCubit(locator()));
   locator.registerFactory(() => HousePostCubit(locator()));
+  locator.registerFactory(() => HouseSellingTypeCubit(locator()));
+
 
 
 
@@ -210,5 +220,5 @@ void setup() {
   locator.registerLazySingleton<AuthLocalDataSource>(
       () => AuthLocalDataSourceImpl(locator()));
   locator.registerLazySingleton<MainRemoteDataSource>(
-      () => MainRemoteDataSourceImpl(locator()));
+      () => MainRemoteDataSourceImpl(locator(), locator()));
 }

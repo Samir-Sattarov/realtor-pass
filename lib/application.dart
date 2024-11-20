@@ -17,14 +17,13 @@ import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
+import 'features/main/presentation/cubit/house_selling_type/house_selling_type_cubit.dart';
 import 'features/main/presentation/cubit/house_stuff/house_stuff_cubit.dart';
 import 'features/main/presentation/cubit/post_house/house_post_cubit.dart';
 import 'features/main/presentation/cubit/posters/posters_cubit.dart';
 import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'features/main/presentation/cubit/support/support_cubit.dart';
-import 'features/main/presentation/screens/house_post_images_screen.dart';
-import 'features/main/presentation/screens/house_post_location_screen.dart';
 import 'locator.dart';
 
 class Application extends StatefulWidget {
@@ -55,6 +54,7 @@ class _ApplicationState extends State<Application>
   late HouseStuffCubit stuffCubit;
   late HousePostCubit postCubit;
   late ForgotPasswordCubit forgotPasswordCubit;
+  late HouseSellingTypeCubit houseSellingTypeCubit;
 
   @override
   void initState() {
@@ -82,6 +82,7 @@ class _ApplicationState extends State<Application>
     stuffCubit =  locator();
     postCubit = locator();
     forgotPasswordCubit = locator();
+    houseSellingTypeCubit = locator();
   }
 
   @override
@@ -108,8 +109,7 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: stuffCubit),
         BlocProvider.value(value: postCubit),
         BlocProvider.value(value: forgotPasswordCubit),
-
-
+        BlocProvider.value(value: houseSellingTypeCubit..load(locale: context.locale.languageCode)),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),

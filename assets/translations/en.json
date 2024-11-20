@@ -76,6 +76,11 @@
   "camera": "Camera",
   "search": "Search",
   "locationChoose": "Please choose your location",
-  "onlyGuestCanSeeLocation": "Your address is only shared with guests after they've made a reservation."
+  "onlyGuestCanSeeLocation": "Your address is only shared with guests after they've made a reservation.",
+  "houseType": "House Type",
+  "sellingType":"Type of sale",
+  "MinimumBedRooms": "Min Bedrooms",
+  "MinimumBeds": "Min Beds"
+
 
 }

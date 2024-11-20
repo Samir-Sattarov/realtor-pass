@@ -13,7 +13,6 @@ import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'catalog_screen.dart';
 import 'favorite_screen.dart';
 import 'home_screen.dart';
-import 'house_post_location_screen.dart';
 import 'listing_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -31,8 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
     const HomeScreen(),
     const CatalogScreen(),
-    HousePostLocationScreen(entity: HousePostEntity.empty(),),
-    // const ListingScreen(),
+    ListingScreen(entity: HousePostEntity.empty()),
     const FavoriteScreen(),
     const ProfileScreen(),
   ];
