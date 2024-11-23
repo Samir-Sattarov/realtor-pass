@@ -12,11 +12,13 @@ class ConfirmPasswordUsecase
 
   @override
   Future<Either<AppError, void>> call(ConfirmPasswordUsecaseParams params) =>
-      authRepository.confirmPassword(params.password, params.email);
+      authRepository.confirmPassword(
+          params.password, params.token, params.isMobile);
 }
 
 class ConfirmPasswordUsecaseParams {
   final String password;
-  final String email;
-  ConfirmPasswordUsecaseParams({required this.password, required this.email});
+  final String token;
+  final bool isMobile = true;
+  ConfirmPasswordUsecaseParams({required this.password, required this.token});
 }

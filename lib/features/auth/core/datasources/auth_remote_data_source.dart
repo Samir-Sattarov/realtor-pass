@@ -9,28 +9,24 @@ import '../models/user_model.dart';
 abstract class AuthRemoteDataSource {
   Future<UserModel> editCurrentUser(UserModel model);
 
-  Future<TokenResponseModel> signIn({
-    required String email,
-    required String password,
-    required String role
-  });
+  Future<TokenResponseModel> signIn(
+      {required String email, required String password, required String role});
 
-  Future<void> signUp({
-    required String username,
-    required String email,
-    required String password,
-    required String role,
-    required String phone
-  });
+  Future<void> signUp(
+      {required String username,
+      required String email,
+      required String password,
+      required String role,
+      required String phone});
   Future<void> getCodeForEditUser({
     required String email,
   });
 
-  Future<void> forgotPassword({
-    required String email,
-  });
+  Future<void> forgotPassword(
+      {required String email, required String role, bool isMobile = true});
+
   Future<void> confirmPassword(
-      {required String newPassword, required String email});
+      {required String newPassword, required String token, bool isMobile = true});
 
   Future<String> confirmOTP({
     required String code,
@@ -55,13 +51,9 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     required String role,
     required String email,
     required String password,
-
   }) async {
-    final response = await client.post(ApiConstants.signIn, params: {
-      "email": email,
-      "password": password,
-      "role":role
-    });
+    final response = await client.post(ApiConstants.signIn,
+        params: {"email": email, "password": password, "role": role});
 
     final model = TokenResponseModel.fromJson(response);
 
@@ -81,9 +73,9 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       params: {
         "username": username,
         "email": email,
-        "password":password,
-        "role":role,
-        "phone":phone
+        "password": password,
+        "role": role,
+        "phone": phone
       },
       withToken: false,
     );
@@ -103,10 +95,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
   @override
   Future<String> confirmOTP({required String code}) async {
-    final response = await client.post(ApiConstants.otp, params: {
-
-        "code":code.toString()
-    });
+    final response =
+        await client.post(ApiConstants.otp, params: {"code": code.toString()});
     debugPrint("Response $response");
 
     return response['userToken'];
@@ -128,29 +118,22 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<void> forgotPassword({required String email}) async {
-    await client.post(
-      ApiConstants.otp,
-      withParse: false,
-      params: {
-        "method": "checkCode",
-        "data": {
-          "code": email,
-        },
-      },
-    );
+  Future<void> forgotPassword(
+      {required String email,
+      required String role,
+      bool isMobile = true}) async {
+    await client.post(ApiConstants.forgotPassword,
+        withParse: false,
+        params: {"email": email, "role": role, "isMobile": true});
   }
 
   @override
   Future<void> getCodeForEditUser({required String email}) async {
     await client.post(
-      ApiConstants.otp,
+      ApiConstants.resetPassword,
       params: {
-        "method": "changeUser",
-        "data": {
           "email": email,
           "forgotPassword": true,
-        }
       },
     );
   }
@@ -169,24 +152,20 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       ApiConstants.otp,
       params: {
         "method": "checkCode",
-        "data": {
-          "code":forgotPassword
-        },
+        "data": {"code": forgotPassword},
       },
     );
   }
 
   @override
   Future<void> confirmPassword(
-      {required String newPassword, required String email}) async {
+      {required String newPassword, required String token,  bool isMobile = true}) async {
     await client.post(
-      ApiConstants.otp,
+      ApiConstants.resetPassword,
       params: {
-        "method": "setUser",
-        "data": {
           "password": newPassword,
-          "userEmail": email,
-        }
+          "userEmail": token,
+          "isMobile": true
       },
     );
   }

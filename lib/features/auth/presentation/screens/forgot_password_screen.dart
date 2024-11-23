@@ -10,7 +10,9 @@ import '../../../../app_core/widgets/button_widget.dart';
 import '../../../../app_core/widgets/error_flash_bar.dart';
 import '../../../../app_core/widgets/text_form_field_widget.dart';
 import '../cubit/forgot_password/forgot_password_cubit.dart';
+import 'confirm_new_password_screen.dart';
 import 'confirm_otp_screen.dart';
+import 'otp_for_reset_password.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   final String email;
@@ -22,6 +24,8 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController controllerEmail = TextEditingController();
+  final TextEditingController controllerRole = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -40,7 +44,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           if (state is ForgotPasswordSuccess) {
             AnimatedNavigation.push(
                 context: context,
-                page: ConfirmOTPScreen(email: controllerEmail.text));
+                page: OtpForResetPasswordScreen(email: controllerEmail.text));
           }
         },
         child: Form(
@@ -71,30 +75,45 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 20.h,),
                     Text(
-                      "forgotPassword".tr(),
+                      "Please enter your email so we can send you a password reset code.".tr(),
                       style: TextStyle(
                         color: AppStyle.dark,
-                        fontSize: 32.sp,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     SizedBox(height: 58.h),
                     SizedBox(height: 21.h),
                     TextFormFieldWidget(
-                      hintText: 'email'.tr(),
+                      hintText: 'name@gmail.com'.tr(),
                       controller: controllerEmail,
                       validator: FormValidator.validateEmail,
-                      title: "enter".tr(),
+                      title: "Email".tr(),
+                    ),
+                    SizedBox(height: 21.h),
+                    TextFormFieldWidget(
+                      hintText: 'owner'.tr(),
+                      controller: controllerRole,
+                      validator: FormValidator.empty,
+                      title: "Role".tr(),
                     ),
                     SizedBox(height: 46.h),
-                    ButtonWidget(title: "send", onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        BlocProvider.of<ForgotPasswordCubit>(context).getCode(
-                          email: controllerEmail.text,
-                        );
-                      }
-                    }),
+                    ButtonWidget(
+                        title: "send",
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            BlocProvider.of<ForgotPasswordCubit>(context)
+                                .getCode(
+                                    email: controllerEmail.text,
+                                    role: controllerRole.text,
+                                    isMobile: true);
+                            AnimatedNavigation.push(
+                                context: context,
+                                page: OtpForResetPasswordScreen(email: controllerEmail.text));
+                          }
+                        }),
                     SizedBox(height: 14.h),
                     SizedBox(height: 40.h),
                   ],

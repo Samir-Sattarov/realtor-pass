@@ -12,8 +12,8 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   ForgotPasswordCubit(this.forgotPasswordUsecase)
       : super(ForgotPasswordInitial());
 
-  getCode({required String email}) async {
-    final response = await forgotPasswordUsecase.call(ForgotPasswordUsecaseParams(email: email));
+  getCode({required String email, required String role, bool isMobile=true}) async {
+    final response = await forgotPasswordUsecase.call(ForgotPasswordUsecaseParams(email: email, role: role,));
 
     response.fold(
       (l) => emit(ForgotPasswordError(l.errorMessage)),

@@ -2,13 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:realtor_pass/features/main/core/entity/house_post_entity.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/house_type/house_type_cubit.dart';
 import 'package:realtor_pass/features/main/presentation/cubit/houses/houses_cubit.dart';
 import 'package:realtor_pass/features/main/presentation/screens/main_screen.dart';
 import 'features/auth/presentation/cubit/auth/auth_cubit.dart';
 import 'features/auth/presentation/cubit/auth/auth_sources/auth_sources_cubit.dart';
+import 'features/auth/presentation/cubit/confitm_password/confirm_password_cubit.dart';
 import 'features/auth/presentation/cubit/current_user/current_user_cubit.dart';
 import 'features/auth/presentation/cubit/edit_current_user_cubit/edit_user_cubit.dart';
 import 'features/auth/presentation/cubit/forgot_password/forgot_password_cubit.dart';
@@ -16,6 +16,8 @@ import 'features/auth/presentation/cubit/otp_code/otp_code_cubit.dart';
 import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
+import 'features/main/presentation/cubit/favorite/favorite_houses__cubit.dart';
+import 'features/main/presentation/cubit/favorite/favorite_json/favorite_houses_json_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
 import 'features/main/presentation/cubit/house_selling_type/house_selling_type_cubit.dart';
 import 'features/main/presentation/cubit/house_stuff/house_stuff_cubit.dart';
@@ -55,6 +57,10 @@ class _ApplicationState extends State<Application>
   late HousePostCubit postCubit;
   late ForgotPasswordCubit forgotPasswordCubit;
   late HouseSellingTypeCubit houseSellingTypeCubit;
+  late FavoriteHousesCubit favoriteHousesCubit;
+  late FavoriteHousesJsonCubit favoriteHousesJsonCubit;
+  late ConfirmPasswordCubit confirmPasswordCubit;
+
 
   @override
   void initState() {
@@ -83,6 +89,11 @@ class _ApplicationState extends State<Application>
     postCubit = locator();
     forgotPasswordCubit = locator();
     houseSellingTypeCubit = locator();
+    favoriteHousesCubit = locator();
+    favoriteHousesJsonCubit =  locator();
+    confirmPasswordCubit =  locator();
+
+
   }
 
   @override
@@ -110,6 +121,11 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: postCubit),
         BlocProvider.value(value: forgotPasswordCubit),
         BlocProvider.value(value: houseSellingTypeCubit..load(locale: context.locale.languageCode)),
+        BlocProvider.value(value: favoriteHousesCubit),
+        BlocProvider.value(value: favoriteHousesJsonCubit),
+        BlocProvider.value(value: confirmPasswordCubit),
+
+
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),

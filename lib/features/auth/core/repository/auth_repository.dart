@@ -20,8 +20,10 @@ abstract class AuthRepository {
   Future<Either<AppError, bool>> checkActiveSession();
   Future<Either<AppError, UserEntity>> getCurrentUser();
   Future<Either<AppError, UserEntity>> editCurrentUser(UserEntity user);
-  Future<Either<AppError, void>> confirmPassword(String password, String email);
-  Future<Either<AppError, void>> forgotPassword(String email);
+  Future<Either<AppError, void>> confirmPassword(
+      String password, String token, bool isMobile);
+  Future<Either<AppError, void>> forgotPassword(
+      String email, String role, bool isMobile);
   Future<Either<AppError, void>> logOut();
 
   Future<Either<AppError, void>> getCodeForEditUser(String email);
@@ -32,8 +34,7 @@ abstract class AuthRepository {
       required String role,
       required String phone});
 
-  Future<Either<AppError, void>> confirmOtp(
-      {required String code});
+  Future<Either<AppError, void>> confirmOtp({required String code});
 
   Future<Either<AppError, void>> confirmOTPForEditUser(
       {required String code, required bool forgotPassword});
@@ -170,16 +171,19 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<Either<AppError, void>> confirmPassword(
-      String password, String email) {
+      String password, String token, bool isMobile) {
     return action<void>(
-      task:
-          remoteDataSource.confirmPassword(newPassword: password, email: email),
+      task: remoteDataSource.confirmPassword(
+          newPassword: password, token: token, isMobile: true),
     );
   }
 
   @override
-  Future<Either<AppError, void>> forgotPassword(String email) {
-    return action(task: remoteDataSource.forgotPassword(email: email));
+  Future<Either<AppError, void>> forgotPassword(
+      String email, String role, bool isMobile) {
+    return action(
+        task: remoteDataSource.forgotPassword(
+            email: email, role: role, isMobile: true));
   }
 
   @override

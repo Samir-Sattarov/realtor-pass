@@ -11,10 +11,14 @@ class ForgotPasswordUsecase extends UseCase<void, ForgotPasswordUsecaseParams> {
 
   @override
   Future<Either<AppError, void>> call(ForgotPasswordUsecaseParams params) =>
-      authRepository.getCodeForEditUser(params.email);
+      authRepository.forgotPassword(params.email, params.role, params.isMobile);
 }
 
 class ForgotPasswordUsecaseParams {
   final String email;
-  ForgotPasswordUsecaseParams({required this.email});
+  final String role;
+  final bool isMobile = true;
+
+
+  ForgotPasswordUsecaseParams({required this.email, required this.role});
 }

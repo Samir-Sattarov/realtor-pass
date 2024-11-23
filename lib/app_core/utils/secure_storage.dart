@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/cupertino.dart';
 
 class SecureStorage {
-  final FlutterSecureStorage storage =  FlutterSecureStorage();
+  final FlutterSecureStorage storage =  const FlutterSecureStorage();
 
   save({required String key, required dynamic value}) async {
     await storage.write(key: key, value: value);
