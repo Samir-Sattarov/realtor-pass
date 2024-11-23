@@ -13,6 +13,7 @@ import '../../core/entity/house_type_entity.dart';
 import '../cubit/house_type/house_type_cubit.dart';
 import '../cubit/houses/houses_cubit.dart';
 import '../widgets/custom_chip_widget.dart';
+import '../widgets/google_map_widget.dart';
 import '../widgets/house_widget.dart';
 import '../widgets/search_widget.dart';
 
@@ -167,15 +168,15 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 SizedBox(
                   height: 16.h,
                 ),
-                // ClipRRect(
-                //   borderRadius:  BorderRadius.horizontal(
-                // right: Radius.circular(10.r), left: Radius.circular(10.r)),
-                //   child: SizedBox(width: 340.w,height: 200.h,
-                //       child: GoogleMapWidget()),
-                // ),
-                // SizedBox(
-                //   height: 16.h,
-                // ),
+                ClipRRect(
+                  borderRadius:  BorderRadius.horizontal(
+                right: Radius.circular(10.r), left: Radius.circular(10.r)),
+                  child: SizedBox(width: 340.w,height: 200.h,
+                      child: GoogleMapWidget()),
+                ),
+                SizedBox(
+                  height: 16.h,
+                ),
                 BlocConsumer<HousesCubit, HousesState>(
                   listener: (context, state) {
                     if (state is HousesLoaded) {

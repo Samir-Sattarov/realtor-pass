@@ -8,6 +8,7 @@ import '../../../../app_core/utils/animated_navigation.dart';
 import '../../../../resources/resources.dart';
 import '../../../auth/presentation/cubit/session/session_cubit.dart';
 import '../../../auth/presentation/screens/sign_in_screen.dart';
+import '../../core/entity/house_entity.dart';
 import '../../core/entity/house_post_entity.dart';
 import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'catalog_screen.dart';
@@ -26,6 +27,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late int currentIndex;
+  late HouseEntity houseEntity;
 
   List<Widget> screens = [
     const HomeScreen(),

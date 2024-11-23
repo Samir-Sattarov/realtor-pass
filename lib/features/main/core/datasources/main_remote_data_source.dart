@@ -38,17 +38,14 @@ abstract class MainRemoteDataSource {
   Future<void> postHouse(HousePostModel model);
   // Future<List<String>> uploadImages(List<File> images);
   Future<HouseSellingTypeResultModel> getHouseSellingType(String locale);
-
-
-
-
-
+  Future<void> saveHouseToFavorite(int userId, int publicationId);
+  Future<HouseResultModel> getFavoriteHouses(int userId);
+  Future<void> deleteFromFavorite(int userId, int publicationsId);
 }
 
 class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   final ApiClient apiClient;
   final AuthLocalDataSource authLocalDataSource;
-
 
   MainRemoteDataSourceImpl(this.apiClient, this.authLocalDataSource);
   Map<String, dynamic> _createRarParams(
@@ -178,7 +175,9 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<ConfigModel> getConfig() async {
-    final response = await apiClient.get(ApiConstants.config);
+    final response = await apiClient.post(ApiConstants.config,
+    params: {}
+    );
     final model = ConfigModel.fromJson(response);
     return model;
   }
@@ -208,11 +207,38 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<HouseSellingTypeResultModel> getHouseSellingType(String locale) async {
-    final response =  await apiClient.get(ApiConstants.houseSellingType);
-    final model =  HouseSellingTypeResultModel.fromJson(response, locale: locale);
+    final response = await apiClient.get(ApiConstants.houseSellingType);
+    final model =
+        HouseSellingTypeResultModel.fromJson(response, locale: locale);
     return model;
+  }
 
+  @override
+  Future<void> saveHouseToFavorite(int userId, int publicationId) async {
+    await apiClient.post(
+      ApiConstants.favoriteHouses,
+      params: {
+        "userId": userId,
+        "publicationId": publicationId,
+      },
+    );
+  }
 
+  @override
+  Future<HouseResultModel> getFavoriteHouses(int userId) async {
+    final response = await apiClient.get(
+      "${ApiConstants.favoriteHouses}/$userId",
+    );
+
+    final model = HouseResultModel.fromJson(response);
+    return model;
+  }
+
+  @override
+  Future<void> deleteFromFavorite(int userId, int publicationsId) async {
+    await apiClient.deleteWithBody(
+      "${ApiConstants.favoriteHouses}/$userId/$publicationsId",
+    );
   }
 
   // @override
