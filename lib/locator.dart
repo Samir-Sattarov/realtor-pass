@@ -29,6 +29,7 @@ import 'features/auth/presentation/cubit/forgot_password/forgot_password_cubit.d
 import 'features/auth/presentation/cubit/otp_code/otp_code_cubit.dart';
 import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
+import 'features/main/core/datasources/main_local_data_source.dart';
 import 'features/main/core/usecases/config_usecase.dart';
 import 'features/main/core/usecases/feedback_usecase.dart';
 import 'features/main/core/usecases/few_steps_usecase.dart';
@@ -39,6 +40,8 @@ import 'features/main/core/usecases/posters_usecase.dart';
 import 'features/main/core/usecases/profitable_terms_usecase.dart';
 import 'features/main/core/usecases/questions_usecase.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
+import 'features/main/presentation/cubit/favorite/favorite_houses__cubit.dart';
+import 'features/main/presentation/cubit/favorite/favorite_json/favorite_houses_json_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
 import 'features/main/presentation/cubit/house_selling_type/house_selling_type_cubit.dart';
 import 'features/main/presentation/cubit/house_stuff/house_stuff_cubit.dart';
@@ -63,7 +66,7 @@ void setup() {
   // ================ Core ================ //
 
   locator.registerLazySingleton(
-        () => Dio()
+    () => Dio()
       ..interceptors.addAll([
         PrettyDioLogger(
           requestHeader: true,
@@ -113,15 +116,23 @@ void setup() {
         locator(),
       ));
   locator.registerLazySingleton(() => PostHouseUsecase(
-    locator(),
-  ));
+        locator(),
+      ));
   locator.registerLazySingleton(() => GetHouseSellingTypeUsecase(
+        locator(),
+      ));
+  locator.registerLazySingleton(() => SaveHousesToFavoriteUsecase(
     locator(),
   ));
+  locator.registerLazySingleton(() => GetFavoriteHouseJsonUsecase(
+    locator(),
+  ));
+  locator.registerFactory(() => GetFavoriteHousesUsecase(locator()));
+  locator.registerFactory(() => DeleteHousesFromFavoriteUsecase(locator()));
+  locator.registerFactory(()=> DeleteAllHousesFromFavoriteUsecase(locator()));
   // locator.registerLazySingleton(() => UploadImagesUseCase(
   //   locator(),
   // ));
-
 
   // ================ External ================ //
 
@@ -156,11 +167,7 @@ void setup() {
         locator(),
       ));
   locator.registerFactory(() => BottomNavCubit());
-  locator.registerFactory(() => AuthCubit(
-        locator(),
-        locator(),
-    locator()
-      ));
+  locator.registerFactory(() => AuthCubit(locator(), locator(), locator()));
 
   locator.registerFactory(() => CurrentUserCubit(
         locator(),
@@ -195,6 +202,9 @@ void setup() {
   locator.registerFactory(() => HouseStuffCubit(locator()));
   locator.registerFactory(() => HousePostCubit(locator()));
   locator.registerFactory(() => HouseSellingTypeCubit(locator()));
+  locator.registerFactory(() => FavoriteHousesCubit(locator(), locator(),locator(), locator(),locator()));
+  locator.registerFactory(() => FavoriteHousesJsonCubit(locator()));
+
 
 
 
@@ -208,9 +218,7 @@ void setup() {
     ),
   );
   locator.registerLazySingleton<MainRepository>(
-    () => MainRepositoryImpl(
-      locator(),
-    ),
+    () => MainRepositoryImpl(locator(), locator(), locator()),
   );
   // ================ DATASOURCE ================ //
 
@@ -221,4 +229,7 @@ void setup() {
       () => AuthLocalDataSourceImpl(locator()));
   locator.registerLazySingleton<MainRemoteDataSource>(
       () => MainRemoteDataSourceImpl(locator(), locator()));
+
+  locator.registerLazySingleton<MainLocalDataSource>(
+          () => MainLocalDataSourceImpl());
 }

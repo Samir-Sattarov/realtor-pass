@@ -3,6 +3,8 @@
 import 'package:equatable/equatable.dart';
 
 class HouseEntity extends Equatable {
+  final int beds;
+  final int guests;
   final List<String> images;
   final int id;
   final String houseTitle;
@@ -14,13 +16,15 @@ class HouseEntity extends Equatable {
   final String category;
   final String description;
   final int price;
-  final int square;
+  final int bedrooms;
   bool isFavorite;
-  final int bathroom;
+  final int bathrooms;
   final int rooms;
 
   HouseEntity(
    {
+     required this.beds,
+     required this.guests,
      required this.houseTitle,
     required this.id,
     required this.houseLocation,
@@ -33,8 +37,8 @@ class HouseEntity extends Equatable {
     required this.lon,
     required this.lat,
     required this.price,
-    required this.square,
-    required this.bathroom,
+    required this.bedrooms,
+    required this.bathrooms,
     required this.rooms,
   });
 
@@ -49,8 +53,8 @@ class HouseEntity extends Equatable {
         description,
         images,
         price,
-        square,
-        bathroom,
+        bedrooms,
+        bathrooms,
         rooms,
       ];
 }

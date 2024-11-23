@@ -1,15 +1,16 @@
 import 'package:card_swiper/card_swiper.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:realtor_pass/features/main/core/entity/house_entity.dart';
-import 'package:realtor_pass/features/main/presentation/screens/house_detail_screen.dart';
 import '../../../../app_core/app_core_library.dart';
-import '../../../../app_core/utils/number_helper.dart';
-import '../../../../resources/resources.dart';
+import '../../../../app_core/utils/bottom_sheets/fav_conditions_body.dart';
+import '../../../../app_core/widgets/button_widget.dart';
+import '../../../auth/presentation/cubit/session/session_cubit.dart';
+import '../../../auth/presentation/screens/sign_in_screen.dart';
+import '../../core/entity/house_entity.dart';
+import '../cubit/favorite/favorite_houses__cubit.dart';
+import '../screens/house_detail_screen.dart';
 
 class HouseWidget extends StatefulWidget {
   final HouseEntity houses;
@@ -23,187 +24,186 @@ class HouseWidget extends StatefulWidget {
   State<HouseWidget> createState() => _HouseWidgetState();
 }
 
-class _HouseWidgetState extends State<HouseWidget>
-    with AutomaticKeepAliveClientMixin {
+class _HouseWidgetState extends State<HouseWidget> {
   late bool isFavorite;
 
   @override
   void initState() {
     isFavorite = false;
-    initialize();
     super.initState();
   }
 
-  initialize() {}
-
-  late List<HouseEntity> houses;
-
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    final houses = widget.houses;
     return GestureDetector(
-      onTap: () => AnimatedNavigation.push(
-          context: context,
-          page: HouseDetailScreen(
-            entity: houses,
-          )),
-      child: _item(context),
+      onTap: () {
+        AnimatedNavigation.push(
+            context: context, page: HouseDetailScreen(entity: widget.houses));
+      },
+      child: Container(
+        height: 182.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.r),
+            color: Colors.grey.shade100,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.9),
+              spreadRadius: 1,
+              blurRadius: 8,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildImageSection(),
+            _buildInfoSection(),
+          ],
+        ),
+      ),
     );
   }
 
-  _item(BuildContext context) {
-    return Container(
+  Widget _buildImageSection() {
+    return SizedBox(
+      width: 170.w,
       height: 182.h,
-      width: 1.sw,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: const Color(0xffA1A1A1),
-          width: 1,
-        ),
-        color: Colors.white,
-      ),
-      child: Row(
+      child: Stack(
         children: [
-          Container(
-            width: 180.w,
-            height: 182.h,
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.r),
-              border: const Border(
-                right: BorderSide(
-                  color: Color(0xffA1A1A1),
-                  width: 1,
+          ClipRRect(
+            borderRadius: BorderRadius.horizontal(
+                right: Radius.circular(10.r), left: Radius.circular(10.r)),
+            child: Swiper(
+              itemCount: widget.houses.images.length,
+              itemBuilder: (context, index) {
+                return Image.network(
+                  widget.houses.images[index],
+                  fit: BoxFit.cover,
+                );
+              },
+              pagination: const SwiperPagination(
+                alignment: Alignment.bottomCenter,
+                builder: DotSwiperPaginationBuilder(
+                  activeColor: Colors.blueAccent,
+                  color: Colors.grey,
+                  size: 6.0,
+                  activeSize: 8.0,
                 ),
               ),
             ),
-            child: Center(
-              child: Stack(
-                children: [
-                  Swiper(
-                    pagination: SwiperCustomPagination(builder:
-                        (BuildContext context, SwiperPluginConfig config) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 13.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                ...List.generate(
-                                  config.itemCount,
-                                  (index) => Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: Container(
-                                        // width: 24.w,
-                                        height: 2.h,
-                                        color: config.activeIndex == index
-                                            ? const Color(0xff474747)
-                                            : const Color(0xffC6C6C6),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 17.h),
-                        ],
-                      );
-                    }),
-                    itemCount: widget.houses.images.length,
-                    itemBuilder: (context, index) => Image.network(
-                      widget.houses.images[index],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  _favoriteButton(),
-                ],
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isFavorite ? Colors.red : Colors.white,
               ),
+              onPressed: () {
+                if (BlocProvider.of<SessionCubit>(context).state
+                    is SessionDisabled) {
+                  AnimatedNavigation.push(
+                      context: context, page: const SignInScreen());
+                } else {
+                  setState(() => isFavorite = !isFavorite);
+                  if (isFavorite) {
+                    BlocProvider.of<FavoriteHousesCubit>(context)
+                        .save(widget.houses.id);
+                  } else {
+                    BlocProvider.of<FavoriteHousesCubit>(context)
+                        .remove(widget.houses.id);
+                  }
+                }
+                setState(() {
+                  isFavorite = !isFavorite;
+                });
+              },
             ),
           ),
-
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Text(
-                    widget.houses.houseTitle,
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppStyle.blue,
-                    ),
-                  ),
-                  SizedBox(height: 5.h,),
-                  Text(
-                    widget.houses.category,
-                    style: TextStyle(
-                      fontSize: 10.sp,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(height: 50.h,),
-
-                  Text(NumberHelper.format(widget.houses.price) +
-                      '\$' +
-                      "/" +
-                      "perMonth".tr()),
-                  SizedBox(height: 6.h),
-                  GestureDetector(
-                    onTap: () {
-
-                    },
-                    child: Container(
-                      width: 143.w,
-                      height: 25.h,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [AppStyle.blue, AppStyle.darkBlue],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(78.r),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "rent".tr(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
         ],
       ),
     );
   }
 
-  _favoriteButton() {
-    return IconButton(
-      onPressed: () {
-
-      },
-      icon: Icon(
-        isFavorite ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
-        color: isFavorite ? Colors.red : Colors.white,
+  Widget _buildInfoSection() {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.all(12.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize:
+              MainAxisSize.min,
+          children: [
+            Text(
+              widget.houses.houseTitle,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              widget.houses.houseType,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(height: 5.h),
+            Column(
+              children: [
+                _buildInfoItem(Icons.meeting_room, widget.houses.beds.toString()),
+                SizedBox(width: 10.w),
+                _buildInfoItem(
+                    Icons.bathroom, widget.houses.bathrooms.toString()),
+                SizedBox(width: 10.w),
+                _buildInfoItem(Icons.other_houses_outlined, widget.houses.guests.toString()),
+              ],
+            ),
+            Spacer(),
+            Text(
+              "${widget.houses.price} \$/monthly",
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            SizedBox(
+                width: 140.w,
+                height: 30,
+                child: ButtonWidget(title: "Buy", onTap: () {}))
+          ],
+        ),
       ),
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
+  Widget _buildInfoItem(IconData icon,  String value) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 16.sp,
+          color: Colors.blueAccent,
+        ),
+        Text(""),
+        SizedBox(width: 4.w),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 12.sp,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    );
+  }
 }
