@@ -10,10 +10,12 @@ class SearchWidget<T> extends StatelessWidget {
   final TextEditingController controller;
   final Function(String value) onSearch;
   final Function()? onFilter;
+
   final String? hintText;
   final Future<List<T>?> Function(String search) suggestionsCallback;
   final Widget Function(BuildContext context, T value) itemBuilder;
-  final Function(String)? onSelect;
+  final ValueChanged<T>? onSelect;
+
 
   const SearchWidget({
     super.key,
@@ -48,15 +50,20 @@ class SearchWidget<T> extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TypeAheadField<T>(
-                      offset: const Offset(0, 12),
+                      offset: const Offset(0, 5),
                       hideOnEmpty: true,
-                      debounceDuration: const Duration(milliseconds: 200),
+                      debounceDuration: const Duration(milliseconds: 100),
                       emptyBuilder: (context) => Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text("${"empty".tr()}..."),
+                        child: Text(
+                          "${"empty".tr()}...",
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       constraints: BoxConstraints(
-                          maxHeight: 300.h, minWidth: 1.sw, maxWidth: 1.sw),
+                        maxHeight: 300.h,
+                        maxWidth: 340.w,
+                      ),
                       controller: controller,
                       itemBuilder: itemBuilder,
                       builder: (context, localController, focusNode) {
@@ -64,6 +71,7 @@ class SearchWidget<T> extends StatelessWidget {
                           focusNode: focusNode,
                           decoration: InputDecoration(
                             hintStyle: TextStyle(
+                                overflow: TextOverflow.ellipsis,
                                 fontSize: 14.sp,
                                 color: const Color(0xffA1A1A1)),
                             hintText: hintText ?? "Apartment for rent",
@@ -79,49 +87,46 @@ class SearchWidget<T> extends StatelessWidget {
                           controller: localController,
                         );
                       },
-                      onSelected: (T? value) {
-                        if (value != null) {
-                          controller.text = value.toString();
-                          onSelect?.call(value.toString());
-                        }
+                      onSelected: (T value) {
+                        controller.text = value.toString(); // Или используйте value.houseLocation, если нужно
+                        onSelect?.call(value);
                       },
                       suggestionsCallback: suggestionsCallback,
                     ),
                   ),
                   SizedBox(width: 8.w),
-                  GestureDetector(
-                    onTap: () => onSearch.call(controller.text),
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [AppStyle.blue, AppStyle.darkBlue],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                  Flexible(
+                    flex: 0,
+                    child: GestureDetector(
+                      onTap: () => onSearch.call(controller.text),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 8.h,
                         ),
-                        borderRadius: BorderRadius.circular(18.r),
-                      ),
-                      child: Center(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [AppStyle.blue, AppStyle.darkBlue],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(18.r),
+                        ),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Icon(
                               Icons.search,
                               color: Colors.white,
                               size: 20,
                             ),
-                            SizedBox(
-                              width: 3.w,
-                            ),
+                            SizedBox(width: 3.w),
                             Text(
                               "search".tr(),
                               style: TextStyle(
                                 color: Colors.white,
-                                height: -0.1,
                                 fontSize: 14.sp,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -131,17 +136,17 @@ class SearchWidget<T> extends StatelessWidget {
               ),
             ),
           ),
-          onFilter == null ? const SizedBox() : SizedBox(width: 8.w),
-          onFilter == null
-              ? const SizedBox()
-              : GestureDetector(
-                  onTap: onFilter,
-                  child: SvgPicture.asset(
-                    Svgs.tFilter,
-                    height: 20.r,
-                    width: 20.r,
-                  ),
-                )
+          if (onFilter != null) ...[
+            SizedBox(width: 8.w),
+            GestureDetector(
+              onTap: onFilter,
+              child: SvgPicture.asset(
+                Svgs.tFilter,
+                height: 20.r,
+                width: 20.r,
+              ),
+            ),
+          ],
         ],
       ),
     );

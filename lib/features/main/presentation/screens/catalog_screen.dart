@@ -74,16 +74,17 @@ class _CatalogScreenState extends State<CatalogScreen> {
     super.dispose();
   }
 
-  Future<List<HouseEntity>> suggestionsCallback(String pattern) async =>
-      Future<List<HouseEntity>>.delayed(
-        const Duration(milliseconds: 0),
-        () => houses.where((house) {
-          final nameLower =
-              house.houseLocation.toLowerCase().replaceAll(' ', '');
-          final patternLower = pattern.toLowerCase().replaceAll(' ', '');
-          return nameLower.contains(patternLower);
-        }).toList(),
-      );
+  Future<List<HouseEntity>> suggestionsCallback(String pattern) async {
+    try {
+      return houses.where((house) {
+        final nameLower = house.houseLocation.toLowerCase().replaceAll(' ', '');
+        final patternLower = pattern.toLowerCase().replaceAll(' ', '');
+        return nameLower.contains(patternLower);
+      }).toList();
+    } catch (e) {
+      return [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -269,6 +270,12 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   search: value,
                   locale: context.locale.languageCode.toString());
             },
+            onSelect: (HouseEntity house) {
+              setState(() {
+                houses = [house];
+              });
+            },
+
             onFilter: () {
               BottomSheets.filter(
                 context,
@@ -296,16 +303,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
             itemBuilder: (BuildContext context, HouseEntity house) {
               return Container(
                 padding: EdgeInsets.all(8.r),
-                width: MediaQuery.of(context).size.width,
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(house.houseType),
-                        Text(house.houseLocation),
-                      ],
-                    ),
+                    Text(house.houseType),
+                    Text(house.houseLocation),
                   ],
                 ),
               );
