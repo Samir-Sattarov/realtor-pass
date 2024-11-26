@@ -3,10 +3,9 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'app_core/app_core_library.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'application.dart';
 import 'locator.dart';
 
@@ -16,6 +15,7 @@ const optionsForListView = LiveOptions(
   visibleFraction: 0.0001,
   reAnimateOnVisibility: false,
 );
+const secureStorage = FlutterSecureStorage();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +25,6 @@ void main() async {
   ]);
   await EasyLocalization.ensureInitialized();
   await Hive.initFlutter();
-
   setup();
 
   runApp(

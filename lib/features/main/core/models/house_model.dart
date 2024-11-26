@@ -50,6 +50,8 @@ class HouseModel extends HouseEntity {
       {required String locale}) {
     final address = json['address'] ?? {};
     final rooms = json['rooms'] ?? {};
+    final categoryData = json['category'] ?? {};
+
 
     return HouseModel(
       id: json["id"],
@@ -57,7 +59,7 @@ class HouseModel extends HouseEntity {
       houseLocation: address["exactAddress"]?.toString() ?? '',
       isFavorite: json["isFavorite"] ?? false,
       houseType: json["houseType"]?.toString() ?? '',
-      category: json["${locale}category"] ?? '',
+      category: categoryData["${locale}Title"]?.toString() ?? '',
       categoryId: json["categoryId"] is int
           ? json["categoryId"]
           : int.tryParse(json["categoryId"]?.toString() ?? '0') ?? 0,

@@ -175,9 +175,7 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
 
   @override
   Future<ConfigModel> getConfig() async {
-    final response = await apiClient.post(ApiConstants.config,
-    params: {}
-    );
+    final response = await apiClient.get(ApiConstants.config);
     final model = ConfigModel.fromJson(response);
     return model;
   }

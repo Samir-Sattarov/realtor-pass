@@ -24,5 +24,6 @@ class ApiConstants {
   static const favoriteHouses =  "favorite-publications/";
   static const forgotPassword = "auth/forgot-password";
   static const resetPassword =  "auth/reset-password";
+  static const getPublishedHouses = "publications/get-user-publication";
   // static const googleMap = "AIzaSyD3d7hj2oSaarverdM6thtnGL3VlrKYtTQ";
 }

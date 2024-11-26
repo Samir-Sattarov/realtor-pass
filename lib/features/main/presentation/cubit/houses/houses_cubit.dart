@@ -62,4 +62,5 @@ class HousesCubit extends Cubit<HousesState> {
       },
     );
   }
+
 }

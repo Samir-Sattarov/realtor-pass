@@ -306,7 +306,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(house.houseType),
+                    Text(house.category.toString()),
                     Text(house.houseLocation),
                   ],
                 ),

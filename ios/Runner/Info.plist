@@ -14,7 +14,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Описание для доступа к фотобиблиотеке</string>
+    <string>Это нужно для выбора фотографий при создании дома!</string>
     <key>NSCameraUsageDescription</key>
     <string>Описание для доступа к камере</string>
     <key>NSMicrophoneUsageDescription</key>

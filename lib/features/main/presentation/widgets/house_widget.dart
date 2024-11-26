@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app_core/app_core_library.dart';
-import '../../../../app_core/utils/bottom_sheets/fav_conditions_body.dart';
 import '../../../../app_core/widgets/button_widget.dart';
 import '../../../auth/presentation/cubit/session/session_cubit.dart';
 import '../../../auth/presentation/screens/sign_in_screen.dart';
@@ -94,7 +93,7 @@ class _HouseWidgetState extends State<HouseWidget> {
             ),
           ),
           Align(
-            alignment: Alignment.topRight,
+            alignment: Alignment.topLeft,
             child: IconButton(
               icon: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -140,17 +139,17 @@ class _HouseWidgetState extends State<HouseWidget> {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: AppStyle.dark,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              widget.houses.houseType,
+              widget.houses.category,
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: AppStyle.blue,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

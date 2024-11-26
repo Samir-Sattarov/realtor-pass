@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'dart:developer';
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:realtor_pass/app_core/app_core_library.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // For responsive UI
+import 'package:geolocator/geolocator.dart'; // For location services
+import 'package:google_maps_flutter/google_maps_flutter.dart'; // Google Maps
+import 'package:geocoding/geocoding.dart'; // For reverse geocoding
+import 'package:permission_handler/permission_handler.dart'; // For permission handling
+
+// Replace this with your actual import for AppStyle
+// It's assumed that AppStyle.dark is a color used in your app's theme
+
+import '../../../../app_core/utils/app_style.dart';
 
 class LocationEntity {
   final double lat;
@@ -50,27 +51,28 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   @override
   void initState() {
-    moveToUseLocation();
-
     super.initState();
+    // Removed moveToUseLocation() from initState
   }
 
-  moveToUseLocation() async {
-    final location = await _getCurrentUserLocation();
-    await mapController!.moveCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          zoom: 20,
-          target: LatLng(
-            location.latitude,
-            location.longitude,
+  Future<void> moveToUseLocation() async {
+    final location = await getCurrentUserLocation();
+    if (mapController != null) {
+      await mapController!.moveCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            zoom: 20,
+            target: LatLng(
+              location.latitude,
+              location.longitude,
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
-  Future<Position> _getCurrentUserLocation() async {
+  Future<Position> getCurrentUserLocation() async {
     PermissionStatus permission = await _requestLocation();
 
     while (permission == PermissionStatus.denied) {
@@ -78,7 +80,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error permission to get current location not allowed'),
+          content: Text('Error: permission to get current location not allowed'),
         ),
       );
     }
@@ -88,7 +90,6 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   Future<PermissionStatus> _requestLocation() async {
     final PermissionStatus status = await Permission.location.request();
-
     return status;
   }
 
@@ -104,6 +105,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
           onMapCreated: (GoogleMapController controller) {
             mapController = controller;
             setState(() {});
+            moveToUseLocation(); // Moved here
           },
           onTap: _handleTap,
           markers: selectedMarker != null ? {selectedMarker!} : {},
@@ -115,7 +117,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
               padding: const EdgeInsets.all(8.0),
               child: _button(
                 Icons.location_on_outlined,
-                () async {
+                    () async {
                   await moveToUseLocation();
                 },
               ),
@@ -131,7 +133,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
                 children: [
                   _button(
                     Icons.add,
-                    () {
+                        () {
                       mapController?.animateCamera(
                         CameraUpdate.zoomIn(),
                       );
@@ -140,7 +142,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
                   SizedBox(height: 10.h),
                   _button(
                     Icons.remove,
-                    () {
+                        () {
                       mapController?.animateCamera(
                         CameraUpdate.zoomOut(),
                       );
@@ -154,7 +156,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
     );
   }
 
-  _button(IconData icon, Function() onTap) {
+  Widget _button(IconData icon, VoidCallback onTap) {
     final borderRadius = BorderRadius.circular(14.r);
     return Material(
       color: Colors.transparent,
@@ -170,10 +172,11 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
             borderRadius: borderRadius,
           ),
           child: Center(
-              child: Icon(
-            icon,
-            color: AppStyle.dark,
-          )),
+            child: Icon(
+              icon,
+              color: AppStyle.dark, // Make sure AppStyle.dark is defined
+            ),
+          ),
         ),
       ),
     );
@@ -181,7 +184,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   Future<void> _handleTap(LatLng position) async {
     List<Placemark> placeMarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
+    await placemarkFromCoordinates(position.latitude, position.longitude);
 
     if (placeMarks.isNotEmpty) {
       Placemark placeMark = placeMarks.first;
@@ -208,13 +211,14 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
         double west = bounds.southwest.longitude;
         double east = bounds.northeast.longitude;
         final entity = LocationEntity(
-            lat: position.latitude,
-            lon: position.longitude,
-            east: east,
-            west: west,
-            north: north,
-            south: south,
-            address: address ?? "");
+          lat: position.latitude,
+          lon: position.longitude,
+          east: east,
+          west: west,
+          north: north,
+          south: south,
+          address: address ?? "",
+        );
         widget.onAddressSelected!(entity);
       }
     }
