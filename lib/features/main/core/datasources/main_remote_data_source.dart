@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:realtor_pass/app_core/app_core_library.dart';
 import 'package:realtor_pass/features/main/core/models/house_model_result.dart';
 import 'package:realtor_pass/features/main/core/models/house_type_result_model.dart';
@@ -36,7 +38,7 @@ abstract class MainRemoteDataSource {
   Future<ConfigModel> getConfig();
   Future<void> sendFeedback(int id, String subject, String feedback);
   Future<void> postHouse(HousePostModel model);
-  // Future<List<String>> uploadImages(List<File> images);
+  Future<List<int>> uploadImages(List<File> images);
   Future<HouseSellingTypeResultModel> getHouseSellingType(String locale);
   Future<void> saveHouseToFavorite(int userId, int publicationId);
   Future<HouseResultModel> getFavoriteHouses(int userId);
@@ -239,13 +241,35 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     );
   }
 
-  // @override
-  // Future<List<String>> uploadImages(List<File> images) async {
-  //   await apiClient.postPhoto(ApiConstants.imageUrl, params: {
-  //
-  //   });
-  //   return ;
-  //
-  //
-  // }
+  @override
+  Future<List<int>> uploadImages(List<File> images) async {
+    List<int> imageIds = [];
+
+    for (File image in images) {
+      try {
+        FormData formData = FormData.fromMap({
+          'file': await MultipartFile.fromFile(image.path),
+        });
+
+        final response = await apiClient.postPhoto(
+          ApiConstants.imageUrl,
+          data: formData,
+          params: {},
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          int imageId = response.data['id'];
+          imageIds.add(imageId);
+        } else {
+          throw Exception('Ошибка при загрузке изображения: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Ошибка при загрузке изображения: $e');
+        throw ExceptionWithMessage('Ошибка при загрузке изображения');
+      }
+    }
+
+    return imageIds;
+  }
+
 }

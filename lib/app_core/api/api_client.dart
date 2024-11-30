@@ -234,7 +234,6 @@ class ApiClientImpl extends ApiClient {
       }) async {
     String? sessionId = await _authenticationLocalDataSource.getToken();
     Map<String, String> headers = {
-      "Content-type": "application/json",
       "Accept": "*/*"
     };
 
@@ -242,13 +241,17 @@ class ApiClientImpl extends ApiClient {
       headers['Authorization'] = "Bearer $sessionId";
     }
 
-    final uri = getPath(path);
+    if (data is FormData) {
+      // Не устанавливаем Content-Type, Dio сделает это автоматически
+    } else {
+      headers["Content-Type"] = "application/json";
+    }
 
-    final body = jsonEncode(params);
+    final uri = getPath(path);
 
     final response = await clientDio.post(
       uri,
-      data: data ?? body,
+      data: data,
       options: options ??
           Options(
             receiveDataWhenStatusError: true,
@@ -258,6 +261,7 @@ class ApiClientImpl extends ApiClient {
 
     return response;
   }
+
 
 
 

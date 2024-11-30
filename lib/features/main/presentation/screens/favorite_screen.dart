@@ -5,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app_core/app_core_library.dart';
 import '../../../../app_core/widgets/error_flash_bar.dart';
 import '../../core/entity/house_entity.dart';
-import '../cubit/favorite/favorite_houses__cubit.dart';
+import '../cubit/favorite/favorite_cubit.dart';
+import '../cubit/favorite/favorite_state.dart';
 import '../widgets/house_vertical_view_widget.dart';
 
 class FavoriteScreen extends StatefulWidget {
@@ -38,7 +39,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             if (state is FavoriteHousesLoaded) {
               if (mounted) {
                 Future.delayed(Duration.zero, () {
-                  houses = state.resultEntity.houses;
+                  houses = state.favoriteHouses;
                 });
               }
             }

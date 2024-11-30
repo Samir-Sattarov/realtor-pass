@@ -47,7 +47,7 @@ abstract class MainRepository {
     String feedback,
   );
   Future<Either<AppError, void>> postHouse(HousePostEntity entity);
-  // Future<Either<AppError, List<String>>> uploadImages(List<File> images);
+  Future<Either<AppError, List<int>>> uploadImages(List<File> images);
   Future<Either<AppError, HouseSellingTypeResultEntity>> getHouseSellingType(
       String locale);
 
@@ -223,8 +223,8 @@ class MainRepositoryImpl extends MainRepository {
   Future<Either<AppError, void>> deleteAllHousesFromFavorite() async {
     return action(task: localDataSource.deleteAllFavoriteCars());
   }
-  // @override
-  // Future<Either<AppError, List<String>>> uploadImages(List<File> images) async {
-  //   return action(task: remoteDataSource.uploadImages(images));
-  // }
+  @override
+  Future<Either<AppError, List<int>>> uploadImages(List<File> images) {
+    return action(task: remoteDataSource.uploadImages(images));
+  }
 }

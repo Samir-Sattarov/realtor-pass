@@ -40,7 +40,7 @@ import 'features/main/core/usecases/posters_usecase.dart';
 import 'features/main/core/usecases/profitable_terms_usecase.dart';
 import 'features/main/core/usecases/questions_usecase.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
-import 'features/main/presentation/cubit/favorite/favorite_houses__cubit.dart';
+import 'features/main/presentation/cubit/favorite/favorite_cubit.dart';
 import 'features/main/presentation/cubit/favorite/favorite_json/favorite_houses_json_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
 import 'features/main/presentation/cubit/house_selling_type/house_selling_type_cubit.dart';
@@ -130,9 +130,9 @@ void setup() {
   locator.registerFactory(() => GetFavoriteHousesUsecase(locator()));
   locator.registerFactory(() => DeleteHousesFromFavoriteUsecase(locator()));
   locator.registerFactory(()=> DeleteAllHousesFromFavoriteUsecase(locator()));
-  // locator.registerLazySingleton(() => UploadImagesUseCase(
-  //   locator(),
-  // ));
+  locator.registerLazySingleton(() => UploadImagesUseCase(
+    locator(),
+  ));
 
   // ================ External ================ //
 
@@ -200,9 +200,9 @@ void setup() {
   locator.registerFactory(() => ConfigCubit(locator()));
   locator.registerFactory(() => SupportCubit(locator()));
   locator.registerFactory(() => HouseStuffCubit(locator()));
-  locator.registerFactory(() => HousePostCubit(locator()));
+  locator.registerFactory(() => HousePostCubit(locator(), locator()));
   locator.registerFactory(() => HouseSellingTypeCubit(locator()));
-  locator.registerFactory(() => FavoriteHousesCubit(locator(), locator(),locator(), locator(),locator()));
+  locator.registerFactory(() => FavoriteHousesCubit(locator()));
   locator.registerFactory(() => FavoriteHousesJsonCubit(locator()));
 
 

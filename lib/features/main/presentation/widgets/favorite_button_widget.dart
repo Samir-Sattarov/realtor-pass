@@ -4,6 +4,7 @@ import 'package:realtor_pass/features/main/core/entity/house_entity.dart';
 import '../../../../app_core/app_core_library.dart';
 import '../../../auth/presentation/cubit/session/session_cubit.dart';
 import '../../../auth/presentation/screens/sign_in_screen.dart';
+import '../cubit/favorite/favorite_cubit.dart';
 
 class FavoriteButtonWidget extends StatefulWidget {
   final HouseEntity entity;
@@ -18,31 +19,14 @@ class FavoriteButtonWidget extends StatefulWidget {
 }
 
 class _FavoriteButtonWidgetState extends State<FavoriteButtonWidget> {
-  bool isFavorite = false;
+  late bool isFavorite;
 
   @override
   void initState() {
-    initialize();
     super.initState();
-  }
-
-  initialize() {
-    // BlocProvider.of<FavoriteCarsJsonCubit>(context).load();
-    // BlocProvider.of<FavoriteCarsJsonCubit>(context).stream.listen((state) {
-    //   if (state is FavoriteCarsJsonLoaded) {
-    //     if (mounted) {
-    //       Future.delayed(
-    //         Duration.zero,
-    //         () {
-    //           isFavorite =
-    //               state.entity.favoriteCarsId.containsKey(widget.entity.id);
-    //
-    //           setState(() {});
-    //         },
-    //       );
-    //     }
-    //   }
-    // });
+    // Инициализация состояния избранного
+    final favoriteCubit = BlocProvider.of<FavoriteHousesCubit>(context);
+    isFavorite = favoriteCubit.isFavorite(widget.entity.id);
   }
 
   @override
@@ -50,20 +34,25 @@ class _FavoriteButtonWidgetState extends State<FavoriteButtonWidget> {
     return GestureDetector(
       onTap: () {
         if (BlocProvider.of<SessionCubit>(context).state is SessionDisabled) {
+          // Если пользователь не авторизован, перенаправляем на экран входа
           AnimatedNavigation.push(context: context, page: const SignInScreen());
         } else {
-          // setState(() => isFavorite = !isFavorite);
-          // if (isFavorite) {
-          //   BlocProvider.of<FavoriteCarsCubit>(context).save(widget.entity.id);
-          // } else {
-          //   BlocProvider.of<FavoriteCarsCubit>(context)
-          //       .remove(widget.entity.id);
-          // }
+          setState(() => isFavorite = !isFavorite);
+          if (isFavorite) {
+            // Добавление в избранное
+            BlocProvider.of<FavoriteHousesCubit>(context)
+                .addFavorite(widget.entity);
+          } else {
+            // Удаление из избранного
+            BlocProvider.of<FavoriteHousesCubit>(context)
+                .removeFavorite(widget.entity.id);
+          }
         }
       },
       child: Icon(
-        isFavorite ? Icons.favorite_rounded : Icons.favorite_rounded,
+        isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
         color: isFavorite ? Colors.red : Colors.grey.shade700,
+        size: 30.0,
       ),
     );
   }

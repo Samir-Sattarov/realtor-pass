@@ -16,7 +16,7 @@ import 'features/auth/presentation/cubit/otp_code/otp_code_cubit.dart';
 import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
-import 'features/main/presentation/cubit/favorite/favorite_houses__cubit.dart';
+import 'features/main/presentation/cubit/favorite/favorite_cubit.dart';
 import 'features/main/presentation/cubit/favorite/favorite_json/favorite_houses_json_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
 import 'features/main/presentation/cubit/house_selling_type/house_selling_type_cubit.dart';

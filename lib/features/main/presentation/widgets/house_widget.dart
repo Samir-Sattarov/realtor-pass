@@ -8,7 +8,7 @@ import '../../../../app_core/widgets/button_widget.dart';
 import '../../../auth/presentation/cubit/session/session_cubit.dart';
 import '../../../auth/presentation/screens/sign_in_screen.dart';
 import '../../core/entity/house_entity.dart';
-import '../cubit/favorite/favorite_houses__cubit.dart';
+import '../cubit/favorite/favorite_cubit.dart';
 import '../screens/house_detail_screen.dart';
 
 class HouseWidget extends StatefulWidget {
@@ -28,8 +28,9 @@ class _HouseWidgetState extends State<HouseWidget> {
 
   @override
   void initState() {
-    isFavorite = false;
     super.initState();
+    final favoriteCubit = BlocProvider.of<FavoriteHousesCubit>(context);
+    isFavorite = favoriteCubit.isFavorite(widget.houses.id);
   }
 
   @override
@@ -43,7 +44,7 @@ class _HouseWidgetState extends State<HouseWidget> {
         height: 182.h,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
-            color: Colors.grey.shade100,
+          color: Colors.grey.shade100,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.9),
@@ -101,22 +102,19 @@ class _HouseWidgetState extends State<HouseWidget> {
               ),
               onPressed: () {
                 if (BlocProvider.of<SessionCubit>(context).state
-                    is SessionDisabled) {
+                is SessionDisabled) {
                   AnimatedNavigation.push(
                       context: context, page: const SignInScreen());
                 } else {
-                  setState(() => isFavorite = !isFavorite);
                   if (isFavorite) {
                     BlocProvider.of<FavoriteHousesCubit>(context)
-                        .save(widget.houses.id);
+                        .removeFavorite(widget.houses.id);
                   } else {
                     BlocProvider.of<FavoriteHousesCubit>(context)
-                        .remove(widget.houses.id);
+                        .addFavorite(widget.houses);
                   }
+                  setState(() => isFavorite = !isFavorite);
                 }
-                setState(() {
-                  isFavorite = !isFavorite;
-                });
               },
             ),
           ),
@@ -131,8 +129,7 @@ class _HouseWidgetState extends State<HouseWidget> {
         padding: EdgeInsets.all(12.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize:
-              MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               widget.houses.houseTitle,
@@ -157,12 +154,14 @@ class _HouseWidgetState extends State<HouseWidget> {
             SizedBox(height: 5.h),
             Column(
               children: [
-                _buildInfoItem(Icons.meeting_room, widget.houses.beds.toString()),
+                _buildInfoItem(
+                    Icons.meeting_room, widget.houses.beds.toString()),
                 SizedBox(width: 10.w),
                 _buildInfoItem(
                     Icons.bathroom, widget.houses.bathrooms.toString()),
                 SizedBox(width: 10.w),
-                _buildInfoItem(Icons.other_houses_outlined, widget.houses.guests.toString()),
+                _buildInfoItem(Icons.other_houses_outlined,
+                    widget.houses.guests.toString()),
               ],
             ),
             Spacer(),
@@ -185,7 +184,7 @@ class _HouseWidgetState extends State<HouseWidget> {
     );
   }
 
-  Widget _buildInfoItem(IconData icon,  String value) {
+  Widget _buildInfoItem(IconData icon, String value) {
     return Row(
       children: [
         Icon(

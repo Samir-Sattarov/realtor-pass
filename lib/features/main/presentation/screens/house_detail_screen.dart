@@ -13,6 +13,7 @@ import '../../../../app_core/widgets/error_flash_bar.dart';
 import '../../../../resources/resources.dart';
 import '../../core/entity/house_entity.dart';
 import '../../core/entity/house_stuff_entity.dart';
+import '../cubit/favorite/favorite_cubit.dart';
 import '../cubit/house_stuff/house_stuff_cubit.dart';
 import '../widgets/favorite_button_widget.dart';
 import '../widgets/house_stuff_widget.dart';
@@ -30,6 +31,7 @@ class HouseDetailScreen extends StatefulWidget {
 }
 
 class _HouseDetailScreenState extends State<HouseDetailScreen> {
+  late bool isFavorite;
   late int currentImageIndex;
   late List<HouseStuffEntity> houseStuff;
 
@@ -38,6 +40,8 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
     super.initState();
     currentImageIndex = 0;
     houseStuff = [];
+    final favoriteCubit = BlocProvider.of<FavoriteHousesCubit>(context);
+    isFavorite = favoriteCubit.isFavorite(widget.entity.id);
     initialize();
   }
 
@@ -141,33 +145,38 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
         children: [
           Row(
             children: [
-              Text(
-                entity.houseTitle,
-                style: TextStyle(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppStyle.blue,
+                Expanded(
+                  child: Text(
+                    entity.houseTitle,
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppStyle.blue,
+                    ),
+                  ),
                 ),
-              ),
+
             ],
+          ),
+          SizedBox(height: 6.h),
+          Text(
+            entity.category.toString(),
+            style: TextStyle(
+              fontSize: 16.sp,
+              color: AppStyle.blue,
+              fontWeight: FontWeight.w600
+            ),
           ),
           SizedBox(height: 6.h),
           Text(
             entity.houseLocation,
             style: TextStyle(
-              fontSize: 24.sp,
+              fontSize: 12.sp,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
             ),
           ),
-          SizedBox(height: 6.h),
-          Text(
-            entity.houseType,
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.grey.shade700,
-            ),
-          ),
+          SizedBox(height: 20.h,)
         ],
       ),
     );
@@ -180,7 +189,8 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           buildFeatureCard(Svgs.tRooms, "${entity.beds} ", "rooms".tr()),
-          buildFeatureCard(Svgs.tRestroom, "${entity.bathrooms}", "bathrooms".tr()),
+          buildFeatureCard(
+              Svgs.tRestroom, "${entity.bathrooms}", "bathrooms".tr()),
           buildFeatureCard(Svgs.tHome, "${entity.guests}", "guests".tr()),
         ],
       ),
@@ -191,11 +201,14 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SvgPicture.asset(svgPath, width: 24.w, height: 24.h, color: AppStyle.blue),
+        SvgPicture.asset(svgPath,
+            width: 24.w, height: 24.h, color: AppStyle.blue),
         SizedBox(height: 8.h),
-        Text(value, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
+        Text(value,
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
         SizedBox(height: 4.h),
-        Text(label, style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade600)),
+        Text(label,
+            style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade600)),
       ],
     );
   }
@@ -232,7 +245,7 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
           if (mounted) {
             Future.delayed(
               Duration.zero,
-                  () {
+              () {
                 setState(() {
                   houseStuff = state.data;
                 });
@@ -289,13 +302,25 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(width:165.w,child: ButtonWidget(title: "makeAnAppointment".tr(), onTap: (){})),
-              Container(width:165.w,child: ButtonWidget(title: "contactARealtor".tr(), onTap: (){})),
+              Container(
+                  width: 200.w,
+                  child: ButtonWidget(
+                      title: "makeAnAppointment".tr(), onTap: () {})),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  "contactARealtor".tr(),
+                  style: TextStyle(
+                      color: AppStyle.blue,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w700),
+                ),
+              )
             ],
           ),
-
-
-          SizedBox(height: 30.h,),
+          SizedBox(
+            height: 30.h,
+          ),
         ],
       ),
     );
