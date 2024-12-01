@@ -19,6 +19,11 @@ class ConfirmPasswordUsecase
 class ConfirmPasswordUsecaseParams {
   final String password;
   final String token;
-  final bool isMobile = true;
-  ConfirmPasswordUsecaseParams({required this.password, required this.token});
+  final bool isMobile;
+
+  ConfirmPasswordUsecaseParams({
+    required this.password,
+    required this.token,
+    this.isMobile = true,
+  });
 }

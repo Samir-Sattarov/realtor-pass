@@ -26,7 +26,9 @@ abstract class AuthRemoteDataSource {
       {required String email, required String role, bool isMobile = true});
 
   Future<void> confirmPassword(
-      {required String newPassword, required String token, bool isMobile = true});
+      {required String newPassword,
+      required String token,
+      bool isMobile = true});
 
   Future<String> confirmOTP({
     required String code,
@@ -132,8 +134,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     await client.post(
       ApiConstants.resetPassword,
       params: {
-          "email": email,
-          "forgotPassword": true,
+        "email": email,
+        "forgotPassword": true,
       },
     );
   }
@@ -159,13 +161,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
   @override
   Future<void> confirmPassword(
-      {required String newPassword, required String token,  bool isMobile = true}) async {
+      {required String newPassword,
+      required String token,
+      bool isMobile = true}) async {
     await client.post(
       ApiConstants.resetPassword,
       params: {
-          "password": newPassword,
-          "userEmail": token,
-          "isMobile": true
+        "newPassword": newPassword,
+        "token": token,
+        "isMobile": true
       },
     );
   }

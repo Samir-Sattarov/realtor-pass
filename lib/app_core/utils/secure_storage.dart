@@ -1,16 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
-  final FlutterSecureStorage storage =  const FlutterSecureStorage();
+  final FlutterSecureStorage storage =   FlutterSecureStorage();
 
   save({required String key, required dynamic value}) async {
     await storage.write(key: key, value: value);
   }
 
-  Future<dynamic>? get({required String key}) async {
-    final dynamic value = await storage.read(key: key);
-
-    return value;
+  Future<String?> get({required String key}) async {
+    try {
+      final value = await storage.read(key: key);
+      return value;
+    } catch (e) {
+      debugPrint('Error reading data: $e');
+      return null;
+    }
   }
 
   delete({required String key}) async {

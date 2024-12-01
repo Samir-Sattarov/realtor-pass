@@ -10,11 +10,15 @@ class ConfirmPasswordCubit extends Cubit<ConfirmPasswordState> {
   ConfirmPasswordCubit(this.confirmPasswordUsecase)
       : super(ConfirmPasswordInitial());
 
-  confirm({required String password, required String token , bool isMobile=true}) async {
+  confirm(
+      {required String password,
+      required String token,
+      bool isMobile = true}) async {
     emit(ConfirmPasswordLoading());
 
-    final response = await confirmPasswordUsecase
-        .call(ConfirmPasswordUsecaseParams(password: password, token: token,  ));
+    final response = await confirmPasswordUsecase.call(
+        ConfirmPasswordUsecaseParams(
+            password: password, token: token, isMobile: true));
 
     response.fold(
       (l) => emit(ConfirmPasswordError(l.errorMessage)),

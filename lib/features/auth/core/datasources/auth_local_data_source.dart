@@ -42,13 +42,15 @@ class AuthLocalDataSourceImpl extends AuthLocalDataSource {
   @override
   Future<int?> getUserId() async {
     final data = await secureStorage.get(key: StorageKeys.kUserId);
-
+    print('Retrieved userId: $data');
     if (data == null) return null;
     return int.parse(data);
   }
 
   @override
   Future<void> saveUserId(int id) async {
+    print('Saving userId: $id');
     await secureStorage.save(key: StorageKeys.kUserId, value: id.toString());
   }
+
 }

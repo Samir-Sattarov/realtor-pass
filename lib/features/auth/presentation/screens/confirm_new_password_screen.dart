@@ -13,15 +13,10 @@ import '../../../../app_core/widgets/error_flash_bar.dart';
 import '../../../../app_core/widgets/text_form_field_widget.dart';
 import '../../core/entities/user_entity.dart';
 import '../cubit/confitm_password/confirm_password_cubit.dart';
+import '../cubit/forgot_password/forgot_password_cubit.dart';
 
 class NewPasswordScreen extends StatefulWidget {
-  final String token;
-  final String email;
-  const NewPasswordScreen({
-    super.key,
-    required this.email,
-    required this.token,
-  });
+  const NewPasswordScreen({super.key});
 
   @override
   State<NewPasswordScreen> createState() => _NewPasswordScreenState();
@@ -29,24 +24,14 @@ class NewPasswordScreen extends StatefulWidget {
 
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
   final TextEditingController controllerPassword = TextEditingController();
-  final TextEditingController controllerConfirmPassword =
-      TextEditingController();
+  final TextEditingController controllerConfirmPassword = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    super.initState();
-    initialize();
-
-  }
-  initialize(){
-    BlocProvider.of<ConfirmPasswordCubit>(context)
-        .confirm(password: controllerPassword.text, token: widget.token);
-
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Получаем код из ForgotPasswordCubit
+    final otpCode = BlocProvider.of<ForgotPasswordCubit>(context).otpCode;
+
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -118,11 +103,12 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
                           final password = controllerConfirmPassword.text;
-                          BlocProvider.of<ConfirmPasswordCubit>(context)
-                              .confirm(
-                                  password: password,
-                                  token: StorageKeys.kToken,
-                                  isMobile: true);
+                          // Используем OTP из ForgotPasswordCubit
+                          BlocProvider.of<ConfirmPasswordCubit>(context).confirm(
+                            password: password,
+                            token: otpCode, // Передаём код
+                            isMobile: true,
+                          );
                         }
                       },
                     ),

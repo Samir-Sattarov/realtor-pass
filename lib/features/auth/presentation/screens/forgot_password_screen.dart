@@ -10,8 +10,6 @@ import '../../../../app_core/widgets/button_widget.dart';
 import '../../../../app_core/widgets/error_flash_bar.dart';
 import '../../../../app_core/widgets/text_form_field_widget.dart';
 import '../cubit/forgot_password/forgot_password_cubit.dart';
-import 'confirm_new_password_screen.dart';
-import 'confirm_otp_screen.dart';
 import 'otp_for_reset_password.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
