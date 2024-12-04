@@ -35,8 +35,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             BlocProvider.of<CurrentUserCubit>(context).load();
             BlocProvider.of<SessionCubit>(context).checkSession();
             BlocProvider.of<BottomNavCubit>(context).change(ScreenIndex.home);
-
-
           }
         },
         child: BlocBuilder<CurrentUserCubit, CurrentUserState>(
@@ -79,12 +77,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         _profileItem(
                           svgPath: Svgs.tUserCircle,
                           title: "profile".tr(),
+                          onTap: () {
+                            AnimatedNavigation.push(
+                                context: context, page: SettingsScreen());
+                          },
+                        ),
+                        SizedBox(height: 16.h),
+                        _profileItem(
+                          svgPath: Svgs.tPrivacy,
+                          title: "privacy".tr(),
                           onTap: () {},
                         ),
                         SizedBox(height: 16.h),
                         _profileItem(
                           svgPath: Svgs.tHome,
-                          title: "applications".tr(),
+                          title: "myHouses".tr(),
                           onTap: () {},
                         ),
                         SizedBox(height: 16.h),
@@ -97,23 +104,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 16.h),
                         _profileItem(
-                          svgPath: Svgs.tSettings,
-                          title: "settings".tr(),
-                          onTap: () {
-                            AnimatedNavigation.push(
-                                context: context, page: const SettingsScreen());
-                          },
-                        ),
-                        SizedBox(height: 16.h),
-                        _profileItem(
                           svgPath: Svgs.tLogOut,
                           title: "logOut".tr(),
                           onTap: () {
                             BlocProvider.of<AuthCubit>(context).logOut();
-
                           },
                           color: Colors.red,
                         ),
+                        SizedBox(height: 16.h),
+                        Center(
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: Text(
+                              "deleteAccount".tr(),
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.red),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
