@@ -30,7 +30,7 @@ abstract class ApiClient {
     required Map<String, dynamic> params,
   });
 
-  Future<Response> postPhoto(
+  Future<dynamic> postPhoto(
       String path, {
         dynamic data,
         required Map<String, dynamic> params,
@@ -224,7 +224,7 @@ class ApiClientImpl extends ApiClient {
 
 
   @override
-  Future<Response> postPhoto(
+  Future<dynamic> postPhoto(
       String path, {
         dynamic data,
         required Map<String, dynamic> params,
@@ -242,7 +242,7 @@ class ApiClientImpl extends ApiClient {
     }
 
     if (data is FormData) {
-      // Не устанавливаем Content-Type, Dio сделает это автоматически
+      headers["Content-Type"] = "multipart/form-data";
     } else {
       headers["Content-Type"] = "application/json";
     }
@@ -259,7 +259,7 @@ class ApiClientImpl extends ApiClient {
           ),
     );
 
-    return response;
+    return _errorHandler(response, withParse: withParse);
   }
 
 

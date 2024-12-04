@@ -1,109 +1,122 @@
-// house_post_entity.dart
-
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 
+import 'upload_photo_result_entity.dart';
+
 class HousePostEntity extends Equatable {
-  final int id;
   final String title;
   final String location;
   final double lat;
   final double lon;
-  final String type;
-  final String category;
+  final int type;
+  final int category;
   final String description;
-  final List<File> images;
+  final UploadPhotoResultEntity images;
   final int price;
   final int beds;
   final int bathrooms;
   final int guests;
   final bool isFavorite;
   final int bedrooms;
-  final List<String>? features;
+  final String address;
+  final String phone;
+  final String email;
+  final List<int> featuresId;
+  final int ownerId;
 
-  const HousePostEntity( {
-    required this .features,
-    required this.bedrooms,
-    required this.id,
-    required this.title,
-    required this.location,
-    required this.lat,
-    required this.lon,
-    required this.type,
-    required this.category,
-    required this.description,
-    required this.images,
-    required this.price,
-    required this.beds,
-    required this.bathrooms,
-    required this.guests,
-    required this.isFavorite,
-  });
+  const HousePostEntity(
+      {
+      required this.title,
+      required this.location,
+      required this.lat,
+      required this.lon,
+      required this.type,
+      required this.category,
+      required this.description,
+      required this.images,
+      required this.price,
+      required this.beds,
+      required this.bathrooms,
+      required this.guests,
+      required this.isFavorite,
+      required this.bedrooms,
+      required this.address,
+      required this.phone,
+      required this.email,
+      required this.featuresId,
+      required this.ownerId});
 
   factory HousePostEntity.empty() {
-    return const HousePostEntity(
-      id: 0,
-      title: "title",
-      location: "location",
-      lat: 0,
-      lon: 0,
-      type: "type",
-      category: "category",
-      description: "description",
-      images: [],
+    return HousePostEntity(
+      ownerId: 0,
+
+      title: "",
+      location: "",
+      lat: 0.0,
+      lon: 0.0,
+      type: 0,
+      category: 0,
+      description: "",
+      images: UploadPhotoResultEntity.empty(),
       price: 0,
       beds: 0,
       bathrooms: 0,
       guests: 0,
       isFavorite: false,
       bedrooms: 0,
-      features: [],
+      address: "",
+      phone: "",
+      email: "",
+      featuresId: const [],
     );
   }
 
   HousePostEntity copyWith({
-    int? id,
+
     String? title,
     String? location,
     double? lat,
     double? lon,
-    String? type,
-    String? category,
+    int? type,
+    int? category,
     String? description,
-    List<File>? images,
+    UploadPhotoResultEntity? images,
     int? price,
     int? bathrooms,
-    double? square,
     int? guests,
     bool? isFavorite,
-    int ?bedrooms,
+    int? bedrooms,
     int? beds,
-    List<String>? features
+    String? address,
+    String? phone,
+    String? email,
+    List<int>? featuresId,
+    int? ownerId,
   }) {
     return HousePostEntity(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      location: location ?? this.location,
-      lat: lat ?? this.lat,
-      lon: lon ?? this.lon,
-      type: type ?? this.type,
-      category: category ?? this.category,
-      description: description ?? this.description,
-      images: images?? this.images,
-      bathrooms: bathrooms ?? this.bathrooms,
-      guests: guests ?? this.guests,
-      isFavorite: isFavorite ?? this.isFavorite,
-      price: price ?? this.price,
-      beds: beds?? this.beds,
-      bedrooms: bedrooms?? this.bedrooms,
-        features: features ?? this.features
-    );
+
+        title: title ?? this.title,
+        location: location ?? this.location,
+        lat: lat ?? this.lat,
+        lon: lon ?? this.lon,
+        type: type ?? this.type,
+        category: category ?? this.category,
+        description: description ?? this.description,
+        images: images ?? this.images,
+        price: price ?? this.price,
+        beds: beds ?? this.beds,
+        bathrooms: bathrooms ?? this.bathrooms,
+        guests: guests ?? this.guests,
+        isFavorite: isFavorite ?? this.isFavorite,
+        bedrooms: bedrooms ?? this.bedrooms,
+        address: address ?? this.address,
+        phone: phone ?? this.phone,
+        email: email ?? this.email,
+        featuresId: featuresId ?? this.featuresId,
+        ownerId: ownerId ?? this.ownerId);
   }
 
   @override
   List<Object?> get props => [
-        id,
         title,
         location,
         lat,
@@ -117,7 +130,10 @@ class HousePostEntity extends Equatable {
         bathrooms,
         guests,
         isFavorite,
-    bedrooms,
-    features
+        bedrooms,
+        address,
+        phone,
+        email,
+        featuresId,
       ];
 }

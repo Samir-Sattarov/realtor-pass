@@ -50,6 +50,7 @@ import 'features/main/presentation/cubit/posters/posters_cubit.dart';
 import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'features/main/presentation/cubit/support/support_cubit.dart';
+import 'features/main/presentation/cubit/upload_photos/upload_photos_cubit.dart';
 
 final locator = GetIt.I;
 
@@ -122,17 +123,17 @@ void setup() {
         locator(),
       ));
   locator.registerLazySingleton(() => SaveHousesToFavoriteUsecase(
-    locator(),
-  ));
+        locator(),
+      ));
   locator.registerLazySingleton(() => GetFavoriteHouseJsonUsecase(
-    locator(),
-  ));
+        locator(),
+      ));
   locator.registerFactory(() => GetFavoriteHousesUsecase(locator()));
   locator.registerFactory(() => DeleteHousesFromFavoriteUsecase(locator()));
-  locator.registerFactory(()=> DeleteAllHousesFromFavoriteUsecase(locator()));
+  locator.registerFactory(() => DeleteAllHousesFromFavoriteUsecase(locator()));
   locator.registerLazySingleton(() => UploadImagesUseCase(
-    locator(),
-  ));
+        locator(),
+      ));
 
   // ================ External ================ //
 
@@ -200,14 +201,11 @@ void setup() {
   locator.registerFactory(() => ConfigCubit(locator()));
   locator.registerFactory(() => SupportCubit(locator()));
   locator.registerFactory(() => HouseStuffCubit(locator()));
-  locator.registerFactory(() => HousePostCubit(locator(), locator()));
+  locator.registerFactory(() => HousePostCubit(locator()));
+  locator.registerFactory(() => UploadPhotosCubit(locator()));
   locator.registerFactory(() => HouseSellingTypeCubit(locator()));
   locator.registerFactory(() => FavoriteHousesCubit(locator()));
   locator.registerFactory(() => FavoriteHousesJsonCubit(locator()));
-
-
-
-
 
   // ================ Repository / Datasource ================ //
 
@@ -231,5 +229,5 @@ void setup() {
       () => MainRemoteDataSourceImpl(locator(), locator()));
 
   locator.registerLazySingleton<MainLocalDataSource>(
-          () => MainLocalDataSourceImpl());
+      () => MainLocalDataSourceImpl());
 }

@@ -26,6 +26,7 @@ import 'features/main/presentation/cubit/posters/posters_cubit.dart';
 import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit.dart';
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'features/main/presentation/cubit/support/support_cubit.dart';
+import 'features/main/presentation/cubit/upload_photos/upload_photos_cubit.dart';
 import 'locator.dart';
 
 class Application extends StatefulWidget {
@@ -55,6 +56,7 @@ class _ApplicationState extends State<Application>
   late OtpCodeCubit otpCodeCubit;
   late HouseStuffCubit stuffCubit;
   late HousePostCubit postCubit;
+  late UploadPhotosCubit uploadPhotosCubit;
   late ForgotPasswordCubit forgotPasswordCubit;
   late HouseSellingTypeCubit houseSellingTypeCubit;
   late FavoriteHousesCubit favoriteHousesCubit;
@@ -91,6 +93,7 @@ class _ApplicationState extends State<Application>
     houseSellingTypeCubit = locator();
     favoriteHousesCubit = locator();
     favoriteHousesJsonCubit =  locator();
+    uploadPhotosCubit =  locator();
     confirmPasswordCubit =  locator();
 
 
@@ -108,6 +111,7 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: sessionCubit..checkSession()),
         BlocProvider.value(value: bottomNavCubit),
         BlocProvider.value(value: housesCubit),
+        BlocProvider.value(value: uploadPhotosCubit),
         BlocProvider.value(value: houseTypeCubit),
         BlocProvider.value(value: editUserCubit),
         BlocProvider.value(value: postersCubit),

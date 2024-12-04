@@ -4,7 +4,7 @@ import 'package:realtor_pass/app_core/app_core_library.dart';
 
 
 class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({Key? key}) : super(key: key);
+  const LoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

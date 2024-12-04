@@ -1,13 +1,8 @@
-
-import 'dart:io';
-
 import '../entity/house_post_entity.dart';
-
 
 class HousePostModel extends HousePostEntity {
   const HousePostModel({
-    required super.features,
-    required super.id,
+    required super.ownerId,
     required super.title,
     required super.location,
     required super.lat,
@@ -20,12 +15,17 @@ class HousePostModel extends HousePostEntity {
     required super.beds,
     required super.bathrooms,
     required super.guests,
-    required super.isFavorite, required super.bedrooms,
+    required super.isFavorite,
+    required super.bedrooms,
+    required super.address,
+    required super.phone,
+    required super.email,
+    required super.featuresId,
   });
+
   factory HousePostModel.fromEntity(HousePostEntity entity) {
     return HousePostModel(
-      features: entity.features,
-      id: entity.id,
+      ownerId: entity.ownerId,
       title: entity.title,
       location: entity.location,
       lat: entity.lat,
@@ -38,51 +38,41 @@ class HousePostModel extends HousePostEntity {
       beds: entity.beds,
       bathrooms: entity.bathrooms,
       guests: entity.guests,
-      isFavorite: entity.isFavorite, bedrooms: entity.bedrooms,
+      isFavorite: entity.isFavorite,
+      bedrooms: entity.bedrooms,
+      address: entity.address,
+      phone: entity.phone,
+      email: entity.email,
+      featuresId: entity.featuresId,
     );
   }
 
-  factory HousePostModel.fromJson(Map<String, dynamic> json) {
-    return HousePostModel(
-      features: json["features"],
-      id: json['id'],
-      title: json['title'],
-      location: json['location'],
-      lat: json['lat'],
-      lon: json['lon'],
-      type: json['type'],
-      category: json['category'],
-      description: json['description'],
-      images: List<File>.from(json['images']),
-      price: json['price'],
-      beds: json['square'],
-      bathrooms: json['bathrooms'],
-      guests: json['rooms'],
-      isFavorite: json['isFavorite'], bedrooms: json["bedrooms"],
-    );
-  }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'title': title,
-      'location': location,
-      'lat': lat,
-      'lon': lon,
-      'type': type,
-      'category': category,
       'description': description,
-      'images': images,
       'price': price,
-      'square': beds,
-      'bathrooms': bathrooms,
-      'rooms': guests,
-      'isFavorite': isFavorite,
-      'bedrooms':bedrooms,
-      'features':features
+      'email': email,
+      'phone': phone,
+      'categoryId': category,
+      'sellingTypeId': type,
+      'ownerId': ownerId,
+      'rooms': {
+        'guests': guests,
+        'bedrooms': bedrooms,
+        'beds': beds,
+        'bathrooms': bathrooms,
+      },
+      'address': {
+        'exactAddress': address,
+        'coords': {'lat': lat, 'lng': lon},
+      },
+      'featuresIds': featuresId,
+      'imageIds': images.photos.map((e) => e.id).toList(),
+      'status': "PUBLISHED"
+
     };
   }
-
-
-
 }
+

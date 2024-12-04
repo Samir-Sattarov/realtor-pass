@@ -16,6 +16,7 @@ import '../entity/house_stuff_result_entity.dart';
 import '../entity/porters_entity.dart';
 import '../entity/profitable_terms_result_entity.dart';
 import '../entity/questions_result_entity.dart';
+import '../entity/upload_photo_result_entity.dart';
 import '../models/favorite_houses_json_model.dart';
 import '../models/house_post_model.dart';
 
@@ -47,7 +48,7 @@ abstract class MainRepository {
     String feedback,
   );
   Future<Either<AppError, void>> postHouse(HousePostEntity entity);
-  Future<Either<AppError, List<int>>> uploadImages(List<File> images);
+  Future<Either<AppError, UploadPhotoResultEntity>> uploadImages(List<File> images);
   Future<Either<AppError, HouseSellingTypeResultEntity>> getHouseSellingType(
       String locale);
 
@@ -224,7 +225,8 @@ class MainRepositoryImpl extends MainRepository {
     return action(task: localDataSource.deleteAllFavoriteCars());
   }
   @override
-  Future<Either<AppError, List<int>>> uploadImages(List<File> images) {
-    return action(task: remoteDataSource.uploadImages(images));
+  Future<Either<AppError, UploadPhotoResultEntity>> uploadImages(List<File> images) async {
+    return action<UploadPhotoResultEntity>(task:   remoteDataSource.uploadImages(images));
+
   }
 }
