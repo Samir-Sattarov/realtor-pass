@@ -47,7 +47,9 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
 
   initialize() async {
     await EasyLocalization.ensureInitialized().then((value) {
+      // ignore: use_build_context_synchronously
       BlocProvider.of<HouseStuffCubit>(context)
+          // ignore: use_build_context_synchronously
           .load(locale: context.locale.languageCode);
     });
   }
@@ -145,27 +147,25 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
         children: [
           Row(
             children: [
-                Expanded(
-                  child: Text(
-                    entity.houseTitle,
-                    style: TextStyle(
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppStyle.blue,
-                    ),
+              Expanded(
+                child: Text(
+                  entity.houseTitle,
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppStyle.blue,
                   ),
                 ),
-
+              ),
             ],
           ),
           SizedBox(height: 6.h),
           Text(
             entity.category.toString(),
             style: TextStyle(
-              fontSize: 16.sp,
-              color: AppStyle.blue,
-              fontWeight: FontWeight.w600
-            ),
+                fontSize: 16.sp,
+                color: AppStyle.blue,
+                fontWeight: FontWeight.w600),
           ),
           SizedBox(height: 6.h),
           Text(
@@ -176,7 +176,9 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
               color: Colors.black87,
             ),
           ),
-          SizedBox(height: 20.h,)
+          SizedBox(
+            height: 20.h,
+          )
         ],
       ),
     );
@@ -303,7 +305,7 @@ class _HouseDetailScreenState extends State<HouseDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                  width: 200.w,
+                  width: 180.w,
                   child: ButtonWidget(
                       title: "makeAnAppointment".tr(), onTap: () {})),
               TextButton(
