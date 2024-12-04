@@ -3,6 +3,8 @@
 <plist version="1.0">
 <dict>
 
+
+
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>This app needs access to location in the background.</string>
     <key>NSLocationAlwaysUsageDescription</key>
@@ -62,5 +64,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>KeychainSharing</key>
+    <true/>
 </dict>
 </plist>
