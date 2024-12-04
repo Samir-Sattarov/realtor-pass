@@ -47,10 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
     initialize();
     super.initState();
   }
-  initialize()  {
 
-      BlocProvider.of<PostersCubit>(context).load();
-
+  initialize() {
+    BlocProvider.of<PostersCubit>(context).load();
   }
 
   @override
@@ -64,8 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap: () {
-                },
+                onTap: () {},
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,8 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       onSearch: (String value) {
                         BlocProvider.of<BottomNavCubit>(context)
                             .change(ScreenIndex.catalog);
-                        BlocProvider.of<HousesCubit>(context)
-                            .load(search: value, locale: context.locale.languageCode);
+                        BlocProvider.of<HousesCubit>(context).load(
+                            search: value, locale: context.locale.languageCode);
                       },
                       suggestionsCallback: suggestionsCallback,
                       itemBuilder: (BuildContext context, HouseEntity house) {
@@ -140,7 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 34.h),
-
               BlocBuilder<PostersCubit, PostersState>(
                 builder: (context, state) {
                   if (state is PostersLoaded) {
@@ -164,9 +161,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: MediaQuery.of(context)
                                               .size
                                               .height,
-                                          width: MediaQuery.of(context)
-                                              .size
-                                              .width,
+                                          width:
+                                              MediaQuery.of(context).size.width,
                                           child: Center(
                                             child: Swiper(
                                               autoplay: true,
@@ -217,7 +213,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ).animate().shimmer(),
-
               BlocBuilder<QuestionsCubit, QuestionsState>(
                 builder: (context, state) {
                   if (state is QuestionsLoaded) {

@@ -54,7 +54,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   children: [
                     SizedBox(height: 10.h),
                     Text(
-                      "favorite".tr(),
+                      "favorites".tr(),
                       style: TextStyle(
                         color: AppStyle.dark,
                         fontSize: 28.sp,

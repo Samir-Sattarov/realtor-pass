@@ -173,7 +173,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   borderRadius:  BorderRadius.horizontal(
                 right: Radius.circular(10.r), left: Radius.circular(10.r)),
                   child: SizedBox(width: 340.w,height: 200.h,
-                      child: GoogleMapWidget()),
+                      child: const GoogleMapWidget()),
                 ),
                 SizedBox(
                   height: 16.h,
