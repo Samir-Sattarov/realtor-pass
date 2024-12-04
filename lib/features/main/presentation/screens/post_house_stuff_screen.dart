@@ -13,7 +13,9 @@ import '../cubit/house_stuff/house_stuff_cubit.dart';
 import 'house_post_third_screen.dart';
 
 class PostHouseStuffScreen extends StatefulWidget {
-  const PostHouseStuffScreen({super.key});
+  final HousePostEntity entity;
+
+  const PostHouseStuffScreen({super.key, required this.entity});
 
   @override
   State<PostHouseStuffScreen> createState() => _PostHouseStuffScreenState();
@@ -21,23 +23,24 @@ class PostHouseStuffScreen extends StatefulWidget {
 
 class _PostHouseStuffScreenState extends State<PostHouseStuffScreen> {
   late List<HouseStuffEntity> houseStuffEntity;
-  HousePostEntity postEntity = HousePostEntity.empty();
-  List<String> selectedFeatures = [];
+  late HousePostEntity postEntity;
+  List<int> selectedFeatures = [];
 
   @override
   void initState() {
     super.initState();
     houseStuffEntity = [];
     selectedFeatures = [];
+    postEntity = widget.entity;
     initialize();
   }
 
   void onCategoryTap(HouseStuffEntity features) {
     setState(() {
-      if (selectedFeatures.contains(features.title)) {
-        selectedFeatures.remove(features.title);
+      if (selectedFeatures.contains(features.id)) {
+        selectedFeatures.remove(features.id);
       } else {
-        selectedFeatures.add(features.title);
+        selectedFeatures.add(features.id);
       }
     });
   }
@@ -51,12 +54,12 @@ class _PostHouseStuffScreenState extends State<PostHouseStuffScreen> {
 
   void onContinue() {
     if (selectedFeatures.isNotEmpty) {
-      postEntity = postEntity.copyWith(features: selectedFeatures);
+      postEntity = postEntity.copyWith(featuresId: selectedFeatures);
 
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>  HousePostThirdScreen(entity: postEntity),
+          builder: (context) => HousePostThirdScreen(entity: postEntity),
         ),
       );
     } else {
@@ -138,7 +141,7 @@ class _PostHouseStuffScreenState extends State<PostHouseStuffScreen> {
                             itemBuilder: (context, index) {
                               final features = houseStuffEntity[index];
                               final isSelected =
-                                  selectedFeatures.contains(features.title);
+                                  selectedFeatures.contains(features.id);
                               return Material(
                                 color: Colors.transparent,
                                 child: AnimatedSwitcher(
@@ -169,7 +172,14 @@ class _PostHouseStuffScreenState extends State<PostHouseStuffScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              SizedBox(child: Center(child: Image.network(features.image, fit: BoxFit.contain,height: 64.r,width: 64.r,))),
+                                              SizedBox(
+                                                  child: Center(
+                                                      child: Image.network(
+                                                features.image,
+                                                fit: BoxFit.contain,
+                                                height: 64.r,
+                                                width: 64.r,
+                                              ))),
                                               SizedBox(height: 10.h),
                                               FittedBox(
                                                 child: Text(
@@ -196,7 +206,9 @@ class _PostHouseStuffScreenState extends State<PostHouseStuffScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10.h,),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -210,7 +222,7 @@ class _PostHouseStuffScreenState extends State<PostHouseStuffScreen> {
                       Expanded(
                         flex: 4,
                         child: ButtonWidget(
-                          title: "Continue",
+                          title: "continue".tr(),
                           onTap: () {
                             onContinue();
                           },

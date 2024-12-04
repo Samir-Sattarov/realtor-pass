@@ -5,11 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app_core/app_core_library.dart';
 import '../../../../app_core/widgets/button_widget.dart';
 import '../../core/entity/house_post_entity.dart';
-import 'house_post_price_screen.dart';
+import 'house_post_location_screen.dart';
 
 class HousePostThirdScreen extends StatefulWidget {
   final HousePostEntity entity;
-  const HousePostThirdScreen({super.key, required this.entity});
+
+  const HousePostThirdScreen({
+    super.key,
+    required this.entity,
+  });
 
   @override
   State<HousePostThirdScreen> createState() => _HousePostThirdScreenState();
@@ -63,6 +67,7 @@ class _HousePostThirdScreenState extends State<HousePostThirdScreen> {
                     ),
                     SizedBox(height: 50.h),
                     TextFormField(
+                      controller: titleController,
                       validator: FormValidator.empty,
                       maxLength: 40,
                       maxLines: null,
@@ -80,6 +85,7 @@ class _HousePostThirdScreenState extends State<HousePostThirdScreen> {
                       height: 20.h,
                     ),
                     TextFormField(
+                      controller: descriptionController,
                       validator: FormValidator.empty,
                       maxLength: 100,
                       maxLines: null,
@@ -94,7 +100,7 @@ class _HousePostThirdScreenState extends State<HousePostThirdScreen> {
                           )),
                     ),
                     SizedBox(
-                      height: 250.h,
+                      height: 320.h,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,25 +111,28 @@ class _HousePostThirdScreenState extends State<HousePostThirdScreen> {
                             },
                             icon: const Icon(Icons.arrow_back_outlined)),
                         SizedBox(
-                            width: 100.w,
-                            child: ButtonWidget(
-                                title: "next".tr(),
-                                onTap: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    postEntity = postEntity.copyWith(
-                                      title: titleController.text,
-                                      description: descriptionController.text,
-                                    );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            HousePostPriceScreen(
-                                                entity: postEntity),
-                                      ),
-                                    );
-                                  }
-                                })),
+                          width: 100.w,
+                          child: ButtonWidget(
+                            title: "next".tr(),
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                postEntity = postEntity.copyWith(
+                                  title: titleController.text,
+                                  description: descriptionController.text,
+                                );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        HousePostLocationScreen(
+                                      entity: postEntity,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ],

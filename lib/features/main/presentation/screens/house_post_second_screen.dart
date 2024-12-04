@@ -9,6 +9,7 @@ import '../../core/entity/house_post_entity.dart';
 
 class HousePostSecondScreen extends StatefulWidget {
   final HousePostEntity entity;
+
   const HousePostSecondScreen({super.key, required this.entity});
 
   @override
@@ -16,14 +17,13 @@ class HousePostSecondScreen extends StatefulWidget {
 }
 
 class HousePostSecondScreenState extends State<HousePostSecondScreen> {
-   late HousePostEntity postEntity;
+  late HousePostEntity postEntity;
 
-   @override
-   void initState() {
-     super.initState();
-     postEntity = widget.entity;
-   }
-
+  @override
+  void initState() {
+    super.initState();
+    postEntity = widget.entity;
+  }
 
   void incrementCounter(String type) {
     setState(() {
@@ -48,22 +48,23 @@ class HousePostSecondScreenState extends State<HousePostSecondScreen> {
     setState(() {
       switch (type) {
         case 'guests':
-          if (postEntity.guests > 1) {
+          if (postEntity.guests > 0) {
             postEntity = postEntity.copyWith(guests: postEntity.guests - 1);
           }
           break;
         case 'bathrooms':
-          if (postEntity.bathrooms > 1) {
-            postEntity = postEntity.copyWith(bathrooms: postEntity.bathrooms - 1);
+          if (postEntity.bathrooms > 0) {
+            postEntity =
+                postEntity.copyWith(bathrooms: postEntity.bathrooms - 1);
           }
           break;
         case 'bedrooms':
-          if (postEntity.bedrooms > 1) {
+          if (postEntity.bedrooms > 0) {
             postEntity = postEntity.copyWith(bedrooms: postEntity.bedrooms - 1);
           }
           break;
         case 'beds':
-          if (postEntity.beds > 1) {
+          if (postEntity.beds > 0) {
             postEntity = postEntity.copyWith(beds: postEntity.beds - 1);
           }
           break;
@@ -130,7 +131,8 @@ class HousePostSecondScreenState extends State<HousePostSecondScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              buildCounter('bathrooms'.tr(), postEntity.bathrooms, 'bathrooms'),
+              buildCounter(
+                  'bathrooms'.tr(), postEntity.bathrooms, 'bathrooms'),
               SizedBox(
                 height: 10.h,
               ),
@@ -142,7 +144,8 @@ class HousePostSecondScreenState extends State<HousePostSecondScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              buildCounter('bedrooms'.tr(), postEntity.bedrooms, 'bedrooms'),
+              buildCounter(
+                  'bedrooms'.tr(), postEntity.bedrooms, 'bedrooms'),
               SizedBox(
                 height: 10.h,
               ),
@@ -151,7 +154,9 @@ class HousePostSecondScreenState extends State<HousePostSecondScreen> {
                 height: 1,
                 color: Color(0xffDADADA),
               ),
-              SizedBox(height: 10.h,),
+              SizedBox(
+                height: 10.h,
+              ),
               buildCounter('beds'.tr(), postEntity.beds, 'beds'),
               SizedBox(
                 height: 10.h,
@@ -164,7 +169,9 @@ class HousePostSecondScreenState extends State<HousePostSecondScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              SizedBox(height: 230.h,),
+              SizedBox(
+                height: 230.h,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -178,16 +185,18 @@ class HousePostSecondScreenState extends State<HousePostSecondScreen> {
                     child: ButtonWidget(
                       title: "next".tr(),
                       onTap: () {
-                        bool hasMadeSelection = postEntity.guests > 1 ||
-                            postEntity.bathrooms > 1 ||
-                            postEntity.bedrooms > 1 ||
-                            postEntity.beds > 1;
+                        bool hasMadeSelection = postEntity.guests > 0 ||
+                            postEntity.bathrooms > 0 ||
+                            postEntity.bedrooms > 0 ||
+                            postEntity.beds > 0;
 
                         if (hasMadeSelection) {
                           // Proceed to navigate
                           AnimatedNavigation.push(
                             context: context,
-                            page: const PostHouseStuffScreen(),
+                            page: PostHouseStuffScreen(
+                              entity: postEntity,
+                            ),
                           );
                         } else {
                           // Show an alert dialog
@@ -195,11 +204,11 @@ class HousePostSecondScreenState extends State<HousePostSecondScreen> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Selection Required'),
-                                content: Text('Please select at least one option before proceeding.'),
+                                title: Text('selection'.tr()),
+                                content: Text('selectAtLeastOneOption'.tr()),
                                 actions: [
                                   TextButton(
-                                    child: Text('OK'),
+                                    child: Text('ok'.tr()),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
@@ -210,12 +219,10 @@ class HousePostSecondScreenState extends State<HousePostSecondScreen> {
                           );
                         }
                       },
-
                     ),
                   ),
                 ],
               ),
-
             ],
           ),
         ),
