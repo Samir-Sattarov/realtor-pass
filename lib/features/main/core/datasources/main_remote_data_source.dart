@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:realtor_pass/app_core/app_core_library.dart';
 import 'package:realtor_pass/features/main/core/models/house_model_result.dart';
 import 'package:realtor_pass/features/main/core/models/house_type_result_model.dart';
@@ -15,6 +14,7 @@ import '../models/posters_model.dart';
 import '../models/profitable_terms_result_model.dart';
 import '../models/questions_result_model.dart';
 import '../models/upload_photo_result_model.dart';
+import '../models/user_houses_result_model.dart';
 
 abstract class MainRemoteDataSource {
   Future<HouseResultModel> getHouses(
@@ -45,6 +45,11 @@ abstract class MainRemoteDataSource {
   Future<void> saveHouseToFavorite(int userId, int publicationId);
   Future<HouseResultModel> getFavoriteHouses(int userId);
   Future<void> deleteFromFavorite(int userId, int publicationsId);
+  Future<UserHousesResultModel> getUserHouses(
+    String locale,int userId
+  );
+  Future<void> deleteUserHouse( int publicationsId);
+
 }
 
 class MainRemoteDataSourceImpl extends MainRemoteDataSource {
@@ -267,5 +272,22 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
       ApiConstants.postHouse,
       params: model.toJson(),
     );
+  }
+
+  @override
+  Future<UserHousesResultModel> getUserHouses(String locale, int userId) async {
+    final response = await apiClient.post(
+      ApiConstants.getPublishedHouses, params: {},
+    );
+    final model = UserHousesResultModel.fromJson(response, locale: locale);
+    return model;
+  }
+
+  @override
+  Future<void> deleteUserHouse(int publicationsId) async {
+    await apiClient.deleteWithBody(
+      "${ApiConstants.deleteUserHouses}$publicationsId",
+    );
+
   }
 }

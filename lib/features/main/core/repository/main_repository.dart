@@ -17,6 +17,7 @@ import '../entity/porters_entity.dart';
 import '../entity/profitable_terms_result_entity.dart';
 import '../entity/questions_result_entity.dart';
 import '../entity/upload_photo_result_entity.dart';
+import '../entity/user_houses_result_entity.dart';
 import '../models/favorite_houses_json_model.dart';
 import '../models/house_post_model.dart';
 
@@ -48,7 +49,8 @@ abstract class MainRepository {
     String feedback,
   );
   Future<Either<AppError, void>> postHouse(HousePostEntity entity);
-  Future<Either<AppError, UploadPhotoResultEntity>> uploadImages(List<File> images);
+  Future<Either<AppError, UploadPhotoResultEntity>> uploadImages(
+      List<File> images);
   Future<Either<AppError, HouseSellingTypeResultEntity>> getHouseSellingType(
       String locale);
 
@@ -57,9 +59,9 @@ abstract class MainRepository {
   Future<Either<AppError, void>> deleteFromFavorite(int carId);
   Future<Either<AppError, void>> deleteAllHousesFromFavorite();
   Future<Either<AppError, HouseResultEntity>> getFavoriteHouses();
-
-
-
+  Future<Either<AppError, UserHousesResultEntity>> getUserHouses(
+      String locale, int userId);
+  Future<Either<AppError, void>> deleteUserHouse(int publicationsId);
 }
 
 class MainRepositoryImpl extends MainRepository {
@@ -67,7 +69,8 @@ class MainRepositoryImpl extends MainRepository {
   final AuthLocalDataSource authLocalDataSource;
   final MainLocalDataSource localDataSource;
 
-  MainRepositoryImpl(this.remoteDataSource, this.authLocalDataSource, this.localDataSource);
+  MainRepositoryImpl(
+      this.remoteDataSource, this.authLocalDataSource, this.localDataSource);
   @override
   Future<Either<AppError, HouseResultEntity>> getHouses(
       String locale,
@@ -158,7 +161,8 @@ class MainRepositoryImpl extends MainRepository {
   }
 
   @override
-  Future<Either<AppError, void>> saveHousesToFavorite(int publicationsId) async {
+  Future<Either<AppError, void>> saveHousesToFavorite(
+      int publicationsId) async {
     final userId = await authLocalDataSource.getUserId();
 
     // ignore: void_checks
@@ -173,13 +177,14 @@ class MainRepositoryImpl extends MainRepository {
   }
 
   @override
-  Future<Either<AppError, FavoriteHousesJsonModel>> getFavoriteHousesJson() async {
+  Future<Either<AppError, FavoriteHousesJsonModel>>
+      getFavoriteHousesJson() async {
     final model = await localDataSource.getFavoriteCars();
 
     return Right(model);
   }
-  @override
 
+  @override
   Future<Either<AppError, HouseResultEntity>> getFavoriteHouses() async {
     try {
       final userId = await authLocalDataSource.getUserId();
@@ -224,9 +229,24 @@ class MainRepositoryImpl extends MainRepository {
   Future<Either<AppError, void>> deleteAllHousesFromFavorite() async {
     return action(task: localDataSource.deleteAllFavoriteCars());
   }
-  @override
-  Future<Either<AppError, UploadPhotoResultEntity>> uploadImages(List<File> images) async {
-    return action<UploadPhotoResultEntity>(task:   remoteDataSource.uploadImages(images));
 
+  @override
+  Future<Either<AppError, UploadPhotoResultEntity>> uploadImages(
+      List<File> images) async {
+    return action<UploadPhotoResultEntity>(
+        task: remoteDataSource.uploadImages(images));
+  }
+
+  @override
+  Future<Either<AppError, UserHousesResultEntity>> getUserHouses(
+    String locale,
+    int userId,
+  ) {
+    return action(task: remoteDataSource.getUserHouses(locale, userId));
+  }
+
+  @override
+  Future<Either<AppError, void>> deleteUserHouse(int publicationsId) {
+    return action(task: remoteDataSource.deleteUserHouse(publicationsId));
   }
 }

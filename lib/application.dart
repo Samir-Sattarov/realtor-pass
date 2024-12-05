@@ -16,6 +16,7 @@ import 'features/auth/presentation/cubit/otp_code/otp_code_cubit.dart';
 import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
+import 'features/main/presentation/cubit/delete_user_houses/delete_user_houses_cubit.dart';
 import 'features/main/presentation/cubit/favorite/favorite_cubit.dart';
 import 'features/main/presentation/cubit/favorite/favorite_json/favorite_houses_json_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
@@ -27,6 +28,7 @@ import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'features/main/presentation/cubit/support/support_cubit.dart';
 import 'features/main/presentation/cubit/upload_photos/upload_photos_cubit.dart';
+import 'features/main/presentation/cubit/user_houses/user_houses_cubit.dart';
 import 'locator.dart';
 
 class Application extends StatefulWidget {
@@ -62,6 +64,8 @@ class _ApplicationState extends State<Application>
   late FavoriteHousesCubit favoriteHousesCubit;
   late FavoriteHousesJsonCubit favoriteHousesJsonCubit;
   late ConfirmPasswordCubit confirmPasswordCubit;
+  late UserHousesCubit userHousesCubit;
+  late DeleteUserHousesCubit deleteUserHousesCubit;
 
 
   @override
@@ -95,6 +99,8 @@ class _ApplicationState extends State<Application>
     favoriteHousesJsonCubit =  locator();
     uploadPhotosCubit =  locator();
     confirmPasswordCubit =  locator();
+    userHousesCubit = locator();
+    deleteUserHousesCubit =  locator();
 
 
   }
@@ -128,7 +134,8 @@ class _ApplicationState extends State<Application>
         BlocProvider.value(value: favoriteHousesCubit),
         BlocProvider.value(value: favoriteHousesJsonCubit),
         BlocProvider.value(value: confirmPasswordCubit),
-
+        BlocProvider.value(value: userHousesCubit),
+        BlocProvider.value(value: deleteUserHousesCubit),
 
       ],
       child: ScreenUtilInit(

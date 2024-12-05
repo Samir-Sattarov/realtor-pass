@@ -1,44 +1,30 @@
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app_core/app_core_library.dart';
 import '../../../../app_core/widgets/button_widget.dart';
-import '../../../auth/presentation/cubit/session/session_cubit.dart';
-import '../../../auth/presentation/screens/sign_in_screen.dart';
 import '../../core/entity/house_entity.dart';
-import '../cubit/favorite/favorite_cubit.dart';
+import '../cubit/delete_user_houses/delete_user_houses_cubit.dart';
 import '../screens/house_detail_screen.dart';
 
-class HouseWidget extends StatefulWidget {
+class UserHousesWidget extends StatelessWidget {
   final HouseEntity houses;
 
-  const HouseWidget({
+  const UserHousesWidget({
     super.key,
     required this.houses,
   });
-
-  @override
-  State<HouseWidget> createState() => _HouseWidgetState();
-}
-
-class _HouseWidgetState extends State<HouseWidget> {
-  late bool isFavorite;
-
-  @override
-  void initState() {
-    super.initState();
-    final favoriteCubit = BlocProvider.of<FavoriteHousesCubit>(context);
-    isFavorite = favoriteCubit.isFavorite(widget.houses.id);
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         AnimatedNavigation.push(
-            context: context, page: HouseDetailScreen(entity: widget.houses));
+          context: context,
+          page: HouseDetailScreen(entity: houses),
+        );
       },
       child: Container(
         height: 182.h,
@@ -50,7 +36,7 @@ class _HouseWidgetState extends State<HouseWidget> {
               color: Colors.grey.withOpacity(0.9),
               spreadRadius: 1,
               blurRadius: 8,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -58,14 +44,14 @@ class _HouseWidgetState extends State<HouseWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildImageSection(),
-            _buildInfoSection(),
+            _buildInfoSection(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildImageSection() {
+  Widget _buildImageSection(  ) {
     return SizedBox(
       width: 170.w,
       height: 182.h,
@@ -75,10 +61,10 @@ class _HouseWidgetState extends State<HouseWidget> {
             borderRadius: BorderRadius.horizontal(
                 right: Radius.circular(10.r), left: Radius.circular(10.r)),
             child: Swiper(
-              itemCount: widget.houses.images.length,
+              itemCount: houses.images.length,
               itemBuilder: (context, index) {
                 return Image.network(
-                  widget.houses.images[index],
+                  houses.images[index],
                   fit: BoxFit.cover,
                 );
               },
@@ -93,37 +79,12 @@ class _HouseWidgetState extends State<HouseWidget> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: IconButton(
-              icon: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: isFavorite ? Colors.red : Colors.white,
-              ),
-              onPressed: () {
-                if (BlocProvider.of<SessionCubit>(context).state
-                is SessionDisabled) {
-                  AnimatedNavigation.push(
-                      context: context, page: const SignInScreen());
-                } else {
-                  if (isFavorite) {
-                    BlocProvider.of<FavoriteHousesCubit>(context)
-                        .deleteAllFavorites();
-                  } else {
-                    BlocProvider.of<FavoriteHousesCubit>(context)
-                        .addFavorite(widget.houses);
-                  }
-                  setState(() => isFavorite = !isFavorite);
-                }
-              },
-            ),
-          ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoSection() {
+  Widget _buildInfoSection(BuildContext context) {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(12.w),
@@ -131,18 +92,33 @@ class _HouseWidgetState extends State<HouseWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              widget.houses.houseTitle,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.bold,
-                color: AppStyle.dark,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    houses.houseTitle,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    BlocProvider.of<DeleteUserHousesCubit>(context)
+                        .delete(publicationsId: houses.id);
+                  },
+                  icon: const Icon(Icons.delete),
+                  color: Colors.red,
+                ),
+              ],
             ),
             Text(
-              widget.houses.category,
+              houses.category,
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.bold,
@@ -151,22 +127,22 @@ class _HouseWidgetState extends State<HouseWidget> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(height: 5.h),
-            Column(
+            SizedBox(height: 10.h),
+            Row(
               children: [
                 _buildInfoItem(
-                    Icons.meeting_room, widget.houses.beds.toString()),
+                    Icons.meeting_room, houses.beds.toString()),
                 SizedBox(width: 10.w),
                 _buildInfoItem(
-                    Icons.bathroom, widget.houses.bathrooms.toString()),
+                    Icons.bathroom, houses.bathrooms.toString()),
                 SizedBox(width: 10.w),
-                _buildInfoItem(Icons.other_houses_outlined,
-                    widget.houses.guests.toString()),
+                _buildInfoItem(
+                    Icons.bedroom_child_sharp, houses.guests.toString()),
               ],
             ),
             Spacer(),
             Text(
-              "${widget.houses.price} \$/monthly",
+              "${houses.price} \$/monthly",
               style: TextStyle(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.bold,
@@ -175,9 +151,13 @@ class _HouseWidgetState extends State<HouseWidget> {
             ),
             SizedBox(height: 8.h),
             SizedBox(
-                width: 140.w,
-                height: 30,
-                child: ButtonWidget(title: "Buy", onTap: () {}))
+              width: 140.w,
+              height: 30,
+              child: ButtonWidget(
+                title: "edit".tr(),
+                onTap: () {},
+              ),
+            ),
           ],
         ),
       ),
@@ -192,7 +172,6 @@ class _HouseWidgetState extends State<HouseWidget> {
           size: 16.sp,
           color: Colors.blueAccent,
         ),
-        Text(""),
         SizedBox(width: 4.w),
         Text(
           value,

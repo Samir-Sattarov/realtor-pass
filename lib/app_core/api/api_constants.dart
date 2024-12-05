@@ -26,5 +26,6 @@ class ApiConstants {
   static const resetPassword =  "auth/reset-password";
   static const getPublishedHouses = "publications/get-user-publication";
   static const uploadImages = "images/upload";
+  static const deleteUserHouses =  'publications/';
   // static const googleMap = "AIzaSyD3d7hj2oSaarverdM6thtnGL3VlrKYtTQ";
 }

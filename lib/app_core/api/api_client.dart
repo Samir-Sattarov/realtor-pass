@@ -167,10 +167,10 @@ class ApiClientImpl extends ApiClient {
 
   @override
   Future<dynamic> deleteWithBody(String path) async {
-    String sessionId = "";
-    // (await _authenticationLocalDataSource.getSessionId()) ?? "";
+    String token =
+    (await _authenticationLocalDataSource.getToken()) ?? "";
     final header = {
-      'Authorization': "Bearer $sessionId",
+      'Authorization': "Bearer $token",
     };
 
     final response = await clientDio.delete(
@@ -178,9 +178,10 @@ class ApiClientImpl extends ApiClient {
       options: Options(headers: header),
     );
 
-    debugPrint("API delete response code: ${response.statusCode} ");
+    debugPrint("API delete response code: ${response.statusCode}");
     return _errorHandler(response);
   }
+
 
   @override
   Future post(String path,
@@ -266,17 +267,25 @@ class ApiClientImpl extends ApiClient {
 
 
   _errorHandler(
-    Response response, {
-    bool withParse = true,
-    bool getRealApi = false,
-  }) {
+      Response response, {
+        bool withParse = true,
+        bool getRealApi = false,
+      }) {
     if (response.statusCode == 200 || response.statusCode == 201) {
       if (getRealApi) {
         return response.realUri;
       }
-      return withParse
-          ? Map<String, dynamic>.from(response.data)
-          : response.data;
+      if (withParse) {
+        // Проверяем, является ли response.data Map или List
+        if (response.data is Map<String, dynamic>) {
+          return Map<String, dynamic>.from(response.data);
+        } else if (response.data is List) {
+          return List<dynamic>.from(response.data);
+        } else {
+          throw Exception("Unexpected response data type: ${response.data.runtimeType}");
+        }
+      }
+      return response.data;
     } else if (response.statusCode == 400 ||
         response.statusCode == 403 ||
         response.statusCode == 401 ||
@@ -284,23 +293,32 @@ class ApiClientImpl extends ApiClient {
         response.statusCode == 500 ||
         response.statusCode == 409) {
       String msg = "unknown_error";
-      var resp = Map<String, dynamic>.from(response.data);
-      debugPrint(resp.toString());
 
-      if (resp.containsKey("error")) {
-        msg = resp["error"];
-      } else if (resp.containsKey("message")) {
-        var rsp = resp["message"];
-        if (rsp.runtimeType == String) msg = resp["message"];
-        if (rsp.runtimeType == List) msg = rsp[0];
-      } else {
-        msg = utf8
-            .decode(response.data)
-            .replaceAll("[", '')
-            .replaceAll("]", '')
-            .replaceAll("}", '')
-            .replaceAll("{", '')
-            .replaceAll("\\", '');
+      try {
+        // Попытка обработать response.data как Map
+        if (response.data is Map<String, dynamic>) {
+          var resp = Map<String, dynamic>.from(response.data);
+          debugPrint(resp.toString());
+
+          if (resp.containsKey("error")) {
+            msg = resp["error"];
+          } else if (resp.containsKey("message")) {
+            var rsp = resp["message"];
+            if (rsp.runtimeType == String) msg = rsp;
+            if (rsp.runtimeType == List) msg = rsp[0];
+          }
+        } else {
+          // Обработка response.data как строки, если это не Map
+          msg = utf8
+              .decode(response.data)
+              .replaceAll("[", '')
+              .replaceAll("]", '')
+              .replaceAll("}", '')
+              .replaceAll("{", '')
+              .replaceAll("\\", '');
+        }
+      } catch (e) {
+        msg = "Error parsing response data: ${e.toString()}";
       }
 
       print("Exception print message $msg");
@@ -311,6 +329,7 @@ class ApiClientImpl extends ApiClient {
       throw Exception(response.statusMessage);
     }
   }
+
 
   String getPath(String path, {Map<dynamic, dynamic>? params}) {
     var paramsString = '';

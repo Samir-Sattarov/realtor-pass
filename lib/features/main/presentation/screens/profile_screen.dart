@@ -10,6 +10,7 @@ import '../../../auth/presentation/cubit/auth/auth_cubit.dart';
 import '../../../auth/presentation/cubit/current_user/current_user_cubit.dart';
 import '../../../auth/presentation/cubit/session/session_cubit.dart';
 import '../cubit/bottom_nav/bottom_nav_cubit.dart';
+import 'my_houses_screen.dart';
 import 'settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -79,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           title: "profile".tr(),
                           onTap: () {
                             AnimatedNavigation.push(
-                                context: context, page: SettingsScreen());
+                                context: context, page: const SettingsScreen());
                           },
                         ),
                         SizedBox(height: 16.h),
@@ -92,7 +93,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         _profileItem(
                           svgPath: Svgs.tHome,
                           title: "myHouses".tr(),
-                          onTap: () {},
+                          onTap: () {
+                            AnimatedNavigation.push(
+                                context: context, page: const MyHousesScreen());
+                          },
                         ),
                         SizedBox(height: 16.h),
                         _profileItem(

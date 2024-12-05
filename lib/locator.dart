@@ -31,15 +31,18 @@ import 'features/auth/presentation/cubit/registration/registration_cubit.dart';
 import 'features/auth/presentation/cubit/session/session_cubit.dart';
 import 'features/main/core/datasources/main_local_data_source.dart';
 import 'features/main/core/usecases/config_usecase.dart';
+import 'features/main/core/usecases/delete_user_houses_usecase.dart';
 import 'features/main/core/usecases/feedback_usecase.dart';
 import 'features/main/core/usecases/few_steps_usecase.dart';
 import 'features/main/core/usecases/get_house_stuff_usecase.dart';
+import 'features/main/core/usecases/get_user_houses_usecase.dart';
 import 'features/main/core/usecases/house_selling_type_usecase.dart';
 import 'features/main/core/usecases/post_house_usecase.dart';
 import 'features/main/core/usecases/posters_usecase.dart';
 import 'features/main/core/usecases/profitable_terms_usecase.dart';
 import 'features/main/core/usecases/questions_usecase.dart';
 import 'features/main/presentation/cubit/config/config_cubit.dart';
+import 'features/main/presentation/cubit/delete_user_houses/delete_user_houses_cubit.dart';
 import 'features/main/presentation/cubit/favorite/favorite_cubit.dart';
 import 'features/main/presentation/cubit/favorite/favorite_json/favorite_houses_json_cubit.dart';
 import 'features/main/presentation/cubit/few_steps/few_steps_cubit.dart';
@@ -51,6 +54,7 @@ import 'features/main/presentation/cubit/profitable_terms/profitable_terms_cubit
 import 'features/main/presentation/cubit/questions/questions_cubit.dart';
 import 'features/main/presentation/cubit/support/support_cubit.dart';
 import 'features/main/presentation/cubit/upload_photos/upload_photos_cubit.dart';
+import 'features/main/presentation/cubit/user_houses/user_houses_cubit.dart';
 
 final locator = GetIt.I;
 
@@ -134,7 +138,12 @@ void setup() {
   locator.registerLazySingleton(() => UploadImagesUseCase(
         locator(),
       ));
-
+  locator.registerLazySingleton(() => GetUserHousesUseCase(
+    locator(),
+  ));
+  locator.registerLazySingleton(() => DeleteUserHousesUsecase(
+    locator(),
+  ));
   // ================ External ================ //
 
   locator.registerLazySingleton(() => SecureStorage());
@@ -206,6 +215,10 @@ void setup() {
   locator.registerFactory(() => HouseSellingTypeCubit(locator()));
   locator.registerFactory(() => FavoriteHousesCubit(locator()));
   locator.registerFactory(() => FavoriteHousesJsonCubit(locator()));
+  locator.registerFactory(() => UserHousesCubit(locator()));
+  locator.registerFactory(() => DeleteUserHousesCubit(locator()));
+
+
 
   // ================ Repository / Datasource ================ //
 
