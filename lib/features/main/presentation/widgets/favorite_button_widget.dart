@@ -10,9 +10,9 @@ class FavoriteButtonWidget extends StatefulWidget {
   final HouseEntity entity;
 
   const FavoriteButtonWidget({
-    Key? key,
+    super.key,
     required this.entity,
-  }) : super(key: key);
+  });
 
   @override
   State<FavoriteButtonWidget> createState() => _FavoriteButtonWidgetState();
@@ -34,18 +34,15 @@ class _FavoriteButtonWidgetState extends State<FavoriteButtonWidget> {
     return GestureDetector(
       onTap: () {
         if (BlocProvider.of<SessionCubit>(context).state is SessionDisabled) {
-          // Если пользователь не авторизован, перенаправляем на экран входа
           AnimatedNavigation.push(context: context, page: const SignInScreen());
         } else {
           setState(() => isFavorite = !isFavorite);
           if (isFavorite) {
-            // Добавление в избранное
             BlocProvider.of<FavoriteHousesCubit>(context)
                 .addFavorite(widget.entity);
           } else {
-            // Удаление из избранного
             BlocProvider.of<FavoriteHousesCubit>(context)
-                .removeFavorite(widget.entity.id);
+                .deleteAllFavorites();
           }
         }
       },
