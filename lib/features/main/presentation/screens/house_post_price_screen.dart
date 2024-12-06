@@ -142,7 +142,7 @@ class _HousePostPriceScreenState extends State<HousePostPriceScreen> {
                                       const BorderSide(color: Colors.grey)),
                               hintText: "+998999999999",
                             ),
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.phone,
                           ),
                         ),
                         SizedBox(height: 20.h),

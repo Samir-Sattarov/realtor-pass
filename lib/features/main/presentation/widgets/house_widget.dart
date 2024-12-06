@@ -1,4 +1,5 @@
 import 'package:card_swiper/card_swiper.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,7 +103,7 @@ class _HouseWidgetState extends State<HouseWidget> {
               ),
               onPressed: () {
                 if (BlocProvider.of<SessionCubit>(context).state
-                is SessionDisabled) {
+                    is SessionDisabled) {
                   AnimatedNavigation.push(
                       context: context, page: const SignInScreen());
                 } else {
@@ -177,7 +178,13 @@ class _HouseWidgetState extends State<HouseWidget> {
             SizedBox(
                 width: 140.w,
                 height: 30,
-                child: ButtonWidget(title: "Buy", onTap: () {}))
+                child: ButtonWidget(
+                    title: "moreDetails".tr(),
+                    onTap: () {
+                      AnimatedNavigation.push(
+                          context: context,
+                          page: HouseDetailScreen(entity: widget.houses));
+                    }))
           ],
         ),
       ),

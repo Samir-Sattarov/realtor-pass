@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app_core/widgets/back_widget.dart';
 import '../../../../app_core/widgets/error_flash_bar.dart';
 import '../../../../app_core/widgets/loading_widget.dart';
+import '../../../../app_core/widgets/success_flash_bar.dart';
 import '../../../auth/presentation/cubit/current_user/current_user_cubit.dart';
 import '../../core/entity/house_entity.dart';
 import '../cubit/delete_user_houses/delete_user_houses_cubit.dart';
@@ -46,6 +47,7 @@ class _MyHousesScreenState extends State<MyHousesScreen> {
             BlocListener<DeleteUserHousesCubit, DeleteUserHousesState>(
               listener: (context, state) {
                 if (state is DeleteUserHousesDeleted) {
+                  SuccessFlushBar("yourHomeDeleted".tr()).show(context);
                   listHouses.removeWhere(
                     (element) => element.id == state.id,
                   );
