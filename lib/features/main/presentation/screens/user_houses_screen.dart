@@ -13,14 +13,14 @@ import '../cubit/delete_user_houses/delete_user_houses_cubit.dart';
 import '../cubit/user_houses/user_houses_cubit.dart';
 import '../widgets/user_houses_widget.dart';
 
-class MyHousesScreen extends StatefulWidget {
-  const MyHousesScreen({super.key});
+class UserHousesScreen extends StatefulWidget {
+  const UserHousesScreen({super.key});
 
   @override
-  State<MyHousesScreen> createState() => _MyHousesScreenState();
+  State<UserHousesScreen> createState() => _UserHousesScreenState();
 }
 
-class _MyHousesScreenState extends State<MyHousesScreen> {
+class _UserHousesScreenState extends State<UserHousesScreen> {
   List<HouseEntity> listHouses = [];
   @override
   void initState() {
