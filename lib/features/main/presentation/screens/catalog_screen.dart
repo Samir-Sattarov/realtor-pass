@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../app_core/utils/app_style.dart';
-import '../../../../app_core/utils/bottom_sheets/bottom_sheets.dart';
 import '../../../../app_core/widgets/error_flash_bar.dart';
 import '../../../../resources/resources.dart';
 import '../../core/entity/chip_entity.dart';
@@ -15,7 +14,7 @@ import '../cubit/houses/houses_cubit.dart';
 import '../widgets/custom_chip_widget.dart';
 import '../widgets/google_map_widget.dart';
 import '../widgets/house_widget.dart';
-import '../widgets/search_widget.dart';
+import '../widgets/map_widget_with_search.dart';
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -25,7 +24,6 @@ class CatalogScreen extends StatefulWidget {
 }
 
 class _CatalogScreenState extends State<CatalogScreen> {
-  final TextEditingController controllerSearch = TextEditingController();
   late ScrollController scrollController;
   int selectedHouseCategory = 0;
   late List<HouseEntity> houses;
@@ -59,7 +57,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
         scrollController.position.maxScrollExtent) {
       Future.delayed(
         const Duration(milliseconds: 200),
-        () {
+            () {
           BlocProvider.of<HousesCubit>(context)
               .loadMore(locale: context.locale.languageCode);
         },
@@ -98,9 +96,24 @@ class _CatalogScreenState extends State<CatalogScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildLocationHeader(),
-                SizedBox(height: 20.h),
-                _buildSearchRow(),
-                SizedBox(height: 16.h),
+                BlocBuilder<HousesCubit, HousesState>(
+                  builder: (context, state) {
+                    return SizedBox(
+                      height: 300.h,
+                      child: MapWidgetWithSearch(
+                        houseLocations: houses.map((e) => LocationEntity.empty().copyWith(lon: e.lon, lat: e.lat),).toList(),
+                        onChanged: (LocationEntity location) {
+                          // BlocProvider.of<HousesCubit>(context).load(
+                          //   locale: context.locale.languageCode.toString(),
+                          // );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: 16.h,
+                ),
                 BlocListener<HouseTypeCubit, HouseTypeState>(
                   listener: (context, state) {
                     if (state is HouseTypeError) {
@@ -110,7 +123,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                       if (mounted) {
                         Future.delayed(
                           Duration.zero,
-                          () {
+                              () {
                             houseType = state.results.housesType;
 
                             print("House type $houseType");
@@ -169,22 +182,16 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 SizedBox(
                   height: 16.h,
                 ),
-                ClipRRect(
-                  borderRadius:  BorderRadius.horizontal(
-                right: Radius.circular(10.r), left: Radius.circular(10.r)),
-                  child: SizedBox(width: 340.w,height: 200.h,
-                      child: const GoogleMapWidget()),
-                ),
                 SizedBox(
                   height: 16.h,
                 ),
-                BlocConsumer<HousesCubit, HousesState>(
+                BlocListener<HousesCubit, HousesState>(
                   listener: (context, state) {
                     if (state is HousesLoaded) {
                       if (mounted) {
                         Future.delayed(
                           Duration.zero,
-                          () {
+                              () {
                             setState(() {
                               houses = state.houses;
                             });
@@ -193,25 +200,23 @@ class _CatalogScreenState extends State<CatalogScreen> {
                       }
                     }
                   },
-                  builder: (context, state) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      child: Column(
-                        children: [
-                          ...List.generate(houses.length, (index) {
-                            final house = houses[index];
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Column(
+                      children: [
+                        ...List.generate(houses.length, (index) {
+                          final house = houses[index];
 
-                            return Padding(
-                              padding: EdgeInsets.only(bottom: 10.h),
-                              child: HouseWidget(
-                                houses: house,
-                              ),
-                            );
-                          })
-                        ],
-                      ),
-                    );
-                  },
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 10.h),
+                            child: HouseWidget(
+                              houses: house,
+                            ),
+                          );
+                        })
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -259,62 +264,62 @@ class _CatalogScreenState extends State<CatalogScreen> {
     );
   }
 
-  Widget _buildSearchRow() {
-    return Row(
-      children: [
-        Expanded(
-          child: SearchWidget(
-            controller: controllerSearch,
-            onSearch: (value) {
-              BlocProvider.of<HousesCubit>(context).load(
-                  search: value,
-                  locale: context.locale.languageCode.toString());
-            },
-            onSelect: (HouseEntity house) {
-              setState(() {
-                houses = [house];
-              });
-            },
-
-            onFilter: () {
-              BottomSheets.filter(
-                context,
-                category: selectedHouseCategory,
-                onConfirm: (
-                  int houseType,
-                  int bedrooms,
-                  int beds,
-                  int maxPrice,
-                  int minPrice,
-                ) {
-                  BlocProvider.of<HousesCubit>(context).load(
-                      search: controllerSearch.text,
-                      sellingType: houseType,
-                      houseType: houseType,
-                      rooms: beds,
-                      bathroom: bedrooms,
-                      maxPrice: maxPrice,
-                      minPrice: minPrice,
-                      locale: context.locale.languageCode.toString());
-                },
-              );
-            },
-            suggestionsCallback: suggestionsCallback,
-            itemBuilder: (BuildContext context, HouseEntity house) {
-              return Container(
-                padding: EdgeInsets.all(8.r),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(house.category.toString()),
-                    Text(house.houseLocation),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
+// Widget _buildSearchRow() {
+//   return Row(
+//     children: [
+//       Expanded(
+//         child: SearchWidget(
+//           controller: controllerSearch,
+//           onSearch: (value) {
+//             BlocProvider.of<HousesCubit>(context).load(
+//                 search: value,
+//                 locale: context.locale.languageCode.toString());
+//           },
+//           onSelect: (HouseEntity house) {
+//             setState(() {
+//               houses = [house];
+//             });
+//           },
+//
+//           onFilter: () {
+//             BottomSheets.filter(
+//               context,
+//               category: selectedHouseCategory,
+//               onConfirm: (
+//                 int houseType,
+//                 int bedrooms,
+//                 int beds,
+//                 int maxPrice,
+//                 int minPrice,
+//               ) {
+//                 BlocProvider.of<HousesCubit>(context).load(
+//                     search: controllerSearch.text,
+//                     sellingType: houseType,
+//                     houseType: houseType,
+//                     rooms: beds,
+//                     bathroom: bedrooms,
+//                     maxPrice: maxPrice,
+//                     minPrice: minPrice,
+//                     locale: context.locale.languageCode.toString());
+//               },
+//             );
+//           },
+//           suggestionsCallback: suggestionsCallback,
+//           itemBuilder: (BuildContext context, HouseEntity house) {
+//             return Container(
+//               padding: EdgeInsets.all(8.r),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(house.category.toString()),
+//                   Text(house.houseLocation),
+//                 ],
+//               ),
+//             );
+//           },
+//         ),
+//       ),
+//     ],
+//   );
+// }
 }

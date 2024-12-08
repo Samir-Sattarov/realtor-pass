@@ -6,7 +6,8 @@ import 'package:realtor_pass/features/main/core/repository/main_repository.dart'
 
 import '../entity/favorite_houses_json_entity.dart';
 
-class GetHousesUsecase extends UseCase<HouseResultEntity, GetHousesUsecaseParams> {
+class GetHousesUsecase
+    extends UseCase<HouseResultEntity, GetHousesUsecaseParams> {
   final MainRepository mainRepository;
 
   GetHousesUsecase(this.mainRepository);
@@ -15,33 +16,37 @@ class GetHousesUsecase extends UseCase<HouseResultEntity, GetHousesUsecaseParams
   Future<Either<AppError, HouseResultEntity>> call(
       GetHousesUsecaseParams params) {
     return mainRepository.getHouses(
-      params.locale,
-        params.page,
-        params.search,
-        params.houseType,
-        params.category,
-        params.square,
-        params.rooms,
-        params.bathroom,
-        params.fromYear,
-        params.toYear,
-        params.maxPrice,
-        params.minPrice);
+      locale: params.locale,
+      page: params.page,
+      search: params.search,
+      houseType: params.houseType,
+      category: params.category,
+      square: params.square,
+      rooms: params.rooms,
+      bathroom: params.bathroom,
+      fromYear: params.fromYear,
+      toYear: params.toYear,
+      maxPrice: params.maxPrice,
+      minPrice: params.minPrice,
+    );
   }
 }
 
-class GetHouseTypeUsecase extends UseCase<HouseTypeResultEntity, GetHousesTypeUsecaseParams> {
+class GetHouseTypeUsecase
+    extends UseCase<HouseTypeResultEntity, GetHousesTypeUsecaseParams> {
   final MainRepository repository;
 
   GetHouseTypeUsecase(this.repository);
 
   @override
-  Future<Either<AppError, HouseTypeResultEntity>> call(GetHousesTypeUsecaseParams params) {
+  Future<Either<AppError, HouseTypeResultEntity>> call(
+      GetHousesTypeUsecaseParams params) {
     return repository.getHouseTypes(params.locale);
   }
 }
 
-class GetFavoriteHouseJsonUsecase extends UseCase<FavoriteHousesJsonEntity, NoParams> {
+class GetFavoriteHouseJsonUsecase
+    extends UseCase<FavoriteHousesJsonEntity, NoParams> {
   final MainRepository repository;
 
   GetFavoriteHouseJsonUsecase(this.repository);
@@ -96,17 +101,18 @@ class DeleteAllHousesFromFavoriteUsecase extends UseCase<void, NoParams> {
   }
 }
 
-
 class FavoriteParams {
   final int publicationsID;
 
   FavoriteParams({required this.publicationsID});
 }
-class GetHousesTypeUsecaseParams{
+
+class GetHousesTypeUsecaseParams {
   final String locale;
 
-  GetHousesTypeUsecaseParams({ required this.locale});
+  GetHousesTypeUsecaseParams({required this.locale});
 }
+
 class GetHousesUsecaseParams {
   final String locale;
   final int page;
@@ -121,7 +127,12 @@ class GetHousesUsecaseParams {
   final int? maxPrice;
   final int? minPrice;
 
-  GetHousesUsecaseParams( {
+  final double? north;
+  final double? west;
+  final double? south;
+  final double? east;
+
+  GetHousesUsecaseParams({
     required this.locale,
     required this.page,
     required this.search,
@@ -134,5 +145,9 @@ class GetHousesUsecaseParams {
     this.toYear,
     this.maxPrice,
     this.minPrice,
+    this.north,
+    this.west,
+    this.south,
+    this.east,
   });
 }

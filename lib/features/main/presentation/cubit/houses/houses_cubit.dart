@@ -22,11 +22,22 @@ class HousesCubit extends Cubit<HousesState> {
     int? toYear,
     int? maxPrice,
     int? minPrice,
+    double? north,
+    double? west,
+    double? south,
+    double? east,
   }) async {
     page = 1;
     houses.clear();
     emit(HousesLoading());
-    final response = await housesUsecase.call(GetHousesUsecaseParams(
+
+
+   print("Location north $north ");
+   print("Location west $west ");
+   print("Location south $south ");
+   print("Location east $east ");
+    final response = await housesUsecase.call(
+      GetHousesUsecaseParams(
         locale: locale,
         page: page,
         search: search,
@@ -38,9 +49,15 @@ class HousesCubit extends Cubit<HousesState> {
         fromYear: fromYear,
         toYear: toYear,
         maxPrice: maxPrice,
-        minPrice: minPrice));
+        minPrice: minPrice,
+        west: west,
+        north: north,
+        east: east,
+        south: south,
+      ),
+    );
     response.fold((l) => HousesError(l.errorMessage), (r) {
-      houses += r.houses;
+      houses = r.houses;
       emit(HousesLoaded(houses));
     });
   }
@@ -62,5 +79,4 @@ class HousesCubit extends Cubit<HousesState> {
       },
     );
   }
-
 }

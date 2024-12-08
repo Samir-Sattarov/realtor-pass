@@ -27,5 +27,5 @@ class ApiConstants {
   static const getPublishedHouses = "publications/get-user-publication";
   static const uploadImages = "images/upload";
   static const deleteUserHouses =  'publications/';
-  // static const googleMap = "AIzaSyD3d7hj2oSaarverdM6thtnGL3VlrKYtTQ";
+  static const googleMapsKey = "AIzaSyAHhMY8oJlMgqG71vH_kebZsWPAPk-2jqc";
 }

@@ -14,6 +14,7 @@ import '../cubit/bottom_nav/bottom_nav_cubit.dart';
 import 'catalog_screen.dart';
 import 'favorite_screen.dart';
 import 'home_screen.dart';
+import 'house_post_location_screen.dart';
 import 'listing_screen.dart';
 
 class MainScreen extends StatefulWidget {

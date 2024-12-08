@@ -29,11 +29,49 @@ class LocationEntity {
     required this.south,
     required this.address,
   });
+
+  factory LocationEntity.empty() {
+    return LocationEntity(
+      lat: 0,
+      lon: 0,
+      east: 0,
+      west: 0,
+      north: 0,
+      south: 0,
+      address: "",
+    );
+  }
+
+  LocationEntity copyWith({
+    String? address,
+    double? lat,
+    double? lon,
+  }) {
+    return LocationEntity(
+      lat: lat ?? this.lat,
+      lon: lon ?? this.lon,
+      east: east,
+      west: west,
+      north: north,
+      south: south,
+      address: address ?? this.address,
+    );
+  }
+
+  @override
+  String toString() {
+    return address;
+  }
 }
 
 class GoogleMapWidget extends StatefulWidget {
   final Function(LocationEntity entity)? onAddressSelected;
-  const GoogleMapWidget({super.key, this.onAddressSelected});
+  final List<LocationEntity> locations;
+  const GoogleMapWidget({
+    super.key,
+    this.onAddressSelected,
+    this.locations = const [],
+  });
 
   @override
   State<GoogleMapWidget> createState() => GoogleMapWidgetState();
@@ -41,6 +79,7 @@ class GoogleMapWidget extends StatefulWidget {
 
 class GoogleMapWidgetState extends State<GoogleMapWidget> {
   GoogleMapController? mapController;
+  late Set<Marker> markers;
   Marker? selectedMarker;
   String? address;
 
@@ -51,8 +90,23 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   @override
   void initState() {
+    initializeMarkers();
     super.initState();
-    // Removed moveToUseLocation() from initState
+  }
+
+  initializeMarkers() {
+    final locations = widget.locations;
+
+    markers = locations
+        .map(
+          (e) => Marker(
+            markerId:
+                MarkerId(DateTime.now().microsecondsSinceEpoch.toString()),
+            position: LatLng(e.lat, e.lon),
+          ),
+        )
+        .toList()
+        .toSet();
   }
 
   Future<void> moveToUseLocation() async {
@@ -80,7 +134,8 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error: permission to get current location not allowed'),
+          content:
+              Text('Error: permission to get current location not allowed'),
         ),
       );
     }
@@ -105,10 +160,10 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
           onMapCreated: (GoogleMapController controller) {
             mapController = controller;
             setState(() {});
-            moveToUseLocation(); // Moved here
+            moveToUseLocation(); // M
           },
           onTap: _handleTap,
-          markers: selectedMarker != null ? {selectedMarker!} : {},
+          markers: selectedMarker != null ? {selectedMarker!} : markers,
         ),
         if (mapController != null)
           Align(
@@ -117,7 +172,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
               padding: const EdgeInsets.all(8.0),
               child: _button(
                 Icons.location_on_outlined,
-                    () async {
+                () async {
                   await moveToUseLocation();
                 },
               ),
@@ -133,7 +188,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
                 children: [
                   _button(
                     Icons.add,
-                        () {
+                    () {
                       mapController?.animateCamera(
                         CameraUpdate.zoomIn(),
                       );
@@ -142,7 +197,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
                   SizedBox(height: 10.h),
                   _button(
                     Icons.remove,
-                        () {
+                    () {
                       mapController?.animateCamera(
                         CameraUpdate.zoomOut(),
                       );
@@ -174,7 +229,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
           child: Center(
             child: Icon(
               icon,
-              color: AppStyle.dark, // Make sure AppStyle.dark is defined
+              color: AppStyle.dark,
             ),
           ),
         ),
@@ -184,7 +239,7 @@ class GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   Future<void> _handleTap(LatLng position) async {
     List<Placemark> placeMarks =
-    await placemarkFromCoordinates(position.latitude, position.longitude);
+        await placemarkFromCoordinates(position.latitude, position.longitude);
 
     if (placeMarks.isNotEmpty) {
       Placemark placeMark = placeMarks.first;

@@ -73,15 +73,15 @@ void setup() {
   locator.registerLazySingleton(
     () => Dio()
       ..interceptors.addAll([
-        PrettyDioLogger(
-          requestHeader: true,
-          requestBody: false,
-          responseBody: true,
-          responseHeader: false,
-          request: true,
-          error: true,
-          compact: true,
-        ),
+        // PrettyDioLogger(
+        //   requestHeader: true,
+        //   requestBody: false,
+        //   responseBody: true,
+        //   responseHeader: false,
+        //   request: true,
+        //   error: true,
+        //   compact: true,
+        // ),
       ]),
   );
   locator.registerLazySingleton<ApiClient>(

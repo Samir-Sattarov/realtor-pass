@@ -150,6 +150,7 @@ class _ApplicationState extends State<Application>
             supportedLocales: context.supportedLocales,
             locale: context.locale,
             theme: ThemeData(
+              scaffoldBackgroundColor: Colors.white,
               fontFamily: "SuisseIntl",
               primarySwatch: Colors.green,
               splashColor: Colors.transparent,

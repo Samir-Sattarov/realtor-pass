@@ -74,7 +74,7 @@ class SearchWidget<T> extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 fontSize: 14.sp,
                                 color: const Color(0xffA1A1A1)),
-                            hintText: hintText ?? "Apartment for rent",
+                            hintText: hintText?.tr() ?? "Apartment for rent",
                             contentPadding: EdgeInsets.zero,
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,

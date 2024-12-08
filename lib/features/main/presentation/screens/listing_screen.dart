@@ -10,18 +10,13 @@ import '../../../auth/presentation/screens/sign_in_screen.dart';
 import '../../core/entity/house_post_entity.dart';
 import 'house_post_images_screen.dart';
 
-class ListingScreen extends StatefulWidget {
+class ListingScreen extends StatelessWidget {
   final HousePostEntity entity;
   const ListingScreen({super.key, required this.entity});
 
   @override
-  State<ListingScreen> createState() => _ListingScreenState();
-}
-
-class _ListingScreenState extends State<ListingScreen> {
-  @override
   Widget build(BuildContext context) {
-    final housePostEntity = widget.entity;
+    final housePostEntity = entity;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

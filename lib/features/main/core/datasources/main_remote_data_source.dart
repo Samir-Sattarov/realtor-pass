@@ -17,10 +17,10 @@ import '../models/upload_photo_result_model.dart';
 import '../models/user_houses_result_model.dart';
 
 abstract class MainRemoteDataSource {
-  Future<HouseResultModel> getHouses(
-    String locale,
-    int page,
-    String search,
+  Future<HouseResultModel> getHouses({
+    required String locale,
+    int page = 1,
+    String search = "",
     int? houseType,
     int? category,
     int? square,
@@ -30,7 +30,11 @@ abstract class MainRemoteDataSource {
     int? toYear,
     int? maxPrice,
     int? minPrice,
-  );
+    double? north,
+    double? west,
+    double? south,
+    double? east,
+  });
   Future<HouseTypeResultModel> getHousesTypes(String locale);
   Future<PostersModel> getPosters();
   Future<HouseStuffResultModel> getHouseStuff(String locale);
@@ -45,11 +49,8 @@ abstract class MainRemoteDataSource {
   Future<void> saveHouseToFavorite(int userId, int publicationId);
   Future<HouseResultModel> getFavoriteHouses(int userId);
   Future<void> deleteFromFavorite(int userId, int publicationsId);
-  Future<UserHousesResultModel> getUserHouses(
-    String locale,int userId
-  );
-  Future<void> deleteUserHouse( int publicationsId);
-
+  Future<UserHousesResultModel> getUserHouses(String locale, int userId);
+  Future<void> deleteUserHouse(int publicationsId);
 }
 
 class MainRemoteDataSourceImpl extends MainRemoteDataSource {
@@ -57,8 +58,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   final AuthLocalDataSource authLocalDataSource;
 
   MainRemoteDataSourceImpl(this.apiClient, this.authLocalDataSource);
-  Map<String, dynamic> _createRarParams(
-    String search,
+  Map<String, dynamic> _createHouseParams({
+    String search = "",
     int? houseType,
     int? category,
     int? square,
@@ -68,7 +69,11 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     int? toYear,
     int? maxPrice,
     int? minPrice,
-  ) {
+    double? north,
+    double? west,
+    double? south,
+    double? east,
+  }) {
     final params = <String, dynamic>{};
 
     if (search.isNotEmpty) {
@@ -103,14 +108,26 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
       params['priceMin'] = minPrice;
     }
 
+    if (north != null) {
+      params['north'] = north;
+    }
+    if (west != null) {
+      params['west'] = west;
+    }
+    if (south != null) {
+      params['south'] = south;
+    }
+    if (east != null) {
+      params['east'] = east;
+    }
     return params;
   }
 
   @override
-  Future<HouseResultModel> getHouses(
-    String locale,
-    int page,
-    String search,
+  Future<HouseResultModel> getHouses({
+    required String locale,
+    int page = 1,
+    String search = "",
     int? houseType,
     int? category,
     int? square,
@@ -120,22 +137,30 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     int? toYear,
     int? maxPrice,
     int? minPrice,
-  ) async {
+    double? north,
+    double? west,
+    double? south,
+    double? east,
+  }) async {
     Map<String, dynamic> params = {
       // "page": page,
     };
 
-    final additionalParams = _createRarParams(
-      search,
-      houseType,
-      category,
-      square,
-      rooms,
-      bathroom,
-      fromYear,
-      toYear,
-      maxPrice,
-      minPrice,
+    final additionalParams = _createHouseParams(
+      search: search,
+      houseType: houseType,
+      category: category,
+      square: square,
+      rooms: rooms,
+      bathroom: bathroom,
+      fromYear: fromYear,
+      toYear: toYear,
+      maxPrice: maxPrice,
+      minPrice: minPrice,
+      north: north,
+      west: west,
+      south: south,
+      east: east,
     );
 
     params.addAll(additionalParams);
@@ -277,7 +302,8 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
   @override
   Future<UserHousesResultModel> getUserHouses(String locale, int userId) async {
     final response = await apiClient.post(
-      ApiConstants.getPublishedHouses, params: {},
+      ApiConstants.getPublishedHouses,
+      params: {},
     );
     final model = UserHousesResultModel.fromJson(response, locale: locale);
     return model;
@@ -288,6 +314,5 @@ class MainRemoteDataSourceImpl extends MainRemoteDataSource {
     await apiClient.deleteWithBody(
       "${ApiConstants.deleteUserHouses}$publicationsId",
     );
-
   }
 }

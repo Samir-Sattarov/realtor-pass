@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../core/entity/house_entity.dart';
 
@@ -40,11 +40,7 @@ class _CardDescriptionWidgetState extends State<CardDescriptionWidget> {
           ),
           SizedBox(height: 8.h),
           Text(
-            'Position: ${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
-            style: TextStyle(fontSize: 12.0.sp),
-          ),
-          Text(
-            'Marker size: ${widget.marker.width}, ${widget.marker.height}',
+            'Position: ${widget.marker.position.latitude}, ${widget.marker.position.longitude}',
             style: TextStyle(fontSize: 12.0.sp),
           ),
         ],

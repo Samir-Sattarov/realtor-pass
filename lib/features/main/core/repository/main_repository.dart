@@ -22,10 +22,10 @@ import '../models/favorite_houses_json_model.dart';
 import '../models/house_post_model.dart';
 
 abstract class MainRepository {
-  Future<Either<AppError, HouseResultEntity>> getHouses(
-    String locale,
-    int page,
-    String search,
+  Future<Either<AppError, HouseResultEntity>> getHouses({
+    required String locale,
+    int page = 1,
+    String search = "",
     int? houseType,
     int? category,
     int? square,
@@ -35,7 +35,11 @@ abstract class MainRepository {
     int? toYear,
     int? maxPrice,
     int? minPrice,
-  );
+    double? north,
+    double? west,
+    double? south,
+    double? east,
+  });
   Future<Either<AppError, HouseTypeResultEntity>> getHouseTypes(String locale);
   Future<Either<AppError, PostersEntity>> getPosters();
   Future<Either<AppError, QuestionsResultEntity>> getQuestions();
@@ -72,33 +76,42 @@ class MainRepositoryImpl extends MainRepository {
   MainRepositoryImpl(
       this.remoteDataSource, this.authLocalDataSource, this.localDataSource);
   @override
-  Future<Either<AppError, HouseResultEntity>> getHouses(
-      String locale,
-      int page,
-      String search,
-      int? houseType,
-      int? category,
-      int? square,
-      int? rooms,
-      int? bathroom,
-      int? fromYear,
-      int? toYear,
-      int? maxPrice,
-      int? minPrice) async {
+  Future<Either<AppError, HouseResultEntity>> getHouses({
+    required String locale,
+    int page = 1,
+    String search = "",
+    int? houseType,
+    int? category,
+    int? square,
+    int? rooms,
+    int? bathroom,
+    int? fromYear,
+    int? toYear,
+    int? maxPrice,
+    int? minPrice,
+    double? north,
+    double? west,
+    double? south,
+    double? east,
+  }) async {
     return action(
         task: remoteDataSource.getHouses(
-      locale,
-      page,
-      search,
-      houseType,
-      category,
-      square,
-      rooms,
-      bathroom,
-      fromYear,
-      toYear,
-      maxPrice,
-      minPrice,
+      locale: locale,
+      page: page,
+      search: search,
+      houseType: houseType,
+      category: category,
+      square: square,
+      rooms: rooms,
+      bathroom: bathroom,
+      fromYear: fromYear,
+      toYear: toYear,
+      maxPrice: maxPrice,
+      minPrice: minPrice,
+      south: south,
+      north: north,
+      east: east,
+      west: west,
     ));
   }
 
