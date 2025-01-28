@@ -103,9 +103,9 @@ class _CatalogScreenState extends State<CatalogScreen> {
                       child: MapWidgetWithSearch(
                         houseLocations: houses.map((e) => LocationEntity.empty().copyWith(lon: e.lon, lat: e.lat),).toList(),
                         onChanged: (LocationEntity location) {
-                          // BlocProvider.of<HousesCubit>(context).load(
-                          //   locale: context.locale.languageCode.toString(),
-                          // );
+                          BlocProvider.of<HousesCubit>(context).load(
+                            locale: context.locale.languageCode.toString(),
+                          );
                         },
                       ),
                     );
